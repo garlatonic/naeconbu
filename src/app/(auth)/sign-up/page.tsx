@@ -1,3 +1,6 @@
+import Separator from "@/components/auth/Separator";
+import SocialButton from "@/components/auth/SocialButton";
+
 export default function Page() {
   return (
     <div className="flex flex-col justify-center gap-10 px-12">
@@ -7,6 +10,9 @@ export default function Page() {
           Nae-Con-Bu에 가입하여 콘서트를 발견하고, 동행을 구해보세요
         </span>
       </div>
+
+      <SocialButton />
+      <Separator />
     </div>
   );
 }
