@@ -18,8 +18,8 @@ export default function Page() {
 
       <SocialButton />
 
-      <div className="input flex flex-col gap-3">
-        <div className="flex flex-col gap-2">
+      <div className="input flex flex-col gap-6">
+        <div className="nicknameInput flex flex-col gap-2">
           <p className="text-sm">닉네임 *</p>
           <div className="flex w-full max-w-sm items-center gap-2">
             <Input type="text" placeholder="Enter Your Nickname" />
@@ -30,7 +30,7 @@ export default function Page() {
           <p className="text-text-sub text-xs">중복된 닉네임입니다.</p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="emailInput flex flex-col gap-2">
           <p className="text-sm">이메일 *</p>
           <div className="flex w-full max-w-sm items-center gap-2">
             <Input type="email" placeholder="Enter Your Email" />
@@ -41,7 +41,7 @@ export default function Page() {
           <p className="text-text-sub text-xs">인증을 완료하세요.</p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="emailConfirm flex flex-col gap-2">
           <p className="text-sm">이메일 인증 *</p>
           <div className="flex w-full max-w-sm items-center gap-2">
             <Input type="number" placeholder="Enter Validation Number" />
@@ -52,12 +52,12 @@ export default function Page() {
           <p className="text-text-sub text-xs">인증번호를 입력하세요.</p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="passwordInput flex flex-col gap-2">
           <p className="text-sm">비밀번호 *</p>
           <PasswordInput />
           <p className="text-text-sub text-xs">영문, 숫자 8자 이상 입력하세요.</p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="passwordConfirm flex flex-col gap-2">
           <p className="text-sm">비밀번호 확인 *</p>
           <PasswordInput />
           <p className="text-text-sub text-xs">동일한 비밀번호를 입력하세요.</p>
@@ -68,7 +68,8 @@ export default function Page() {
           <Checkbox className="cursor-pointer" />
           <Label>아이디 저장</Label>
         </div>
-        <Button className="login cursor-pointer" variant="default" size="lg" asChild={false}>
+
+        <Button className="signUpButton cursor-pointer" variant="default" size="lg" asChild={false}>
           회원가입
         </Button>
       </div>

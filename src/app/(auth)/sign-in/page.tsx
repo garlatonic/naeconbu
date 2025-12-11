@@ -16,10 +16,10 @@ export default function SignIn() {
 
       <SocialButton />
 
-      <div className="input flex flex-col gap-3">
+      <div className="input flex flex-col gap-6">
         <Input placeholder="Email Address" className="h-13" />
         <PasswordInput />
-        <div className="flex justify-between">
+        <div className="idSave flex justify-between">
           <div className="flex items-center gap-2">
             <Checkbox className="cursor-pointer" />
             <Label>아이디 저장</Label>
@@ -28,7 +28,7 @@ export default function SignIn() {
                 비밀번호를 잊으셨나요?
               </Link> */}
         </div>
-        <Button className="login cursor-pointer" variant="default" size="lg" asChild={false}>
+        <Button className="signInButton cursor-pointer" variant="default" size="lg" asChild={false}>
           로그인
         </Button>
       </div>
