@@ -52,7 +52,7 @@ export default function page() {
           <Discography />
         </div>
         {/*오른쪽 파트*/}
-        <div className={"flex w-125 shrink-0 flex-col gap-12"}>
+        <div className={"sticky top-8 flex w-125 shrink-0 flex-col gap-12 self-start"}>
           <QuickStat />
           <HotTrack />
           <SimilarArtists />
