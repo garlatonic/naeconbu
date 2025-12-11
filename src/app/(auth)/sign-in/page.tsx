@@ -17,7 +17,7 @@ export default function SignIn() {
       <SocialButton />
 
       <div className="input flex flex-col gap-6">
-        <Input placeholder="Email Address" className="h-13" />
+        <Input placeholder="Email Address" className="bg-point-sub h-13" />
         <PasswordInput />
         <div className="idSave flex justify-between">
           <div className="flex items-center gap-2">

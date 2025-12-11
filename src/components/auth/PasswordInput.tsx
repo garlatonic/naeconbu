@@ -7,7 +7,7 @@ export default function PasswordInput({
   placeholder?: string;
 }) {
   return (
-    <InputGroup className="h-13">
+    <InputGroup className="bg-point-sub h-13">
       <InputGroupInput placeholder={placeholder} className="h-13" />
       <InputGroupAddon align="inline-end">
         <Eye />

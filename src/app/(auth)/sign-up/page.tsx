@@ -22,9 +22,9 @@ export default function Page() {
       <div className="input flex flex-col gap-6">
         <div className="nicknameInput flex flex-col gap-2">
           <p className="text-sm">닉네임 *</p>
-          <div className="flex w-full max-w-sm items-center gap-2">
-            <Input type="text" placeholder="Enter Your Nickname" className="h-13" />
-            <Button type="submit" variant="default" className="bg-point-main h-13">
+          <div className="flex w-full items-center gap-2">
+            <Input type="text" placeholder="Enter Your Nickname" className="bg-point-sub h-13" />
+            <Button type="submit" variant="default" size="lg" className="bg-point-main h-13">
               Confirm
             </Button>
           </div>
@@ -33,9 +33,9 @@ export default function Page() {
 
         <div className="emailInput flex flex-col gap-2">
           <p className="text-sm">이메일 *</p>
-          <div className="flex w-full max-w-sm items-center gap-2">
-            <Input type="email" placeholder="Enter Your Email" className="h-13" />
-            <Button type="submit" variant="default" className="bg-point-main h-13">
+          <div className="flex w-full items-center gap-2">
+            <Input type="email" placeholder="Enter Your Email" className="bg-point-sub h-13" />
+            <Button type="submit" variant="default" size="lg" className="bg-point-main h-13">
               Confirm
             </Button>
           </div>
@@ -44,9 +44,13 @@ export default function Page() {
 
         <div className="emailConfirm flex flex-col gap-2">
           <p className="text-sm">이메일 인증 *</p>
-          <div className="flex w-full max-w-sm items-center gap-2">
-            <Input type="number" placeholder="Enter Validation Number" className="h-13" />
-            <Button type="submit" variant="default" className="bg-point-main h-13">
+          <div className="flex w-full items-center gap-2">
+            <Input
+              type="number"
+              placeholder="Enter Validation Number"
+              className="bg-point-sub h-13"
+            />
+            <Button type="submit" variant="default" size="lg" className="bg-point-main h-13">
               Confirm
             </Button>
           </div>
@@ -63,6 +67,7 @@ export default function Page() {
           <PasswordInput />
           <p className="text-text-sub text-xs">동일한 비밀번호를 입력하세요.</p>
         </div>
+
         <DatePicker />
 
         <div className="agreeCheckbox flex items-center gap-2">
