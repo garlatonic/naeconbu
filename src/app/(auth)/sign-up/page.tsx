@@ -1,8 +1,8 @@
+import { DatePicker } from "@/components/auth/DatePicker";
 import PasswordInput from "@/components/auth/PasswordInput";
 import SocialButton from "@/components/auth/SocialButton";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function Page() {
@@ -18,10 +18,18 @@ export default function Page() {
       <SocialButton />
 
       <div className="input flex flex-col gap-3">
-        <Input placeholder="Email Address" className="h-13" />
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">비밀번호 *</p>
+          <PasswordInput />
+          <p className="text-text-sub text-xs">영문, 숫자 8자 이상 입력하세요</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">비밀번호 확인 *</p>
+          <PasswordInput />
+          <p className="text-text-sub text-xs">영문, 숫자 8자 이상 입력하세요</p>
+        </div>
+        <DatePicker />
 
-        <PasswordInput />
-        <PasswordInput />
         <div className="flex items-center gap-2">
           <Checkbox className="cursor-pointer" />
           <Label>아이디 저장</Label>
