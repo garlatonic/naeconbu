@@ -43,7 +43,7 @@ export default function ArtistDetailPast() {
             <Button
               size={"lg"}
               variant={"outline"}
-              className={"cursor-pointer border-2"}
+              className={"border-border cursor-pointer border-2"}
               type={"button"}
             >
               <span className={"font-bold"}>지난 공연 더 보기</span>

@@ -5,7 +5,9 @@ import { Separator } from "@/components/ui/separator";
 
 export default function ArtistDetailProfile() {
   return (
-    <section className={"bg-bg-sub flex h-100 items-center gap-12 border-y px-13 py-16"}>
+    <section
+      className={"bg-bg-sub border-border flex h-100 items-center gap-12 border-b px-13 py-16"}
+    >
       <div className={"mx-auto flex w-full max-w-400 gap-12"}>
         {/*프로필 이미지 파트*/}
         <div
@@ -39,6 +41,7 @@ export default function ArtistDetailProfile() {
             </div>
           </div>
           {/*소셜 버튼 모음 부분*/}
+          {/*TODO: 나중에 아래 border 수정해야할지 보기*/}
           <div className={"flex gap-2"}>
             <Button
               className={"bg-bg-sub hover:bg-text-point-sub cursor-pointer border"}
