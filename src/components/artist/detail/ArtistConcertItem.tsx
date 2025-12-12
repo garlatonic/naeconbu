@@ -4,7 +4,7 @@ import { Item } from "@/components/ui/item";
 
 export default function ArtistConcertItem() {
   return (
-    <Item variant={"outline"} className={"hover:border-text-main h-54 items-start gap-8 p-6"}>
+    <Item variant={"outline"} className={"bg-bg-main hover:border-text-main items-start gap-8 p-6"}>
       {/*왼쪽 날짜 파트*/}
       <div className={"flex w-32 flex-col items-center justify-center gap-1"}>
         <span className={"text-text-sub"}>3월</span>
@@ -16,7 +16,7 @@ export default function ArtistConcertItem() {
         {/*위쪽 파트*/}
         <div className={"flex justify-between"}>
           <div className={"flex flex-col gap-2"}>
-            <span className={"bold text-2xl"}>Echoes of Tommorow - Seoul</span>
+            <h3 className={"bold text-2xl"}>Echoes of Tommorow - Seoul</h3>
             <div className={"flex gap-4"}>
               <div className={"flex items-center justify-center gap-2"}>
                 <MapPin size={14} className={"text-text-sub"} />
