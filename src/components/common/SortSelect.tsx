@@ -11,7 +11,7 @@ import {
 export function SortSelect() {
   return (
     <Select>
-      <SelectTrigger size="sm">
+      <SelectTrigger size="default" className="bg-point-sub w-22">
         <SelectValue placeholder="정렬" />
       </SelectTrigger>
       <SelectContent>

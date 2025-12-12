@@ -12,7 +12,8 @@ export default function ArtistListItems() {
   return (
     <div className="grid grid-cols-5 gap-8">
       {Array.from({ length: 10 }).map((_, index) => (
-        <Link key={index} href="#">
+        // TODO: 나중에 ArtistCard로 바꿔끼우기
+        <Link key={index} href="artists/1">
           <Card className="items-center p-8 text-center shadow-none">
             <Avatar className="ring-border size-30 ring-4">
               <AvatarImage
