@@ -5,7 +5,7 @@ export default function ConcertDetailVenue() {
   return (
     <div className="venue flex flex-col gap-6">
       <h2 className="text-text-main text-3xl font-bold">공연장 정보</h2>
-      <div className={twMerge(`bg-bg-sub flex flex-col gap-6 rounded-2xl p-4`)}>
+      <div className={twMerge(`bg-bg-sub flex flex-col gap-6 rounded-xl p-4`)}>
         <div className="grid grid-cols-2">
           <div className="flex flex-col gap-3">
             <h3 className="text-text-main text-lg">KSPO DOME(올림픽체조경기장)</h3>

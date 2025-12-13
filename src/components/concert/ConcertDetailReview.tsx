@@ -10,7 +10,7 @@ export default function ConcertDetailReview() {
     <div className="review flex flex-col gap-6">
       <h2 className="text-text-main text-3xl font-bold">리뷰 게시판</h2>
 
-      <div className={twMerge(`bg-bg-sub flex flex-col gap-6 rounded-2xl p-6`)}>
+      <div className={twMerge(`bg-bg-sub flex flex-col gap-6 rounded-xl p-6`)}>
         <div className="flex justify-between">
           <div className="flex gap-4">
             <strong className="text-4xl">4.8</strong>

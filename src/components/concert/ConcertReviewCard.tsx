@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function ConcertReviewCard() {
   return (
-    <div className={twMerge(`border-border flex flex-col gap-4 rounded-2xl border-2 p-6`)}>
+    <div className={twMerge(`border-border flex flex-col gap-4 rounded-xl border-2 p-6`)}>
       <div className="flex justify-between">
         <div className="flex gap-4">
           <Avatar className="ring-border size-10 ring-4">
