@@ -3,6 +3,20 @@ import { Calendar, Clock4 } from "lucide-react";
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import Image from "next/image";
 
+/*
+ * TODO: 선택된 공연 카드 표시 컴포넌트
+ *
+ * - 이 컴포넌트는 "선택된 공연 정보"를 보여주는 역할만 담당
+ * - 공연 데이터는 부모 컴포넌트에서 prop으로 전달받도록 수정
+ *
+ * Props 예시:
+ * type SelectedConcertCardProps = {
+ *   concert: Concert | null;
+ * };
+ *
+ * - concert가 null이면 렌더링하지 않음
+ */
+
 export default function SelectedConcertCard() {
   return (
     // TODO: 아래 부분은 select로 클릭했을 시 보여주는 아이템 클릭 안되면 안보이게 하기

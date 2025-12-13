@@ -1,6 +1,24 @@
 import { CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
+/*
+ * TODO: 리뷰 제목 입력 기능 구현
+ *
+ * - 리뷰 제목은 부모 컴포넌트에서 상태 관리
+ *   (예: title: string)
+ *
+ * - ReviewTitleSection은
+ *   - value
+ *   - onChange
+ *   를 props로 전달받는 controlled input으로 변경
+ *
+ * Props 예시:
+ * type ReviewTitleSectionProps = {
+ *   value: string;
+ *   onChange: (value: string) => void;
+ * };
+ */
+
 export default function ReviewTitleSection() {
   return (
     <CardContent className={"flex flex-col gap-2"}>

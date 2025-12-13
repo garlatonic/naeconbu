@@ -2,6 +2,24 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CardContent } from "@/components/ui/card";
 
+/*
+ * TODO: 리뷰 본문 입력 기능 구현
+ *
+ * - 리뷰 본문(content)은 부모 컴포넌트에서 상태 관리
+ *   (예: content: string)
+ *
+ * - ReviewConcertSection은
+ *   - value
+ *   - onChange
+ *   를 props로 전달받는 controlled textarea로 변경
+ *
+ * Props 예시:
+ * type ReviewConcertSectionProps = {
+ *   value: string;
+ *   onChange: (value: string) => void;
+ * };
+ */
+
 export default function ReviewConcertSection() {
   return (
     <CardContent>

@@ -2,6 +2,27 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { CardContent } from "@/components/ui/card";
 
+/*
+ * TODO: 리뷰 작성 동의 체크 기능 구현
+ *
+ * - 동의 여부(isConfirmed: boolean)는 부모 컴포넌트에서 상태 관리
+ *
+ * - ReviewConfirmSection은
+ *   - checked
+ *   - onCheckedChange
+ *   를 props로 전달받는 controlled checkbox로 변경
+ *
+ * Props 예시:
+ * type ReviewConfirmSectionProps = {
+ *   checked: boolean;
+ *   onChange: (checked: boolean) => void;
+ * };
+ *
+ * - 동의하지 않은 경우
+ *   - 리뷰 제출 버튼 비활성화
+ *   - 또는 제출 시 validation 에러 처리
+ */
+
 export default function ReviewConfirmSection() {
   return (
     <CardContent className={"flex flex-col gap-4"}>
