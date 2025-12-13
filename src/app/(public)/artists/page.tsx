@@ -1,12 +1,13 @@
-import BreadcrumbNav from "@/components/common/BreadcrumbNav";
-import Link from "next/link";
+import ArtistListNavbar from "@/components/artist/list/ArtistListNavbar";
+import ArtistListHeader from "@/components/artist/list/ArtistListHeader";
+import ArtistListMain from "@/components/artist/list/ArtistListMain";
 
 export default function page() {
   return (
     <>
-      <BreadcrumbNav itemType="아티스트" />
-      <h1>page Component</h1>
-      <Link href={"/home"}></Link>
+      <ArtistListNavbar />
+      <ArtistListHeader />
+      <ArtistListMain />
     </>
   );
 }

@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function ArtistDetailNavbar() {
   return (
-    <nav className={"px-13 py-4"}>
+    <nav className={"border-border border-b px-15 py-4"}>
       <Breadcrumb className={"mx-auto max-w-400"}>
         <BreadcrumbList>
           <BreadcrumbItem>
