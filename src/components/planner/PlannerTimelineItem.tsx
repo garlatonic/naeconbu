@@ -42,10 +42,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { twMerge } from "tailwind-merge";
 import { ScheduleProps, ScheduleType, TransportType } from "@/types/planner";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 
 const getIcon = (type: ScheduleType, onLast: boolean, transport_type?: TransportType) => {
   switch (type) {

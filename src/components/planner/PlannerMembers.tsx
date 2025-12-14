@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
-import { Field, FieldLabel } from "../ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 
 type Role = "소유자" | "편집자" | "뷰어";
 type Status = "joined" | "pending";

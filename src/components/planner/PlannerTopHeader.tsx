@@ -5,7 +5,10 @@ export default function PlannerTopHeader() {
   return (
     <header className="bg-linear-to-tr from-zinc-900 to-zinc-800 px-15 py-28">
       <div className="mx-auto max-w-400 space-y-6">
-        <BackPageButton variant="ghost" className="flex h-auto gap-2 p-0! text-base text-zinc-400">
+        <BackPageButton
+          variant="ghost"
+          className="flex h-auto gap-2 p-0! text-base text-zinc-400 hover:bg-transparent hover:text-zinc-200"
+        >
           <ArrowLeftIcon size={16} />
           뒤로 가기
         </BackPageButton>

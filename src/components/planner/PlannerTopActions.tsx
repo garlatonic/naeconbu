@@ -35,7 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { PlannerMembers } from "./PlannerMembers";
 
 export default function PlannerTopActions() {

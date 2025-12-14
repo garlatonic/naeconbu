@@ -1,5 +1,5 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { ScanIcon } from "lucide-react";
 
 export default function PlannerMapView() {
