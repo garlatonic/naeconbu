@@ -1,10 +1,11 @@
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import { ConcertCartProp } from "@/components/concert/ConcertType";
+import Link from "next/link";
 
 export default function ConcertCard({ image, title, date, location }: ConcertCartProp) {
   return (
-    <div className="flex cursor-pointer flex-col gap-5">
+    <Link href="#" className="flex cursor-pointer flex-col gap-5">
       <Image
         src={image}
         alt="Concert Poster"
@@ -25,6 +26,6 @@ export default function ConcertCard({ image, title, date, location }: ConcertCar
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

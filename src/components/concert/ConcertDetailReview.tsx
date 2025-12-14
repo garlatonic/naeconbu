@@ -4,6 +4,7 @@ import ReviewRatingBar from "@/components/concert/ReviewRatingBar";
 import { twMerge } from "tailwind-merge";
 import ConcertReviewCard from "@/components/concert/ConcertReviewCard";
 import LoadMoreBtn from "@/components/common/LoadMoreBtn";
+import Link from "next/link";
 
 export default function ConcertDetailReview() {
   return (
@@ -33,13 +34,15 @@ export default function ConcertDetailReview() {
               <p className="text-text-sub text-sm">리뷰 1,475개</p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-border-point hover:bg-border px-4 py-2"
-          >
-            리뷰 작성
-          </Button>
+          <Link href="#">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-border-point hover:bg-border px-4 py-2"
+            >
+              리뷰 작성
+            </Button>
+          </Link>
         </div>
         <ReviewRatingBar />
       </div>
