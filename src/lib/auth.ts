@@ -67,3 +67,21 @@ export async function checkNickname(nickname: string) {
 
   return json.data;
 }
+
+// 이메일 인증코드 전송
+
+export async function sendEmailCode(email: string) {
+  const res = await fetch(`http://localhost:8080/api/v1/auth/email/send`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  const json = await res.json();
+
+  if (!res.ok || json.resultCode !== "OK") {
+    throw new Error(json.msg ?? "인증번호 전송 실패");
+  }
+
+  return json;
+}

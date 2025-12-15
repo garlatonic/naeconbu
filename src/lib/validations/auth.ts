@@ -13,6 +13,13 @@ export const signInSchema = z.object({
 export const signUpSchema = z
   .object({
     email: z.string().min(1, "이메일은 필수입니다.").email("이메일 형식이 올바르지 않습니다."),
+    emailCode: z
+      .string()
+      .transform((v) => v.toUpperCase())
+      .refine((value) => /^[A-Z0-9]{6}$/.test(value), {
+        message: "인증 코드는 영문 대문자와 숫자를 포함한 6자리여야 합니다.",
+      })
+      .optional(),
     nickname: z.string().min(1, "닉네임은 필수입니다."),
     password: z
       .string()
