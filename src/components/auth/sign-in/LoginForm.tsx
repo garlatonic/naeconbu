@@ -2,24 +2,35 @@
 
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/auth/PasswordInput";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { login } from "@/lib/auth";
 import { toast } from "sonner";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { type LoginFormValues, loginSchema } from "@/lib/validations/auth";
+import FieldError from "@/components/auth/FieldError";
 
 export default function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+  });
 
-  const handleLogin = async () => {
+  const onSubmit = async (data: LoginFormValues) => {
     try {
-      setLoading(true);
-      await login(email, password);
+      await login(data.email, data.password);
       toast.success("로그인이 완료됐습니다.");
       router.push("/");
     } catch (error) {
@@ -28,41 +39,58 @@ export default function LoginForm() {
       } else {
         toast.error("로그인 중 오류가 발생했습니다.");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="input flex flex-col gap-6">
-      <Input
-        placeholder="Email Address"
-        className="bg-point-sub h-13"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
-
-      <div className="idSave flex justify-between">
-        <div className="flex items-center gap-2">
-          <Checkbox className="cursor-pointer" />
-          <Label>아이디 저장</Label>
-        </div>
-        {/* TODO: 비밀번호 찾기 */}
-        {/* <Link href="/sign-up" className="text-text-sub cursor-pointer hover:text-text-main">
-                비밀번호를 잊으셨나요?
-              </Link> */}
+    <form onSubmit={handleSubmit(onSubmit)} className="input flex flex-col gap-6">
+      <div className={"flex flex-col gap-2"}>
+        <Input
+          placeholder="이메일을 입력하세요"
+          className="bg-point-sub h-13"
+          autoComplete={"username"}
+          {...register("email")}
+        />
+        {errors.email && <FieldError message={errors.email.message} />}
       </div>
+      <Controller
+        name="password"
+        control={control}
+        render={({ field }) => (
+          <div className={"flex flex-col gap-2"}>
+            <PasswordInput
+              value={field.value}
+              onChange={field.onChange}
+              placeholder={"비밀번호를 입력하세요"}
+              autoComplete="current-password"
+            />
+            {errors.password && <FieldError message={errors.password?.message} />}
+          </div>
+        )}
+      />
+
+      {/*TODO: 아이디 저장 및 비밀번호 찾기는 시간 되면 나중에 구현*/}
+      {/*<div className="idSave flex justify-between">*/}
+      {/*  <div className="flex items-center gap-2">*/}
+      {/*    <Checkbox className="cursor-pointer" />*/}
+      {/*    <Label>아이디 저장</Label>*/}
+      {/*  </div>*/}
+      {/*  /!* TODO: 비밀번호 찾기 *!/*/}
+      {/*  /!* <Link href="/sign-up" className="text-text-sub cursor-pointer hover:text-text-main">*/}
+      {/*          비밀번호를 잊으셨나요?*/}
+      {/*        </Link> *!/*/}
+      {/*</div>*/}
+
       <Button
         className="signInButton cursor-pointer"
         variant="default"
+        type={"submit"}
         size="lg"
         asChild={false}
-        onClick={handleLogin}
-        disabled={loading}
+        disabled={isSubmitting}
       >
-        로그인
+        {isSubmitting ? "로그인 중..." : "로그인"}
       </Button>
-    </div>
+    </form>
   );
 }
