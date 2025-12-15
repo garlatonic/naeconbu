@@ -3,9 +3,9 @@ import MateListIntro from "@/components/concert-mate/list/MateListIntro";
 
 export default function Page() {
   return (
-    <main>
+    <>
       <MateListIntro />
       <MateListContent />
-    </main>
+    </>
   );
 }
