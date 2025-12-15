@@ -1,7 +1,11 @@
+import MateListContent from "@/components/concert-mate/list/MateListContent";
+import MateListIntro from "@/components/concert-mate/list/MateListIntro";
+
 export default function Page() {
   return (
     <>
-      <h1>Page Component</h1>
+      <MateListIntro />
+      <MateListContent />
     </>
   );
 }
