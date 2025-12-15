@@ -1,5 +1,3 @@
-"use client";
-
 import SocialButton from "@/components/auth/SocialButton";
 import Intro from "@/components/auth/sign-in/Intro";
 import LoginForm from "@/components/auth/sign-in/LoginForm";

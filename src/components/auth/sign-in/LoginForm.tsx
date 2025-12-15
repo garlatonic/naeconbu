@@ -32,7 +32,7 @@ export default function LoginForm() {
     try {
       await login(data.email, data.password);
       toast.success("로그인이 완료됐습니다.");
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -48,7 +48,8 @@ export default function LoginForm() {
         <Input
           placeholder="이메일을 입력하세요"
           className="bg-point-sub h-13"
-          autoComplete={"username"}
+          autoComplete={"email"}
+          aria-label={"이메일"}
           {...register("email")}
         />
         {errors.email && <FieldError message={errors.email.message} />}
