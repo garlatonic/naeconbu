@@ -6,10 +6,8 @@ export default function Page() {
   return (
     <>
       <BreadcrumbNav itemType="공연" />
-      <main className="flex flex-col gap-9">
-        <ConcertListIntro />
-        <ConcertListContent />
-      </main>
+      <ConcertListIntro />
+      <ConcertListContent />
     </>
   );
 }
