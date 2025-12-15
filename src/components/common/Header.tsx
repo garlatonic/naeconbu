@@ -29,10 +29,10 @@ export default function Header() {
           {/* TODO: 유저 로그인 여부 확인 후 토글 */}
           {/* 비회원일 때 */}
           <div className="space-x-8 text-zinc-500">
-            <Link className="hover:font-medium" href="/login">
+            <Link className="hover:font-medium" href="/sign-in">
               로그인
             </Link>
-            <Link className="hover:font-medium" href="/signup">
+            <Link className="hover:font-medium" href="/sign-up">
               회원가입
             </Link>
           </div>
