@@ -109,33 +109,60 @@ export async function signUp(payload: {
 // 닉네임 중복 체크
 
 export async function checkNickname(nickname: string) {
-  const res = await fetch(`http://localhost:8080/api/v1/auth/nickname/check?nickname=${nickname}`);
+  try {
+    const res = await fetch(
+      `http://localhost:8080/api/v1/auth/nickname/check?nickname=${encodeURIComponent(nickname)}`
+    );
 
-  const json = await res.json();
+    const json = await res.json();
 
-  if (!res.ok || json.resultCode !== "OK") {
-    throw new Error(json.msg ?? "닉네임 확인 실패");
+    if (!res.ok || json.resultCode !== "OK") {
+      throw new Error(json.msg ?? "닉네임 확인 실패");
+    }
+
+    return json.data;
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("서버에 연결할 수 없습니다.");
+    }
+    if (err instanceof Error) {
+      throw err;
+    }
+    throw new Error("알 수 없는 오류가 발생했습니다.");
   }
-
-  return json.data;
 }
 
 // 이메일 인증코드 전송
 
 export async function sendEmailCode(email: string) {
-  const res = await fetch(`http://localhost:8080/api/v1/auth/email/send`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  });
+  try {
+    const res = await fetch("http://localhost:8080/api/v1/auth/email/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
-  const json = await res.json();
+    let json;
+    try {
+      json = await res.json();
+    } catch {
+      throw new Error("서버 응답을 처리할 수 없습니다.");
+    }
 
-  if (!res.ok || json.resultCode !== "OK") {
-    throw new Error(json.msg ?? "인증번호 전송 실패");
+    if (!res.ok || json.resultCode !== "OK") {
+      throw new Error(json.msg ?? "인증번호 전송 실패");
+    }
+
+    return json;
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("서버에 연결할 수 없습니다.");
+    }
+    if (err instanceof Error) {
+      throw err;
+    }
+    throw new Error("알 수 없는 오류가 발생했습니다.");
   }
-
-  return json;
 }
 
 // 이메일 인증코드 검증

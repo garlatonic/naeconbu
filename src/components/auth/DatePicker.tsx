@@ -37,12 +37,6 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
           placeholder="2025년 1월 19일"
           className="bg-point-sub h-13 pr-10"
           readOnly
-          onKeyDown={(e) => {
-            if (e.key === "ArrowDown") {
-              e.preventDefault();
-              setOpen(true);
-            }
-          }}
         />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

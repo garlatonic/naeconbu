@@ -1,4 +1,4 @@
-import React from "react";
+import type { ChangeEvent } from "react";
 
 export type LoginResponse = {
   status: number;
@@ -19,7 +19,7 @@ export type SignUpResponse = {
 
 export type PasswordInputProps = {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   autoComplete?: string;
   id?: string;

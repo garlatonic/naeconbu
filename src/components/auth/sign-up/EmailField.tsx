@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { SignUpFormValues } from "@/lib/validations/auth";
 import { sendEmailCode, verifyEmailCode } from "@/lib/auth";
@@ -25,7 +25,6 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [hasRequestedCode, setHasRequestedCode] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
 
@@ -47,10 +46,10 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
       // 즉시 FieldError로 렌더링되지 않고, submit 시점에만 노출됨
       // RHF formState / FieldError 렌더 조건 재확인 필요
 
-      setError("email", {
-        type: "manual",
-        message: "이메일을 입력해주세요",
-      });
+      // setError("email", {
+      //   type: "manual",
+      //   message: "이메일을 입력해주세요",
+      // });
       toast.error("이메일을 입력해주세요");
       return;
     }
@@ -62,7 +61,6 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
 
       clearErrors("email");
       setIsCodeSent(true);
-      setHasRequestedCode(true);
       setRemainingTime(300);
 
       toast.success("인증 코드 전송 완료", {
@@ -149,7 +147,7 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
         </div>
         {errors.email && <FieldError message={errors.email.message} />}
       </div>
-      {(hasRequestedCode || isCodeSent) && (
+      {isCodeSent && (
         <div className="emailConfirm flex flex-col gap-2">
           <label htmlFor={"emailCode"} className="text-sm">
             이메일 인증 *

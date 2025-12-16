@@ -14,7 +14,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
   const {
     register,
     getValues,
-    setError,
+    // setError,
     clearErrors,
     formState: { errors },
   } = useFormContext<SignUpFormValues>();
@@ -25,7 +25,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
     const nickname = getValues("nickname");
 
     if (!nickname) {
-      setError("nickname", { type: "manual", message: "닉네임을 입력해주세요." });
+      // setError("nickname", { type: "manual", message: "닉네임을 입력해주세요." });
       toast.error("닉네임을 입력해주세요.");
       return;
     }
@@ -37,10 +37,13 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
       setChecked(true);
     } catch (e) {
       setChecked(false);
-      setError("nickname", {
-        type: "manual",
-        message: e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.",
-      });
+
+      // TODO: 나중에 setError로 처리하는 방법 찾기
+
+      // setError("nickname", {
+      //   type: "manual",
+      //   message: e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.",
+      // });
       toast.error(e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.");
     } finally {
       setChecking(false);
