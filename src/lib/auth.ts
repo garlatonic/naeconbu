@@ -1,4 +1,4 @@
-import { LoginResponse } from "@/types/auth";
+import { LoginResponse, SignUpResponse } from "@/types/auth";
 
 // 로그인
 export async function login(email: string, password: string): Promise<LoginResponse> {
@@ -50,6 +50,58 @@ export async function login(email: string, password: string): Promise<LoginRespo
     }
 
     // 정말 예외적인 케이스
+    throw new Error("알 수 없는 오류가 발생했습니다.");
+  }
+}
+
+// 회원가입
+export async function signUp(payload: {
+  email: string;
+  nickname: string;
+  password: string;
+  birth: string;
+  profileImage?: string;
+}): Promise<SignUpResponse> {
+  try {
+    const res = await fetch("http://localhost:8080/api/v1/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    let json: SignUpResponse;
+    try {
+      json = (await res.json()) as SignUpResponse;
+    } catch {
+      throw new Error("서버 응답을 처리할 수 없습니다.");
+    }
+
+    if (!res.ok || json.resultCode !== "OK") {
+      let fallbackMsg = "회원가입 중 오류가 발생했습니다.";
+
+      if (res.status === 400) {
+        fallbackMsg = "요청 값이 올바르지 않습니다.";
+      } else if (res.status === 409) {
+        fallbackMsg = "이미 가입된 사용자입니다.";
+      } else if (res.status === 404) {
+        fallbackMsg = "회원가입 API를 찾을 수 없습니다.";
+      } else if (res.status >= 500) {
+        fallbackMsg = "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      }
+
+      throw new Error(json.msg ?? fallbackMsg);
+    }
+
+    return json;
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("서버에 연결할 수 없습니다. 네트워크 상태를 확인해주세요.");
+    }
+
+    if (err instanceof Error) {
+      throw err;
+    }
+
     throw new Error("알 수 없는 오류가 발생했습니다.");
   }
 }

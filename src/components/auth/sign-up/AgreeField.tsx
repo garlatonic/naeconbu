@@ -4,8 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { SignUpFormValues } from "@/lib/validations/auth";
-import { toast } from "sonner";
-import { useEffect } from "react";
+import FieldError from "@/components/auth/FieldError";
 
 export default function AgreeField() {
   const {
@@ -13,11 +12,6 @@ export default function AgreeField() {
     formState: { errors },
   } = useFormContext<SignUpFormValues>();
 
-  useEffect(() => {
-    if (errors.agree?.message) {
-      toast.error(errors.agree.message);
-    }
-  }, [errors.agree]);
   return (
     <div className="flex flex-col gap-1">
       <Controller
@@ -34,6 +28,7 @@ export default function AgreeField() {
           </div>
         )}
       />
+      {errors.agree && <FieldError message={errors.agree.message} />}
     </div>
   );
 }
