@@ -10,12 +10,14 @@ export default function PasswordInput({
   onChange,
   placeholder = "비밀번호를 입력하세요",
   autoComplete,
+  id,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <InputGroup className="bg-point-sub h-13">
       <InputGroupInput
+        id={id}
         type={showPassword ? "text" : "password"}
         value={value}
         onChange={onChange}

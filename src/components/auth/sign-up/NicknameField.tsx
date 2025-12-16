@@ -49,10 +49,13 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
 
   return (
     <div className="nicknameInput flex flex-col gap-2">
-      <p className="text-sm">닉네임 *</p>
+      <label htmlFor={"nickname"} className="text-sm">
+        닉네임 *
+      </label>
       <div className="flex w-full items-center gap-2">
         <Input
           type="text"
+          id={"nickname"}
           placeholder="닉네임을 입력하세요"
           className="bg-point-sub h-13"
           {...register("nickname", {

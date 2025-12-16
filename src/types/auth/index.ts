@@ -22,6 +22,7 @@ export type PasswordInputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   autoComplete?: string;
+  id?: string;
 };
 
 export type NicknameFieldProps = {

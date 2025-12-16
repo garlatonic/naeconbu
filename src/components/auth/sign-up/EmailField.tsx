@@ -117,10 +117,13 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
   return (
     <>
       <div className="emailInput flex flex-col gap-2">
-        <p className="text-sm">이메일 *</p>
+        <label htmlFor={"email"} className="text-sm">
+          이메일 *
+        </label>
         <div className="flex w-full items-center gap-2">
           <Input
             type="email"
+            id={"email"}
             placeholder="이메일을 입력하세요"
             autoComplete={"username"}
             className="bg-point-sub h-13"
@@ -148,10 +151,13 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
       </div>
       {(hasRequestedCode || isCodeSent) && (
         <div className="emailConfirm flex flex-col gap-2">
-          <p className="text-sm">이메일 인증 *</p>
+          <label htmlFor={"emailCode"} className="text-sm">
+            이메일 인증 *
+          </label>
           <div className="flex w-full items-center gap-2">
             <Input
               type="text"
+              id={"emailCode"}
               placeholder="인증번호를 입력해주세요"
               className="bg-point-sub h-13"
               disabled={isVerified}
