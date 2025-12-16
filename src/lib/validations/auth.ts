@@ -1,3 +1,5 @@
+// zod 스키마 저장 파일
+
 import { z } from "zod";
 
 export const signInSchema = z.object({

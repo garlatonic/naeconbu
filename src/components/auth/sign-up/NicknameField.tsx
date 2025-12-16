@@ -25,7 +25,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
     const nickname = getValues("nickname");
 
     if (!nickname) {
-      setError("nickname", { message: "닉네임을 입력해주세요." });
+      setError("nickname", { type: "manual", message: "닉네임을 입력해주세요." });
       toast.error("닉네임을 입력해주세요.");
       return;
     }
@@ -38,6 +38,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
     } catch (e) {
       setChecked(false);
       setError("nickname", {
+        type: "manual",
         message: e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.",
       });
       toast.error(e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.");
@@ -57,7 +58,6 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
           {...register("nickname", {
             onChange: () => {
               setChecked(null);
-              clearErrors("nickname");
             },
           })}
         />
