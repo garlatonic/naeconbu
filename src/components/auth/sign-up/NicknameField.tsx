@@ -8,6 +8,7 @@ import FieldError from "@/components/auth/FieldError";
 import { useState } from "react";
 import { checkNickname } from "@/lib/auth";
 import { NicknameFieldProps } from "@/types/auth";
+import { toast } from "sonner";
 
 export default function NicknameField({ checked, setChecked }: NicknameFieldProps) {
   const {
@@ -25,6 +26,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
 
     if (!nickname) {
       setError("nickname", { message: "닉네임을 입력해주세요." });
+      toast.error("닉네임을 입력해주세요.");
       return;
     }
     setChecking(true);
@@ -38,6 +40,7 @@ export default function NicknameField({ checked, setChecked }: NicknameFieldProp
       setError("nickname", {
         message: e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.",
       });
+      toast.error(e instanceof Error ? e.message : "닉네임을 사용할 수 없습니다.");
     } finally {
       setChecking(false);
     }
