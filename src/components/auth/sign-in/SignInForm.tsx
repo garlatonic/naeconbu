@@ -45,7 +45,11 @@ export default function SignInForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="input flex flex-col gap-6">
       <div className={"flex flex-col gap-2"}>
+        <label htmlFor="email" className={"text-sm"}>
+          이메일
+        </label>
         <Input
+          id={"email"}
           placeholder="이메일을 입력하세요"
           className="bg-point-sub h-13"
           autoComplete={"email"}
@@ -54,21 +58,25 @@ export default function SignInForm() {
         />
         {errors.email && <FieldError message={errors.email.message} />}
       </div>
-      <Controller
-        name="password"
-        control={control}
-        render={({ field }) => (
-          <div className={"flex flex-col gap-2"}>
-            <PasswordInput
-              value={field.value}
-              onChange={field.onChange}
-              placeholder={"비밀번호를 입력하세요"}
-              autoComplete="current-password"
-            />
-            {errors.password && <FieldError message={errors.password?.message} />}
-          </div>
-        )}
-      />
+      <div className={"flex flex-col gap-2"}>
+        <label htmlFor="password">비밀번호</label>
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <div className={"flex flex-col gap-2"}>
+              <PasswordInput
+                id={"password"}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder={"비밀번호를 입력하세요"}
+                autoComplete="current-password"
+              />
+              {errors.password && <FieldError message={errors.password?.message} />}
+            </div>
+          )}
+        />
+      </div>
 
       {/*TODO: 아이디 저장 및 비밀번호 찾기는 시간 되면 나중에 구현*/}
       {/*<div className="idSave flex justify-between">*/}
