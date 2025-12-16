@@ -122,6 +122,7 @@ export default function EmailField({ onVerified }: EmailFieldProps) {
           <Input
             type="email"
             placeholder="이메일을 입력하세요"
+            autoComplete={"username"}
             className="bg-point-sub h-13"
             disabled={isVerified || (isCodeSent && remainingTime > 0)}
             {...register("email")}

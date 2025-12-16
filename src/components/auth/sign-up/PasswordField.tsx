@@ -21,6 +21,7 @@ export default function PasswordField() {
               value={field.value}
               onChange={field.onChange}
               placeholder={"비밀번호를 영문, 숫자, 특수문자를 포함한 8자 이상 입력하세요"}
+              autoComplete="new-password"
             />
           )}
         />
@@ -36,6 +37,7 @@ export default function PasswordField() {
               value={field.value ?? ""}
               onChange={field.onChange}
               placeholder={"동일한 비밀번호를 입력하세요"}
+              autoComplete="new-password"
             />
           )}
         />
