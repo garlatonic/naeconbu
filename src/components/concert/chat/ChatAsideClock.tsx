@@ -54,7 +54,7 @@ export default function ChatAsideClock() {
 
   return (
     <div className={"flex flex-col gap-8"}>
-      <p className="text-text-main text-xl font-bold">서버 시간</p>
+      <h3 className="text-text-main text-xl font-bold">서버 시간</h3>
       <div ref={ref} />
     </div>
   );
