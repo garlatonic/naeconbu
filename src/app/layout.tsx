@@ -5,7 +5,6 @@ import Footer from "@/components/common/Footer";
 import { pretendard } from "@/../public/fonts/local_fonts";
 
 import { twMerge } from "tailwind-merge";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
@@ -15,19 +14,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko">
       <body className={twMerge("min-h-dvh text-sm", pretendard.className)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          <main className="min-h-dvh">{children}</main>
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
+        <Header />
+        <main className="min-h-dvh">{children}</main>
+        <Toaster />
+        <Footer />
       </body>
     </html>
   );

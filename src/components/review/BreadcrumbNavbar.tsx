@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 export type BreadcrumbItemType = {
-  label: string | React.ReactNode;
+  label: string;
   href?: string;
 };
 
@@ -76,7 +76,7 @@ export default function BreadcrumbNavbar({ items }: BreadcrumbNavProps) {
 
             return (
               <Fragment key={`${item.label}-${index}`}>
-                <BreadcrumbItem>
+                <BreadcrumbItem key={item.label}>
                   {item.href && !isLast ? (
                     <BreadcrumbLink asChild>
                       <Link href={item.href}>{item.label}</Link>

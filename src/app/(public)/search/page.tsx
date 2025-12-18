@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
-
 export default function Page() {
-  redirect("/search/overview");
+  return (
+    <>
+      <h1>Page Component</h1>
+    </>
+  );
 }
