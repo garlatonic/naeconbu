@@ -8,7 +8,7 @@ import { login } from "@/lib/auth";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type SignInFormValues, signInSchema } from "@/lib/validations/auth";
+import { type SignInFormValues, signInSchema } from "@/lib/zod/auth";
 import FieldError from "@/components/auth/FieldError";
 
 export default function SignInForm() {

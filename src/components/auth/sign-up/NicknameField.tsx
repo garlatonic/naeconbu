@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFormContext } from "react-hook-form";
-import { SignUpFormValues } from "@/lib/validations/auth";
+import { SignUpFormValues } from "@/lib/zod/auth";
 import FieldError from "@/components/auth/FieldError";
 import { useState } from "react";
 import { checkNickname } from "@/lib/auth";
