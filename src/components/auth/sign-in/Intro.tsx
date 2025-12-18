@@ -1,4 +1,4 @@
-export default function SignInIntro() {
+export default function Intro() {
   return (
     <div className="intro flex flex-col gap-2">
       <p className="text-text-main text-3xl font-bold">환영합니다</p>

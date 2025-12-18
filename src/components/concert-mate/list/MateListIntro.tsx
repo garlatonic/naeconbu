@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Input } from "@/components/ui/input";
+import { Plus, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-import SearchInput from "@/components/concert-mate/SearchInput";
 
 export default function MateListIntro() {
   return (
@@ -14,13 +15,18 @@ export default function MateListIntro() {
             <h2 className="text-text-main text-4xl font-bold">공연 동행 찾기</h2>
             <p className="text-text-sub text-md">다가오는 콘서트를 함께 즐길 Mate 를 찾아보세요.</p>
           </div>
-          <Link href="/concert-mate/write">
+          <Link href="/write">
             <Button variant="default" size="lg" className="bg-point-main cursor-pointer">
               <Plus /> 글 작성하기
             </Button>
           </Link>
         </div>
-        <SearchInput className="w-[60%]" />
+        <ButtonGroup className="w-[60%]">
+          <Input placeholder="검색어를 입력해주세요" />
+          <Button variant="outline" aria-label="Search" className="bg-point-sub cursor-pointer">
+            <SearchIcon />
+          </Button>
+        </ButtonGroup>
       </div>
     </section>
   );

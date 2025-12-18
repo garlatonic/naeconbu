@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ReviewWriteHeader from "@/components/review/write/ReviewWriteHeader";
+import ConcertSelectSection from "@/components/review/write/ConcertSelectSection";
 import SelectedConcertCard from "@/components/review/write/SelectedConcertCard";
 import ReviewTitleSection from "@/components/review/write/ReviewTitleSection";
 import ReviewRatingSection from "@/components/review/write/ReviewRatingSection";
@@ -10,7 +11,6 @@ import PhotoUploadSection from "@/components/review/write/PhotoUploadSection";
 import ReviewTagSection from "@/components/review/write/ReviewTagSection";
 import ReviewConfirmSection from "@/components/review/write/ReviewConfirmSection";
 import ReviewFooterActions from "@/components/review/write/ReviewFooterActions";
-import ModalContainer from "@/components/concert-mate/modal/ModalContainer";
 
 export default function ReviewWriteMain() {
   return (
@@ -18,8 +18,7 @@ export default function ReviewWriteMain() {
       <div className={"flex w-full max-w-400 flex-col gap-8"}>
         <Card className={"gap-8 p-12"}>
           <ReviewWriteHeader />
-          {/* 공연 선택칸 + 선택 모달 */}
-          <ModalContainer />
+          <ConcertSelectSection />
           <SelectedConcertCard />
           <ReviewTitleSection />
           <ReviewRatingSection />
