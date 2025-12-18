@@ -3,19 +3,11 @@ import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { getMe } from "@/lib/auth/auth.server";
-import { GetMeResponse } from "@/types/auth";
+import { getAuthStatus } from "@/lib/auth/auth.server";
 import LogoutButton from "@/components/home/LogoutButton";
 
 export default async function Header() {
-  let isLoggedIn: GetMeResponse["data"] | null = null;
-
-  try {
-    const res = await getMe();
-    isLoggedIn = res.data;
-  } catch {
-    isLoggedIn = null;
-  }
+  const isLoggedIn = await getAuthStatus();
 
   const navLinkHover =
     "relative inline-block transition-all duration-300 ease-in-out text-text-main hover:-translate-y-0.5 before:absolute before:-bottom-0.5 before:left-0 before:right-0 before:-z-10 before:h-0.5 before:bg-border-point before:origin-bottom before:scale-y-0 before:transform before:transition-transform before:duration-300 before:ease-in-out hover:before:scale-y-100";
@@ -41,8 +33,7 @@ export default async function Header() {
               />
             </div>
           </div>
-          {/* TODO: 유저 로그인 여부 확인 후 토글 */}
-          {/* 비회원일 때 */}
+          {/* 로그인 상태에 따라 다른 메뉴 표시 */}
           <div className="space-x-8 text-zinc-500">
             {isLoggedIn ? (
               <>
