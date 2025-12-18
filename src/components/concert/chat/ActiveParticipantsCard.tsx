@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/card";
 import InfoBadge from "@/components/concert/chat/InfoBadge";
