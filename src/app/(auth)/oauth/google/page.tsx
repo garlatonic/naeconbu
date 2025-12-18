@@ -1,34 +1,10 @@
 "use client";
+import { useOAuthCallback } from "@/hooks/useOAuthCallback";
 
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+// TODO: 로그인 실패 시 서버 에러 메시지 기반 분기 처리
+// TODO: 네트워크 오류/타임아웃에 대한 UX 개선 (로딩/재시도)
 
-export default function KakaoCallbackPage() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const code = params.get("code");
-
-  useEffect(() => {
-    if (!code) return;
-
-    const login = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login/google?code=${code}`,
-        {
-          method: "GET",
-          credentials: "include", // 쿠키 방식이면 필수
-        }
-      );
-
-      if (res.ok) {
-        router.replace("/home");
-      } else {
-        router.replace("/sign-in");
-      }
-    };
-
-    login();
-  }, [code, router]);
-
+export default function GoogleCallbackPage() {
+  useOAuthCallback("google");
   return <p>구글 로그인 처리 중...</p>;
 }
