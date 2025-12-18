@@ -1,4 +1,18 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { getMe } from "@/lib/auth/auth.server";
+import { redirect } from "next/navigation";
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  let isLoggedIn = false;
+
+  try {
+    await getMe();
+    isLoggedIn = true;
+  } catch {}
+
+  if (isLoggedIn) {
+    redirect("/home");
+  }
+
   return (
     <div className="grid min-h-screen grid-cols-2">
       {/* TODO: 왼쪽 이미지 */}
