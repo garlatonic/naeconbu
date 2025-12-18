@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import QrCode from "@/components/ui/qr-code";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Concert } from "@/types/home";
+import UpcomingSkeleton from "../loading/UpcomingSkeleton";
 import Image from "next/image";
 
 export default function UpcomingSlider({ concerts }: { concerts: Concert[] }) {
@@ -43,77 +44,78 @@ export default function UpcomingSlider({ concerts }: { concerts: Concert[] }) {
           </div>
         </div>
         <div className="m-auto w-full max-w-400">
-          <Swiper
-            onSwiper={setSwiperInstance}
-            slidesPerView="auto"
-            className="w-full overflow-visible!"
-          >
-            {concerts.map((concert) => {
-              const startDate = new Date(concert.startDate);
-              const endDate = new Date(concert.endDate);
+          <Suspense fallback={<UpcomingSkeleton />}>
+            <Swiper
+              onSwiper={setSwiperInstance}
+              slidesPerView="auto"
+              className="w-full overflow-visible!"
+            >
+              {concerts.map((concert) => {
+                const startDate = new Date(concert.startDate);
+                const endDate = new Date(concert.endDate);
 
-              let dateString = "";
-              // TODO : 공연 시간도 반영하기 (현재는 날짜만 입력되어 있음)
+                let dateString = "";
+                // TODO : 공연 시간도 반영하기 (현재는 날짜만 입력되어 있음)
 
-              if (startDate === endDate) {
-                dateString = `${startDate.getFullYear()}.${(startDate.getMonth() + 1).toString().padStart(2, "0")}.${startDate.getDate().toString().padStart(2, "0")}`;
-              } else {
-                dateString = `${startDate.getFullYear()}.${(startDate.getMonth() + 1).toString().padStart(2, "0")}.${startDate.getDate().toString().padStart(2, "0")} ― ${endDate.getDate().toString().padStart(2, "0")}`;
-              }
+                if (startDate === endDate) {
+                  dateString = `${startDate.getFullYear()}.${(startDate.getMonth() + 1).toString().padStart(2, "0")}.${startDate.getDate().toString().padStart(2, "0")}`;
+                } else {
+                  dateString = `${startDate.getFullYear()}.${(startDate.getMonth() + 1).toString().padStart(2, "0")}.${startDate.getDate().toString().padStart(2, "0")} ― ${endDate.getDate().toString().padStart(2, "0")}`;
+                }
 
-              return (
-                <SwiperSlide key={concert.id} className="group mr-8 w-auto! last:mr-0">
-                  <Link className="relative block w-80" href={`/concerts/${concert.id}`}>
-                    <AspectRatio ratio={320 / 426.5}>
-                      {/* TODO : 이미지 concert.posterUrl 로 바꿀것 */}
-                      <Image
-                        src="/images/hero_slide_01.png"
-                        alt={concert.name}
-                        className="rounded-2xl object-cover"
-                        fill
-                        sizes="320px"
-                        placeholder="blur"
-                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-                      />
-                    </AspectRatio>
-                    <div className="absolute top-0 left-0 flex h-full w-full flex-col bg-zinc-900/30 opacity-0 backdrop-blur-xs transition-opacity group-hover:opacity-100">
-                      <div className="flex h-[58.8%] items-center justify-center p-6">
-                        <h3 className="text-center text-2xl font-semibold text-white">
-                          {concert.name}
-                        </h3>
+                return (
+                  <SwiperSlide key={concert.id} className="group mr-8 w-auto! last:mr-0">
+                    <Link className="relative block w-80" href={`/concerts/${concert.id}`}>
+                      <AspectRatio ratio={320 / 426.5}>
+                        <Image
+                          src={concert.posterUrl}
+                          alt={concert.name}
+                          className="rounded-2xl object-cover"
+                          loading="eager"
+                          priority
+                          width={320}
+                          height={426.5}
+                        />
+                      </AspectRatio>
+                      <div className="absolute top-0 left-0 flex h-full w-full flex-col bg-zinc-900/30 opacity-0 backdrop-blur-xs transition-opacity group-hover:opacity-100">
+                        <div className="flex h-[58.8%] items-center justify-center p-6">
+                          <h3 className="text-center text-2xl font-semibold text-white">
+                            {concert.name}
+                          </h3>
+                        </div>
+                        <div className="border-t-bg-main flex h-[41.2%] items-center justify-between border-t border-dashed p-6">
+                          <ul className="space-y-5.5 text-white">
+                            <li className="space-y-2">
+                              <strong className="text-base font-semibold">Date</strong>
+                              <p>{dateString}</p>
+                            </li>
+                            <li className="space-y-2">
+                              <strong className="text-base font-semibold">Venue</strong>
+                              <p>{concert.placeName}</p>
+                            </li>
+                          </ul>
+                          {/* TODO : 해당 공연의 예매 가능한 링크 넣기 */}
+                          <QrCode address="https://ncbticket.com/concerts/1" size={64} />
+                        </div>
+                        {/* 티켓 옆 꾸밈요소 */}
+                        <div className="absolute top-[58.8%] -mt-4 w-full">
+                          <div className="bg-bg-main absolute -right-4 h-8 w-8 rounded-full"></div>
+                          <div className="bg-bg-main absolute -left-4 h-8 w-8 rounded-full"></div>
+                        </div>
                       </div>
-                      <div className="border-t-bg-main flex h-[41.2%] items-center justify-between border-t border-dashed p-6">
-                        <ul className="space-y-5.5 text-white">
-                          <li className="space-y-2">
-                            <strong className="text-base font-semibold">Date</strong>
-                            <p>{dateString}</p>
-                          </li>
-                          <li className="space-y-2">
-                            <strong className="text-base font-semibold">Venue</strong>
-                            <p>{concert.placeName}</p>
-                          </li>
-                        </ul>
-                        {/* TODO : 해당 공연의 예매 가능한 링크 넣기 */}
-                        <QrCode address="https://ncbticket.com/concerts/1" size={64} />
+                      {/* 티켓 각 모서리 꾸밈요소 */}
+                      <div className="etc">
+                        <div className="bg-bg-main absolute -top-4 -left-4 h-8 w-8 rounded-full"></div>
+                        <div className="bg-bg-main absolute -top-4 -right-4 h-8 w-8 rounded-full"></div>
+                        <div className="bg-bg-main absolute -bottom-4 -left-4 h-8 w-8 rounded-full"></div>
+                        <div className="bg-bg-main absolute -right-4 -bottom-4 h-8 w-8 rounded-full"></div>
                       </div>
-                      {/* 티켓 옆 꾸밈요소 */}
-                      <div className="absolute top-[58.8%] -mt-4 w-full">
-                        <div className="bg-bg-main absolute -right-4 h-8 w-8 rounded-full"></div>
-                        <div className="bg-bg-main absolute -left-4 h-8 w-8 rounded-full"></div>
-                      </div>
-                    </div>
-                    {/* 티켓 각 모서리 꾸밈요소 */}
-                    <div className="etc">
-                      <div className="bg-bg-main absolute -top-4 -left-4 h-8 w-8 rounded-full"></div>
-                      <div className="bg-bg-main absolute -top-4 -right-4 h-8 w-8 rounded-full"></div>
-                      <div className="bg-bg-main absolute -bottom-4 -left-4 h-8 w-8 rounded-full"></div>
-                      <div className="bg-bg-main absolute -right-4 -bottom-4 h-8 w-8 rounded-full"></div>
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+                    </Link>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </Suspense>
         </div>
       </div>
     </section>
