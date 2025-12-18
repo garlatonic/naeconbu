@@ -54,6 +54,30 @@ export async function login(email: string, password: string): Promise<LoginRespo
   }
 }
 
+// 로그아웃
+export async function logout() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/logout`, {
+      method: "POST",
+      credentials: "include", // 🔥 쿠키 전달 필수
+    });
+
+    if (!res.ok) {
+      throw new Error("로그아웃에 실패했습니다.");
+    }
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error("서버에 연결할 수 없습니다.");
+    }
+
+    if (err instanceof Error) {
+      throw err;
+    }
+
+    throw new Error("알 수 없는 오류가 발생했습니다.");
+  }
+}
+
 // 회원가입
 export async function signUp(payload: {
   email: string;
