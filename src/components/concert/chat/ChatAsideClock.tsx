@@ -42,6 +42,7 @@ export default function ChatAsideClock() {
         css: css({
           width: "44px",
           height: "80px",
+          fontSize: "42px",
         }),
       }),
       autoStart: true,
