@@ -9,12 +9,7 @@ export default function ConcertInfoCard() {
     <Card className={"gap-4 p-7"}>
       <CardTitle className={"text-text-main text-xl font-bold"}>Concert Information</CardTitle>
       <div className="relative aspect-[16/9] overflow-hidden rounded-md bg-gray-200">
-        <Image
-          src={"/images/poster-placeholder.png"}
-          alt="Concert Poster"
-          fill
-          className="object-cover"
-        />
+        <Image src={"/images/slide02.gif"} alt="Concert Poster" fill className="object-cover" />
       </div>
       <h3 className={"text-xl font-semibold"}>The Midmight Echo Live</h3>
       <div className={"flex flex-col gap-3"}>
