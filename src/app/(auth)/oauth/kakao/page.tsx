@@ -21,7 +21,9 @@ export default function KakaoCallbackPage() {
           <Spinner />
         </EmptyMedia>
         <EmptyTitle>카카오 로그인 중이에요</EmptyTitle>
-        <EmptyDescription>곧 홈 화면으로 이동할게요 🙂</EmptyDescription>
+        <EmptyDescription role="status" aria-live="polite">
+          곧 홈 화면으로 이동할게요 🙂
+        </EmptyDescription>
       </EmptyHeader>
     </Empty>
   );
