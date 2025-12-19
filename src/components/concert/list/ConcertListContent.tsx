@@ -39,8 +39,7 @@ export default async function ConcertListContent({
             <ConcertCard
               key={concert.id}
               id={concert.id}
-              posterUrl="/ConcertPoster.png"
-              // 현재 파일이 없어서 임의로 대체
+              posterUrl={concert.posterUrl}
               name={concert.name}
               startDate={concert.startDate}
               endDate={concert.endDate}
