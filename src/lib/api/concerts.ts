@@ -1,4 +1,6 @@
+import { ConcertDetail } from "@/types/concerts";
 import { Concert, ConcertWithTicket, ResponseData } from "@/types/home";
+import ClientApi from "@/utils/helpers/clientApi";
 
 const createEmptyResponse = (message: string): ResponseData<ConcertWithTicket[]> => ({
   status: 500,
@@ -7,7 +9,6 @@ const createEmptyResponse = (message: string): ResponseData<ConcertWithTicket[]>
   data: [],
 });
 
-// TODO : 현재 그냥 다가오는 공연만 가져오도록 작업. 나중에는 예매 임박 순으로 바꿀것
 export const getUpcomingConcerts = async ({
   page = 0,
   size = 20,
@@ -16,17 +17,8 @@ export const getUpcomingConcerts = async ({
   size?: number;
 } = {}): Promise<ResponseData<ConcertWithTicket[]>> => {
   try {
-    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const url = new URL(`${baseURL}/api/v1/concerts/list/UPCOMING`);
-    url.searchParams.append("page", page.toString());
-    url.searchParams.append("size", size.toString());
-
-    const res = await fetch(url.toString(), {
+    const res = await ClientApi(`/api/v1/concerts/list/UPCOMING?page=${page}&size=${size}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
       cache: "no-store",
     });
 
@@ -40,10 +32,10 @@ export const getUpcomingConcerts = async ({
     const concertsWithTicketLinks = await Promise.all(
       data.data.map(async (concert: Concert) => {
         try {
-          const ticketRes = await fetch(
-            `${baseURL}/api/v1/concerts/ticketOffices?concertId=${concert.id}`,
+          const ticketRes = await ClientApi(
+            `/api/v1/concerts/ticketOffices?concertId=${concert.id}`,
             {
-              credentials: "include",
+              method: "GET",
               cache: "no-store",
             }
           );
@@ -62,7 +54,6 @@ export const getUpcomingConcerts = async ({
           };
         } catch (error) {
           console.error(`Error fetching ticket info for concert ${concert.id}:`, error);
-          // 에러 나도 콘서트 정보는 유지
           return concert;
         }
       })
@@ -75,5 +66,44 @@ export const getUpcomingConcerts = async ({
   } catch (error) {
     console.error("Error fetching upcoming concerts:", error);
     return createEmptyResponse("콘서트 목록을 가져오는데 실패했습니다");
+  }
+};
+
+// 공연 정보 상세 가져오기
+export const getConcertDetail = async ({
+  concertId,
+}: {
+  concertId: string;
+}): Promise<ConcertDetail | null> => {
+  try {
+    const res = await ClientApi(`/api/v1/concerts/concertDetail?concertId=${concertId}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return null;
+    }
+
+    const data = await res.json();
+
+    // 좋아요 여부까지 가져오기
+    // const likeRes = await ClientApi(`/api/v1/concerts/isLike/${concertId}`, {
+    //   method: "GET",
+    //   cache: "no-store",
+    // });
+
+    // if (!likeRes.ok) {
+    //   console.error("Like API Error:", likeRes.status);
+    //   return data; // 좋아요 정보 없이 기본 데이터 반환
+    // }
+
+    // const likeData = await likeRes.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching concert detail:", error);
+    return null;
   }
 };
