@@ -1,11 +1,11 @@
 import ConcertCard from "@/components/concert/ConcertCard";
-import { SortSelect } from "@/components/common/SortSelect";
 import { twMerge } from "tailwind-merge";
 import { ConcertData } from "@/components/concert/ConcertType";
+import { SortSelect } from "@/components/common/SortSelect";
 
-async function getConcerts() {
+async function getConcerts(sortType: string = "LIKE") {
   // 기본 : 좋아요 순 정렬
-  const res = await fetch("http://localhost:8080/api/v1/concerts/list/LIKE?page=0&size=12");
+  const res = await fetch(`http://localhost:8080/api/v1/concerts/list/${sortType}?page=0&size=12`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -14,8 +14,14 @@ async function getConcerts() {
   return res.json();
 }
 
-export default async function ConcertListContent() {
-  const res = await getConcerts();
+export default async function ConcertListContent({
+  searchParams,
+}: {
+  searchParams: { sort?: string };
+}) {
+  const sortType = searchParams.sort;
+
+  const res = await getConcerts(sortType);
   const concertsList = res.data;
 
   return (
