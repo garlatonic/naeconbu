@@ -1,7 +1,7 @@
 import Image from "next/image";
 import ConcertHeaderArtist from "@/components/concert/detail/ConcertHeaderArtist";
 import ConcertHeaderBtn from "@/components/concert/detail/ConcertHeaderBtn";
-import { ConcertDetail } from "@/types/concerts";
+import { type ConcertDetail } from "@/types/concerts";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { HeartIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
@@ -56,27 +56,15 @@ export default function ConcertHeader({ concertDetail }: { concertDetail: Concer
               type="date"
               label="날짜 및 시간"
               title={formatDateRange(concertDetail.startDate, concertDetail.endDate)}
-              // TODO : 공연 시작정보에서 시간도 받아올 수 있는지 체크
             />
-            <ConcertHeaderInfo
-              type="location"
-              label="장소"
-              title={concertDetail.placeName}
-              subtitle={concertDetail.placeAddress}
-            />
+            <ConcertHeaderInfo type="location" label="장소" title={concertDetail.placeName} />
             <ConcertHeaderInfo
               type="price"
               label="티켓 가격"
               title={formatPrice(concertDetail.minPrice, concertDetail.maxPrice)}
-              // TODO : 좌석별 정보 체크
             />
-            {/* TODO : 관람석 몇개인지 체크하는 API 있는지? 없으면 예매일정을 넣어야할 듯 */}
-            <ConcertHeaderInfo
-              type="capacity"
-              label="관람석"
-              title="14,595석"
-              subtitle="12세 관람가"
-            />
+            {/* TODO : 관리자일 경우 예매일정 직접 입력하는 버튼 추가 */}
+            <ConcertHeaderInfo type="ticketing" label="예매 일정" title={"직접입력"} />
           </div>
           <ConcertHeaderArtist />
           <ConcertHeaderBtn />

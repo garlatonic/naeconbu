@@ -1,16 +1,16 @@
 import { ConcertInfoItem } from "@/types/concerts";
-import { Calendar, MapPin, Ticket, Armchair } from "lucide-react";
+import { MapPin, CalendarClockIcon, Calendar1Icon, TicketPercentIcon } from "lucide-react";
 
 const iconMap = {
-  date: <Calendar className="stroke-point-main size-5" />,
+  date: <Calendar1Icon className="stroke-point-main size-5" />,
   location: <MapPin className="stroke-point-main size-5" />,
-  price: <Ticket className="stroke-point-main size-5" />,
-  capacity: <Armchair className="stroke-point-main size-5" />,
+  price: <TicketPercentIcon className="stroke-point-main size-5" />,
+  ticketing: <CalendarClockIcon className="stroke-point-main size-5" />,
 };
 
 export default function ConcertHeaderInfo({ type, label, title, subtitle }: ConcertInfoItem) {
   return (
-    <div className="flex gap-4">
+    <div className="flex items-center gap-4">
       <div className="bg-bg-sub flex size-12 items-center justify-center rounded-full">
         {iconMap[type]}
       </div>

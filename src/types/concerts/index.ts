@@ -18,7 +18,7 @@ export type ConcertDetail = {
 
 // 공연 상세 정보 아이템
 export type ConcertInfoItem = {
-  type: "date" | "location" | "price" | "capacity";
+  type: "date" | "location" | "price" | "ticketing";
   label: string;
   title: string;
   subtitle?: string;
