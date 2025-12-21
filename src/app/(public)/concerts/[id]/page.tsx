@@ -2,12 +2,13 @@ import ConcertDetail from "@/components/concert/detail/ConcertDetail";
 import ConcertHeader from "@/components/concert/detail/ConcertHeader";
 import ConcertSimilar from "@/components/concert/detail/ConcertSimilar";
 import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
-import { getConcertDetail } from "@/lib/api/concerts";
+import { getConcertDetail, getConcertVenueInfo } from "@/lib/api/concerts";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const concertDetailData = await getConcertDetail({ concertId: id });
+  const concertVenueData = await getConcertVenueInfo({ concertId: id });
 
   return (
     <>
@@ -18,8 +19,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           { label: concertDetailData?.name },
         ]}
       />
+
       <ConcertHeader concertDetail={concertDetailData} />
-      <ConcertDetail />
+      <ConcertDetail concertDetail={concertDetailData} concertVenueData={concertVenueData.data} />
       <ConcertSimilar />
     </>
   );

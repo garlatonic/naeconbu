@@ -23,3 +23,23 @@ export type ConcertInfoItem = {
   title: string;
   subtitle?: string;
 };
+
+// 공연장 정보
+export type ConcertVenueInfo = {
+  placeName: string;
+  placeAddress: string;
+  telephone: string;
+  placeUrl: string;
+  lat: number;
+  lon: number;
+  hasRestaurant: boolean;
+  hasCafe: boolean;
+  hasStore: boolean;
+  hasPlayroom: boolean;
+  hasNursingRoom: boolean;
+  hasBarrierFreeParking: boolean;
+  hasBarrierFreeRestRoom: boolean;
+  hasBarrierFreeRamp: boolean;
+  hasBarrierFreeElevator: boolean;
+  hasParking: boolean;
+};

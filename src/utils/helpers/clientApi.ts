@@ -17,12 +17,18 @@ type NextFetchOptions = RequestInit & {
  * @returns {Promise<Response>} fetch 응답
  */
 export default async function ClientApi(path: string, init?: NextFetchOptions) {
-  return await fetch(`${API_URL}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers || {}), // 순서 바꿔서 사용자 헤더가 우선되도록
-    },
-    credentials: "include",
-  });
+  try {
+    const response = await fetch(`${API_URL}${path}`, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers || {}),
+      },
+      credentials: "include",
+    });
+
+    return response;
+  } catch (error) {
+    throw new Error("서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.", error as Error);
+  }
 }

@@ -107,3 +107,24 @@ export const getConcertDetail = async ({
     return null;
   }
 };
+
+// 공연장 정보 가져오기
+export const getConcertVenueInfo = async ({ concertId }: { concertId: string }) => {
+  try {
+    const res = await ClientApi(`/api/v1/concerts/placeDetail?concertId=${concertId}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return createEmptyResponse(`API 요청 실패: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching concert venue info:", error);
+    return createEmptyResponse("공연장 정보를 가져오는데 실패했습니다");
+  }
+};
