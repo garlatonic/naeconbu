@@ -2,10 +2,10 @@
 
 import ConcertCard from "@/components/concert/ConcertCard";
 import { twMerge } from "tailwind-merge";
-import { ConcertData } from "@/components/concert/ConcertType";
 import ListSortClient from "@/components/concert/list/ListSortClient";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ConcertData } from "@/types/concerts";
 
 export default function ConcertListContent({
   initialList,

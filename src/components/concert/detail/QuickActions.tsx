@@ -1,8 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import { Button } from "@/components/ui/button";
-import { QuickActionsProps } from "@/components/concert/ConcertType";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { QuickActionsProps } from "@/types/concerts";
 
 export default function QuickActions({ Icon1, text, Icon2 = ArrowRight }: QuickActionsProps) {
   return (

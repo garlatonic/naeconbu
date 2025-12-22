@@ -1,7 +1,7 @@
+import { ConcertData } from "@/types/concerts";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ConcertData } from "@/components/concert/ConcertType";
 
 export default function ConcertCard({
   id,
