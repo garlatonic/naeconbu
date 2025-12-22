@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { ConcertData } from "@/components/concert/ConcertType";
 import ListSortClient from "@/components/concert/list/ListSortClient";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function ConcertListContent({
   initialList,
@@ -18,9 +19,11 @@ export default function ConcertListContent({
   const [loading, setLoading] = useState(false);
 
   const oTarget = useRef(null);
-  const pageRef = useRef(2);
+  const pageRef = useRef(1); // 0 시작 이므로
 
   const loadMoreList = useCallback(async () => {
+    setLoading(true);
+
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/concerts/list/${sortType}?page=${pageRef.current}&size=12`
@@ -42,13 +45,14 @@ export default function ConcertListContent({
           return [...prev, ...uniqueAddList];
         });
         pageRef.current += 1;
-
-        if (addList.length < 12) {
-          setHasMore(false);
-        }
+      }
+      if (addList.length < 12) {
+        setHasMore(false);
+        toast.success("모든 공연을 불러왔습니다.");
       }
     } catch (error) {
       console.error(error);
+      toast.error("데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
@@ -103,7 +107,7 @@ export default function ConcertListContent({
           ))}
         </div>
       </div>
-      {hasMore && <div ref={oTarget}></div>}
+      {hasMore && <div ref={oTarget} className="h-1 w-full" aria-hidden="true" />}
     </section>
   );
 }
