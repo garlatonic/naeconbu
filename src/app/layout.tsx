@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main className="min-h-dvh">{children}</main>
           <Footer />
-          <Toaster />
+          <Toaster className={pretendard.className} />
         </ThemeProvider>
       </body>
     </html>
