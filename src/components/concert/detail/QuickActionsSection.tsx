@@ -1,4 +1,5 @@
 "use client";
+
 import { useRef, useState } from "react";
 import {
   ExternalLink,
@@ -6,8 +7,6 @@ import {
   CalendarPlus2Icon,
   ArrowRightIcon,
   Share2Icon,
-  Clock8Icon,
-  Clock4Icon,
   CheckIcon,
   CopyIcon,
   BellIcon,
@@ -38,31 +37,96 @@ import {
   AlertDialogFooter,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
+import { createPlanner } from "@/lib/api/planner";
+import { redirect } from "next/navigation";
+import { User } from "@/types/user";
 
 export default function QuickActionsSection({
   concertId,
   concertTicketingData,
   concertStartDate,
   concertEndDate,
+  userData,
 }: {
   concertId?: string;
   concertTicketingData?: TicketOffice[] | null;
   concertStartDate?: string;
   concertEndDate?: string;
+  userData: User | null;
 }) {
+  // 링크 공유하기 Input
   const shareInputRef = useRef<HTMLInputElement>(null);
 
+  // 모달 상태 관리
   const [ticketDialogOpen, setTicketDialogOpen] = useState(false);
   const [plannerDialogOpen, setPlannerDialogOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [alarmDialogOpen, setAlarmDialogOpen] = useState(false);
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
 
+  // 공유하기 복사 상태 관리
   const [copied, setCopied] = useState<boolean>(false);
-  // TODO : 플래너 생성 함수... 추후 구현 필요
-  const handleCreatePlanner = () => {
-    // 플래너 생성 로직 구현
+
+  // 플래너 생성 상태 관리
+  const [plannerTitle, setPlannerTitle] = useState<string | undefined>("");
+  const [plannerDate, setPlannerDate] = useState<Date | undefined>(undefined);
+
+  // 모달 열기 핸들러
+  const handleOpenTicketModal = () => {
+    setTicketDialogOpen(true);
+  };
+  const handleOpenPlannerModal = () => {
+    if (!userData) {
+      toast.error("로그인 후 이용해주세요.");
+      return;
+    }
+    setPlannerDialogOpen(true);
+  };
+  const handleOpenShareModal = () => {
+    setShareDialogOpen(true);
+  };
+  const handleOpenAlarmModal = () => {
+    if (!userData) {
+      toast.error("로그인 후 이용해주세요.");
+      return;
+    }
+    setAlarmDialogOpen(true);
+  };
+  const handleOpenChatModal = () => {
+    setChatDialogOpen(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleClosePlannerModal = () => {
     setPlannerDialogOpen(false);
+  };
+
+  // 플래너 생성 핸들러
+  const handleCreatePlanner = async () => {
+    if (!concertId) return;
+    if (!plannerTitle) {
+      toast.error("플래너 제목을 입력해주세요.");
+      return;
+    }
+    if (!plannerDate) {
+      toast.error("플래너 날짜를 선택해주세요.");
+      return;
+    }
+
+    const data = await createPlanner({
+      concertId,
+      title: plannerTitle,
+      planDate: plannerDate.toISOString().slice(0, 10),
+    });
+
+    if (!data) {
+      toast.error("플래너 생성에 실패했습니다.");
+      return;
+    }
+
+    toast.success("플래너가 생성되었습니다.");
+    setPlannerDialogOpen(false);
+    redirect(`/planner/${data.data.id}`);
   };
 
   // 복사
@@ -88,7 +152,7 @@ export default function QuickActionsSection({
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setTicketDialogOpen(true)}
+          onClick={handleOpenTicketModal}
           className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
         >
           <div className="flex items-center gap-2">
@@ -100,7 +164,7 @@ export default function QuickActionsSection({
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setPlannerDialogOpen(true)}
+          onClick={handleOpenPlannerModal}
           className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
         >
           <div className="flex items-center gap-2">
@@ -112,7 +176,7 @@ export default function QuickActionsSection({
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setShareDialogOpen(true)}
+          onClick={handleOpenShareModal}
           className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
         >
           <div className="flex items-center gap-2">
@@ -124,7 +188,7 @@ export default function QuickActionsSection({
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setAlarmDialogOpen(true)}
+          onClick={handleOpenAlarmModal}
           className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
         >
           <div className="flex items-center gap-2">
@@ -136,7 +200,7 @@ export default function QuickActionsSection({
         <Button
           variant="outline"
           size="lg"
-          onClick={() => setChatDialogOpen(true)}
+          onClick={handleOpenChatModal}
           className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
         >
           <div className="flex items-center gap-2">
@@ -206,50 +270,24 @@ export default function QuickActionsSection({
           <FieldGroup className="max-h-[60vh] gap-6 overflow-y-auto p-4">
             <Field>
               <FieldLabel>제목</FieldLabel>
-              <Input type="text" placeholder="플래너 제목을 입력하세요" />
+              <Input
+                type="text"
+                placeholder="플래너 제목을 입력하세요"
+                value={plannerTitle}
+                onChange={(e) => setPlannerTitle(e.target.value)}
+              />
             </Field>
             <Field>
               <FieldLabel>날짜</FieldLabel>
               <ConcertDatePicker
                 startDate={new Date(concertStartDate?.split("-").join(",") ?? "")}
                 endDate={new Date(concertEndDate?.split("-").join(",") ?? "")}
+                onChange={(date) => setPlannerDate(date)}
               />
             </Field>
-            <div className="flex gap-4">
-              <Field>
-                <FieldLabel>시작 시간</FieldLabel>
-                <div className="relative">
-                  <Input
-                    type="time"
-                    id="time-picker"
-                    step="1"
-                    defaultValue="08:30:00"
-                    className="peer bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                  />
-                  <div className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-3 peer-disabled:opacity-50">
-                    <Clock8Icon className="size-4" />
-                  </div>
-                </div>
-              </Field>
-              <Field>
-                <FieldLabel>종료 시간</FieldLabel>
-                <div className="relative">
-                  <Input
-                    type="time"
-                    id="time-picker"
-                    step="1"
-                    defaultValue="08:30:00"
-                    className="peer bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                  />
-                  <div className="text-muted-foreground pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-3 peer-disabled:opacity-50">
-                    <Clock4Icon className="size-4" />
-                  </div>
-                </div>
-              </Field>
-            </div>
           </FieldGroup>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPlannerDialogOpen(false)}>
+            <Button variant="outline" onClick={handleClosePlannerModal}>
               취소
             </Button>
             <Button onClick={handleCreatePlanner}>만들기</Button>

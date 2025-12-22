@@ -43,8 +43,7 @@ export default function ConcertHeader({
             />
           </AspectRatio>
         </div>
-        {/* className = "left" */}
-        <div className="right bg-bg-main border-border flex flex-1 flex-col gap-8 rounded-2xl border p-10">
+        <div className="bg-bg-main border-border flex flex-1 flex-col gap-8 rounded-2xl border p-10">
           <div className="title flex justify-between">
             <div className="flex flex-col gap-4">
               {/* TODO : 아티스트 쪽 장르? 된다면 넣기 */}

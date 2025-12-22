@@ -20,6 +20,9 @@ import { Popover } from "@radix-ui/react-popover";
 import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { patchTicketTimeSet } from "@/lib/api/concerts";
+import { createPlanner } from "@/lib/api/planner";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 export default function ConcertHeaderBtn({
   concertDetail,
@@ -41,13 +44,63 @@ export default function ConcertHeaderBtn({
   const [startTicketDate, setStartTicketDate] = useState<Date | undefined>(undefined);
   const [endTicketDate, setEndTicketDate] = useState<Date | undefined>(undefined);
 
-  // TODO : 플래너 생성 함수... 추후 구현 필요
-  const handleCreatePlanner = async () => {
-    // 플래너 생성 로직 구현
+  // 플래너 생성 상태 관리
+  const [plannerTitle, setPlannerTitle] = useState<string | undefined>("");
+  const [plannerDate, setPlannerDate] = useState<Date | undefined>(undefined);
+
+  // 모달 열기 핸들러
+  const handleOpenTicketModal = () => {
+    setTicketDialogOpen(true);
+  };
+  const handleOpenPlannerModal = () => {
+    if (!userData) {
+      toast.error("로그인 후 이용해주세요.");
+      return;
+    }
+    setPlannerDialogOpen(true);
+  };
+  const handleOpenTicketingModal = () => {
+    setTicketingDialogOpen(true);
   };
 
-  const handleCreateTicketing = async () => {
-    // 티켓팅 등록 로직 구현
+  // 모달 닫기 핸들러
+  const handleClosePlannerModal = () => {
+    setPlannerDialogOpen(false);
+  };
+  const handleCloseTicketingModal = () => {
+    setTicketingDialogOpen(false);
+  };
+
+  // 플래너 생성 핸들러
+  const handleCreatePlanner = async () => {
+    if (!concertDetail?.concertId) return;
+    if (!plannerTitle) {
+      toast.error("플래너 제목을 입력해주세요.");
+      return;
+    }
+    if (!plannerDate) {
+      toast.error("플래너 날짜를 선택해주세요.");
+      return;
+    }
+
+    const data = await createPlanner({
+      concertId: concertDetail.concertId,
+      title: plannerTitle,
+      planDate: plannerDate.toISOString().slice(0, 10),
+    });
+
+    if (!data) {
+      toast.error("플래너 생성에 실패했습니다.");
+      return;
+    }
+
+    toast.success("플래너가 생성되었습니다.");
+    setPlannerDialogOpen(false);
+    redirect(`/planner/${data.data.id}`);
+  };
+
+  // 어드민 - 티켓팅 일정 등록 핸들러
+  const handlePatchTicketing = async () => {
     await patchTicketTimeSet({
       concertId: concertDetail?.concertId || "",
       startDateTime: startTicketDate?.toISOString() || "",
@@ -63,7 +116,7 @@ export default function ConcertHeaderBtn({
           size="lg"
           asChild={false}
           className="bg-point-main w-full flex-1 cursor-pointer"
-          onClick={() => setTicketDialogOpen(true)}
+          onClick={handleOpenTicketModal}
         >
           <ExternalLink />
           티켓 예매하기
@@ -73,7 +126,7 @@ export default function ConcertHeaderBtn({
           size="lg"
           asChild={false}
           className="bg-point-sub border-border-point w-full flex-1 cursor-pointer"
-          onClick={() => setPlannerDialogOpen(true)}
+          onClick={handleOpenPlannerModal}
         >
           <CalendarPlus2 />
           플래너 만들기
@@ -84,7 +137,7 @@ export default function ConcertHeaderBtn({
             size="lg"
             asChild={false}
             className="bg-bg-sub border-border-point cursor-pointer"
-            onClick={() => setTicketingDialogOpen(true)}
+            onClick={handleOpenTicketingModal}
           >
             <CalendarClockIcon />
           </Button>
@@ -150,18 +203,24 @@ export default function ConcertHeaderBtn({
           <FieldGroup className="max-h-[60vh] gap-6 overflow-y-auto p-4">
             <Field>
               <FieldLabel>제목</FieldLabel>
-              <Input type="text" placeholder="플래너 제목을 입력하세요" />
+              <Input
+                type="text"
+                placeholder="플래너 제목을 입력하세요"
+                value={plannerTitle}
+                onChange={(e) => setPlannerTitle(e.target.value)}
+              />
             </Field>
             <Field>
               <FieldLabel>날짜</FieldLabel>
               <ConcertDatePicker
                 startDate={new Date(concertDetail?.startDate?.split("-").join(",") ?? "")}
                 endDate={new Date(concertDetail?.endDate?.split("-").join(",") ?? "")}
+                onChange={(date) => setPlannerDate(date)}
               />
             </Field>
           </FieldGroup>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPlannerDialogOpen(false)}>
+            <Button variant="outline" onClick={handleClosePlannerModal}>
               취소
             </Button>
             <Button onClick={handleCreatePlanner}>만들기</Button>
@@ -272,10 +331,10 @@ export default function ConcertHeaderBtn({
             </div>
           </FieldGroup>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setTicketingDialogOpen(false)}>
+            <Button variant="outline" onClick={handleCloseTicketingModal}>
               취소
             </Button>
-            <Button onClick={handleCreateTicketing}>등록</Button>
+            <Button onClick={handlePatchTicketing}>등록</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
