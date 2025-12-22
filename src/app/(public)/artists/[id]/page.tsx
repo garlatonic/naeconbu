@@ -19,7 +19,7 @@ export default async function page({ params }: { params: Promise<{ id: string }>
         ]}
       />
       <ArtistDetailProfile artist={artist} artistId={Number(id)} />
-      <ArtistDetailOverview />
+      <ArtistDetailOverview artist={artist} />
       <ArtistDetailUpcoming />
       <ArtistDetailPast />
     </>

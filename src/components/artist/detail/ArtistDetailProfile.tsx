@@ -22,6 +22,7 @@ export default function ArtistDetailProfile({
           <Image
             src={artist.profileImageUrl}
             alt={artist.artistName}
+            sizes={"120px"}
             fill
             className="object-cover"
           />
