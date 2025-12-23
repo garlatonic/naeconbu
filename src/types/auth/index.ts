@@ -39,8 +39,9 @@ export interface GetMeResponse {
     email: string;
     nickname: string;
     birthdate: string;
-    status: string;
+    createdDate: string;
     profileImageUrl: string;
+    status: string;
     role: string;
   };
 }

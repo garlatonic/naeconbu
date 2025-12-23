@@ -3,8 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CalendarClockIcon, TicketIcon } from "lucide-react";
 import MyPageSetting from "./MyPageSetting";
 import { UserData } from "@/types/my-page";
+import { format } from "date-fns";
 
 export default function MyPageHeader({ userData }: { userData: UserData }) {
+  const formattedDate = format(new Date(userData.createdDate), "yyyy-mm-dd");
   return (
     <header className="bg-zinc-900 px-15 py-20">
       <div className="mx-auto flex max-w-400 gap-10">
@@ -26,14 +28,14 @@ export default function MyPageHeader({ userData }: { userData: UserData }) {
                 <TicketIcon size={16} className="fill-zinc-300" />
                 가입일
               </strong>
-              {/* TODO : 23일 추가 해주신다고 함 */}
-              <p>2025-12-08</p>
+              <p>{formattedDate}</p>
             </li>
             <li className="flex items-center gap-2 text-base text-zinc-300">
               <strong className="flex items-center gap-1">
                 <CalendarClockIcon size={16} />
                 예정된 일정
               </strong>
+              {/* TODO : 추가 필요 */}
               <p>8개</p>
             </li>
           </ul>

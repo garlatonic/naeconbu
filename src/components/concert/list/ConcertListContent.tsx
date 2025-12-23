@@ -88,12 +88,15 @@ export default function ConcertListContent({
       <div className={twMerge(`mx-auto flex w-full max-w-400 flex-col gap-9`)}>
         <div className="header flex items-center justify-between">
           <div className="flex items-center gap-2">
+            {/* TODO : 토탈 갯수 받기 */}
             <span className="text-text-main text-2xl font-bold">{concertsList.length}</span>
             <span className="text-text-main text-lg">items</span>
           </div>
+          {/* TODO : 정렬 API 수정 따라 수정 */}
           <ListSortClient />
         </div>
         <div className="list grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {/* TODO : 가끔 12개씩 안 불러지는 오류 해결 */}
           {concertsList.map((concert: ConcertData) => (
             <ConcertCard
               key={concert.id}

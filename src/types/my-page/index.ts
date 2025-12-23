@@ -45,6 +45,7 @@ export type UserData = {
   email: string;
   nickname: string;
   birthdate: string | null;
+  createdDate: string;
   profileImageUrl?: string;
   status: string;
   role: string;
