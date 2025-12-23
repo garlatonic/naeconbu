@@ -22,7 +22,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { patchTicketTimeSet } from "@/lib/api/concerts";
 import { createPlanner } from "@/lib/api/planner";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function ConcertHeaderBtn({
   concertDetail,
@@ -33,6 +33,9 @@ export default function ConcertHeaderBtn({
   concertTicketingData: TicketOffice[] | null;
   userData: User | null;
 }) {
+  // 링크 이동
+  const router = useRouter();
+
   // 모달 상태 관리
   const [ticketDialogOpen, setTicketDialogOpen] = useState(false);
   const [plannerDialogOpen, setPlannerDialogOpen] = useState(false);
@@ -45,7 +48,7 @@ export default function ConcertHeaderBtn({
   const [endTicketDate, setEndTicketDate] = useState<Date | undefined>(undefined);
 
   // 플래너 생성 상태 관리
-  const [plannerTitle, setPlannerTitle] = useState<string | undefined>("");
+  const [plannerTitle, setPlannerTitle] = useState<string>("");
   const [plannerDate, setPlannerDate] = useState<Date | undefined>(undefined);
 
   // 모달 열기 핸들러
@@ -96,16 +99,38 @@ export default function ConcertHeaderBtn({
 
     toast.success("플래너가 생성되었습니다.");
     setPlannerDialogOpen(false);
-    redirect(`/planner/${data.data.id}`);
+
+    router.push(`/planner/${data.data.id}`);
   };
 
   // 어드민 - 티켓팅 일정 등록 핸들러
   const handlePatchTicketing = async () => {
-    await patchTicketTimeSet({
-      concertId: concertDetail?.concertId || "",
-      startDateTime: startTicketDate?.toISOString() || "",
-      endDateTime: endTicketDate?.toISOString() || "",
-    });
+    if (!concertDetail?.concertId) {
+      toast.error("콘서트 정보가 올바르지 않습니다.");
+      return;
+    }
+    if (!startTicketDate || !endTicketDate) {
+      toast.error("시작 및 종료 티켓팅 일정을 모두 선택해주세요.");
+      return;
+    }
+    if (startTicketDate >= endTicketDate) {
+      toast.error("티켓팅 시작 일시는 종료 일시보다 앞서야 합니다.");
+      return;
+    }
+
+    try {
+      await patchTicketTimeSet({
+        concertId: concertDetail.concertId,
+        startDateTime: startTicketDate.toISOString(),
+        endDateTime: endTicketDate.toISOString(),
+      });
+      toast.success("티켓팅 일정이 저장되었습니다.");
+      setTicketingDialogOpen(false);
+    } catch (error) {
+      // 에러 로깅 및 사용자 피드백
+      console.error("Failed to patch ticketing time:", error);
+      toast.error("티켓팅 일정 저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -317,7 +342,7 @@ export default function ConcertHeaderBtn({
                 </Popover>
               </Field>
               <Field>
-                <FieldLabel htmlFor="time-start" className="invisible">
+                <FieldLabel htmlFor="time-end" className="invisible">
                   티켓팅 시간
                 </FieldLabel>
                 <Input

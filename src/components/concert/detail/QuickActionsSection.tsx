@@ -38,7 +38,7 @@ import {
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 import { createPlanner } from "@/lib/api/planner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { User } from "@/types/user";
 
 export default function QuickActionsSection({
@@ -54,6 +54,9 @@ export default function QuickActionsSection({
   concertEndDate?: string;
   userData: User | null;
 }) {
+  // 링크 이동
+  const router = useRouter();
+
   // 링크 공유하기 Input
   const shareInputRef = useRef<HTMLInputElement>(null);
 
@@ -68,7 +71,7 @@ export default function QuickActionsSection({
   const [copied, setCopied] = useState<boolean>(false);
 
   // 플래너 생성 상태 관리
-  const [plannerTitle, setPlannerTitle] = useState<string | undefined>("");
+  const [plannerTitle, setPlannerTitle] = useState<string>("");
   const [plannerDate, setPlannerDate] = useState<Date | undefined>(undefined);
 
   // 모달 열기 핸들러
@@ -126,7 +129,7 @@ export default function QuickActionsSection({
 
     toast.success("플래너가 생성되었습니다.");
     setPlannerDialogOpen(false);
-    redirect(`/planner/${data.data.id}`);
+    router.push(`/planner/${data.data.id}`);
   };
 
   // 복사
@@ -374,9 +377,11 @@ export default function QuickActionsSection({
             <AlertDialogTitle>채팅에 참여하시겠어요?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogDescription>
-            예매일이 임박한 공연이에요.
-            <br />
-            채팅에 참여해 실시간 서버 시간과 다른 이용자들과의 이야기를 함께 나눠보세요.
+            <p>
+              예매일이 임박한 공연이에요.
+              <br />
+              채팅에 참여해 실시간 서버 시간과 다른 이용자들과의 이야기를 함께 나눠보세요.
+            </p>
           </AlertDialogDescription>
           <AlertDialogFooter>
             <AlertDialogCancel>취소</AlertDialogCancel>
