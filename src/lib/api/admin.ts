@@ -30,7 +30,7 @@ export const patchTicketTimeSet = async ({
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        cookie: cookieStore.toString(),
+        Cookie: cookieStore.toString(),
       },
       body: JSON.stringify({
         concertId,

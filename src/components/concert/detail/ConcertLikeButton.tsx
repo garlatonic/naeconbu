@@ -21,10 +21,18 @@ export default function ConcertLikeButton({
   const handleLikeConcert = async () => {
     if (!concertId) return;
     if (isLiked) {
-      await deleteLikeConcert(concertId);
+      const ok = await deleteLikeConcert(concertId);
+      if (!ok) {
+        toast.error("알림 해제에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        return;
+      }
       toast.success("알림이 해제되었습니다.");
     } else {
-      await postLikeConcert(concertId);
+      const ok = await postLikeConcert(concertId);
+      if (!ok) {
+        toast.error("알림 설정에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        return;
+      }
       toast.success("알림이 설정되었습니다.");
     }
     router.refresh();

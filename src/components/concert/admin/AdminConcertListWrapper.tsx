@@ -4,7 +4,7 @@ import AdminConcertListContent from "./AdminConcertListContent";
 export default async function AdminConcertListWrapper({
   initialList,
 }: {
-  initialList: ConcertData[] | [];
+  initialList: ConcertData[];
 }) {
-  return <AdminConcertListContent initialList={initialList || []} />;
+  return <AdminConcertListContent initialList={initialList} />;
 }

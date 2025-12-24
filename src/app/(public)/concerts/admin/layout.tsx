@@ -10,6 +10,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     isAdmin = userData?.role === "ADMIN";
   }
 
+  try {
+    const meResponse = await getMe();
+    const userData = meResponse?.data;
+    isAdmin = userData?.role === "ADMIN";
+  } catch {
+    isAdmin = false;
+  }
+
   if (!isAdmin) redirect("/home");
 
   return <>{children}</>;

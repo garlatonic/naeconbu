@@ -27,7 +27,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (isAuthenticated) userData = (await getMe()).data;
 
   // 찜한 공연인지 여부 가져오기
-  const isLikedConcert = await getIsLikedConcert(id, cookieStore.toString());
+  let isLikedConcert = null;
+  if (isAuthenticated) {
+    isLikedConcert = await getIsLikedConcert(id, cookieStore.toString());
+  }
 
   return (
     <>

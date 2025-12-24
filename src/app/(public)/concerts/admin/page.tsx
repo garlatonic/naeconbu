@@ -3,9 +3,7 @@ import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
 import { getNoTicketTimeLists } from "@/lib/api/admin";
 
 export default async function Page() {
-  const noTicketTimeLists = await getNoTicketTimeLists({ page: 0, size: 12 });
-
-  const initialList = noTicketTimeLists;
+  const initialList = await getNoTicketTimeLists({ page: 0, size: 12 });
 
   if (!initialList) {
     return (
