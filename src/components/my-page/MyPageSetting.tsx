@@ -38,6 +38,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   ); // 생일 값
   const [emailAlert, setEmailAlert] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [previewImg, setPreviewImg] = useState("");
 
   const handleEditDialog = () => setShowEditDialog((prevState) => !prevState);
 
@@ -66,6 +67,13 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     }
   }, [showEditDialog]);
 
+  const handleImgChange = (file: File | null) => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewImg(url);
+    }
+  };
+
   return (
     <>
       <Button
@@ -86,11 +94,16 @@ export default function MyPageSetting({ userData }: { userData: User }) {
           <FieldGroup className="max-h-[60vh] overflow-y-auto p-4">
             <Field>
               <Label htmlFor="file">프로필 이미지</Label>
-              <FileUploadBox />
+              <FileUploadBox value={previewImg} onFileChange={handleImgChange} />
             </Field>
             <Field>
               <Label htmlFor="nickname">닉네임 *</Label>
-              <Input id="nickname" placeholder="닉네임을 입력해주세요." value={userData.nickname} />
+              <Input
+                // 임시로 defaultValue 사용
+                id="nickname"
+                placeholder="닉네임을 입력해주세요."
+                defaultValue={userData.nickname}
+              />
             </Field>
             <Field>
               <Label htmlFor="nickname">비밀번호 *</Label>
@@ -142,10 +155,11 @@ export default function MyPageSetting({ userData }: { userData: User }) {
               <Label htmlFor="email">이메일 *</Label>
               <div className="relative space-y-1">
                 <Input
+                  // 임시로 defaultValue 사용
                   type="email"
                   placeholder="이메일을 입력하세요."
                   className="pr-9"
-                  value={userData.email}
+                  defaultValue={userData.email}
                 />
                 <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p>
               </div>
