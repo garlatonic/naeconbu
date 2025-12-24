@@ -1,5 +1,3 @@
-"use server";
-
 import { ResponseData } from "@/types/api";
 import { ConcertDetail, LikeConcert, TicketOffice } from "@/types/concerts";
 import { Concert, ConcertWithTicket } from "@/types/home";
