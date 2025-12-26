@@ -11,16 +11,22 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
-import { FileUploadBox } from "../review/write/FileUploadBox";
-import { Label } from "../ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Calendar } from "../ui/calendar";
-import { Separator } from "../ui/separator";
-import { Switch } from "../ui/switch";
+import { useEffect, useRef, useState } from "react";
+import { FileUploadBox } from "@/components/review/write/FileUploadBox";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 import { User } from "@/types/user";
 import { getUsersSettings } from "@/lib/api/users";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function MyPageSetting({ userData }: { userData: User }) {
   // TODO : 주석 다 지우기
@@ -28,17 +34,26 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // 설정 값들
+  const [previewImg, setPreviewImg] = useState(""); // 프로필 이미지
+  const [nickName, setNickName] = useState(userData.nickname); // 닉네임
   const [password, setPassword] = useState(""); // 비밀번호
   const [passwordConfirm, setPasswordConfirm] = useState(""); // 비밀번호 확인
-  const [isVisible, setIsVisible] = useState(false); // 비밀번호 가리기 관련
-  const [isVisibleConfirm, setIsVisibleConfirm] = useState(false); // 비밀번호 가리기 관련
-  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState(userData.email); // 이메일
+  // const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
   const [date, setDate] = useState<Date | undefined>(
     userData.birthdate ? new Date(userData.birthdate) : undefined
-  ); // 생일 값
+  ); // 생일
   const [emailAlert, setEmailAlert] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [previewImg, setPreviewImg] = useState("");
+  const initialUsersSettings = useRef<{ emailAlert: boolean; darkMode: boolean } | null>(null);
+  // 값 비교를 위한 초기값 저장
+
+  const [isVisible, setIsVisible] = useState(false); // 비밀번호 가리기 관련
+  const [isVisibleConfirm, setIsVisibleConfirm] = useState(false); // 비밀번호 가리기 관련
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false); // 모달 닫기 확인 모달
 
   const handleEditDialog = () => setShowEditDialog((prevState) => !prevState);
 
@@ -53,6 +68,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     }
   };
 
+  // 이메일알림 및 다크모드 설정 상태 가져오기
   useEffect(() => {
     if (showEditDialog) {
       const loadData = async () => {
@@ -61,17 +77,59 @@ export default function MyPageSetting({ userData }: { userData: User }) {
           setEmailAlert(res.emailNotifications);
           setDarkMode(res.darkMode);
           // TODO : 네트워크 느리면 느리게 뜰 수 있는 문제점
+          initialUsersSettings.current = res;
         }
       };
       loadData();
     }
   }, [showEditDialog]);
 
+  // 이미지 파일 프리뷰 띄우기
   const handleImgChange = (file: File | null) => {
     if (file) {
       const url = URL.createObjectURL(file);
       setPreviewImg(url);
     }
+  };
+
+  // 모달 닫을 때 변한 값이 있을 때 막기
+  const handleClose = (open: boolean) => {
+    if (!open) {
+      // 닫기 검문 조건
+      const emailChanged = userData.email !== email;
+      const nickNameChanged = userData.nickname !== nickName;
+      const birthDateChanged = userData.birthdate !== date;
+      const ProfileImageChanged = userData.profileImageUrl !== previewImg;
+      const emailAlertChanged = initialUsersSettings.current?.emailAlert !== emailAlert;
+      const darkModeChanged = initialUsersSettings.current?.darkMode !== darkMode;
+      const isChanged =
+        emailChanged ||
+        nickNameChanged ||
+        birthDateChanged ||
+        ProfileImageChanged ||
+        emailAlertChanged ||
+        darkModeChanged;
+      // TODO : 비밀번호 빈칸 추가
+
+      if (isChanged) {
+        setIsConfirmOpen(true);
+      } else {
+        setIsConfirmOpen(false);
+      }
+    }
+  };
+
+  // 모달을 닫으면 입력한 데이터 날아가도록 함
+  const resetFields = () => {
+    setPreviewImg("");
+    setNickName(userData.nickname);
+    setEmail(userData.email);
+    setDate(userData.birthdate ? new Date(userData.birthdate) : undefined);
+    if (initialUsersSettings.current) {
+      setEmailAlert(initialUsersSettings.current.emailAlert);
+      setDarkMode(initialUsersSettings.current.darkMode);
+    }
+    // TODO : 비밀번호 추가
   };
 
   return (
@@ -86,7 +144,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
         <SettingsIcon className="text-background size-8 fill-white stroke-zinc-900" />
       </Button>
       {/* open -> true면 나타나, onOpenChange -> 닫기 버튼 누르기 등의 상태 변화가 생겼을 때 false로 바꿔 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog} aria-description="설정">
+      <Dialog open={showEditDialog} onOpenChange={handleClose} aria-description="설정">
         <DialogContent>
           <DialogHeader>
             <DialogTitle>설정</DialogTitle>
@@ -99,10 +157,10 @@ export default function MyPageSetting({ userData }: { userData: User }) {
             <Field>
               <Label htmlFor="nickname">닉네임 *</Label>
               <Input
-                // 임시로 defaultValue 사용
                 id="nickname"
                 placeholder="닉네임을 입력해주세요."
-                defaultValue={userData.nickname}
+                value={nickName}
+                onChange={(e) => setNickName(e.target.value)}
               />
             </Field>
             <Field>
@@ -155,11 +213,11 @@ export default function MyPageSetting({ userData }: { userData: User }) {
               <Label htmlFor="email">이메일 *</Label>
               <div className="relative space-y-1">
                 <Input
-                  // 임시로 defaultValue 사용
                   type="email"
                   placeholder="이메일을 입력하세요."
                   className="pr-9"
-                  defaultValue={userData.email}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p>
               </div>
@@ -242,6 +300,35 @@ export default function MyPageSetting({ userData }: { userData: User }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* 모달 닫기 확인 모달 */}
+      <AlertDialog
+        open={isConfirmOpen}
+        onOpenChange={setIsConfirmOpen}
+        aria-description="모달 닫기"
+      >
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>변경 사항을 저장하지 않고 나가시겠습니까?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setIsConfirmOpen(false);
+                setShowEditDialog(false);
+                resetFields();
+              }}
+            >
+              네
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setIsConfirmOpen(false)}>
+              아니오
+            </Button>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
