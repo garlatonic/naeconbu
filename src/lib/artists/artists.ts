@@ -1,13 +1,13 @@
 import {
   ArtistDetail,
   ArtistDetailResponse,
-  ArtistListItem,
+  ArtistListContent,
   ArtistListResponse,
   LikeArtistResponse,
 } from "@/types/artists";
 
 // 아티스트 목록 불러오기
-export async function getArtists(): Promise<ArtistListItem[]> {
+export async function getArtists(): Promise<ArtistListContent[]> {
   try {
     // fetch (네트워크 단계)
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/artists`, {
@@ -30,7 +30,7 @@ export async function getArtists(): Promise<ArtistListItem[]> {
     }
 
     // 성공
-    return json.data;
+    return json.data.content;
   } catch (err) {
     // 네트워크 에러 (Failed to fetch)
     if (err instanceof TypeError) {
