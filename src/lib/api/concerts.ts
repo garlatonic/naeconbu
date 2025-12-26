@@ -221,7 +221,7 @@ export const totalConcertCount = async () => {
     const data = await res.json();
     return data.data;
   } catch (error) {
-    console.error("Error fetching users detail:", error);
+    console.error("Error fetching total concert count:", error);
     return null;
   }
 };
