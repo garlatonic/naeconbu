@@ -39,14 +39,21 @@ export interface ArtistDetail {
   relatedArtists: RelatedArtist[];
 }
 
-export type ArtistListResponse = ApiResponse<ArtistListItem[]>;
-export type LikeArtistResponse = ApiResponse<null>;
-export type ArtistDetailResponse = ApiResponse<ArtistDetail>;
-
-export type ArtistListItem = {
+export type ArtistListContent = {
   id: number;
   artistName: string;
-  genreName: string; // 필요 x
+  nameKo: string | null;
+  artistGroup: string | null;
+  genres: string[];
+  likeCount: number;
   imageUrl: string;
-  likeCount: number; // 필요 x
+  isLiked: boolean;
 };
+
+export type ArtistListData = {
+  content: ArtistListContent[];
+};
+
+export type ArtistListResponse = ApiResponse<ArtistListData>;
+export type LikeArtistResponse = ApiResponse<null>;
+export type ArtistDetailResponse = ApiResponse<ArtistDetail>;

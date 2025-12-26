@@ -6,7 +6,7 @@ import { Heart, Loader2 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 import React, { useState } from "react";
-import { ArtistListItem } from "@/types/artists";
+import { ArtistListContent } from "@/types/artists";
 import { likeArtist } from "@/lib/artists/artists";
 import { toast } from "sonner";
 
@@ -17,9 +17,9 @@ import { toast } from "sonner";
 //  - 좋아요/취소 시 optimistic update 적용 검토
 //  - 실제 서버에서 받은 초기 like 상태를 props나 state로 관리하기
 
-export default function ArtistListCard({ artist }: { artist: ArtistListItem }) {
+export default function ArtistListCard({ artist }: { artist: ArtistListContent }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(artist.isLiked);
 
   const handleLikeClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
