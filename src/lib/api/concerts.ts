@@ -185,7 +185,6 @@ export const getIsLikedConcert = async (
     const res = await ClientApi(`/api/v1/concerts/isLike/${concertId}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         Cookie: cookie,
       },
       cache: "no-store",

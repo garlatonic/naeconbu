@@ -15,6 +15,7 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { twMerge } from "tailwind-merge";
+import { PAGE_SIZE } from "@/utils/helpers/constants";
 
 export default function MyPageLikedConcertList({
   initialList,
@@ -27,13 +28,12 @@ export default function MyPageLikedConcertList({
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const pageSize = 12;
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   const loadPage = async (page: number) => {
     setLoading(true);
     try {
-      const response = await getLikedConcertList({ page: page - 1, size: pageSize });
+      const response = await getLikedConcertList({ page: page - 1, size: PAGE_SIZE });
       setConcertsList(response.data || []);
     } catch (error) {
       console.error("Error loading liked concerts:", error);
@@ -153,7 +153,7 @@ export default function MyPageLikedConcertList({
                     aria-disabled={currentPage === 1}
                     className={twMerge(
                       currentPage === 1 && "pointer-events-none opacity-50",
-                      "*:not-[svg]:hidden!"
+                      "[&>:not(svg)]:hidden"
                     )}
                   />
                 </PaginationItem>
@@ -167,7 +167,7 @@ export default function MyPageLikedConcertList({
                     aria-disabled={currentPage === totalPages}
                     className={twMerge(
                       currentPage === totalPages && "pointer-events-none opacity-50",
-                      "*:not-[svg]:hidden!"
+                      "[&>:not(svg)]:hidden"
                     )}
                   />
                 </PaginationItem>

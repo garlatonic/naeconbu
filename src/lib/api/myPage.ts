@@ -3,6 +3,7 @@
 import { ResponseData } from "@/types/api";
 import { Concert } from "@/types/home";
 import ClientApi from "@/utils/helpers/clientApi";
+import { PAGE_SIZE } from "@/utils/helpers/constants";
 import { createEmptyResponse } from "@/utils/helpers/createEmptyResponse";
 import { cookies } from "next/headers";
 
@@ -14,8 +15,6 @@ type Artist = {
   imageUrl: string;
   isLiked: boolean;
 };
-
-const PAGE_SIZE = 12;
 
 /**
  * 찜한 공연 목록 조회
@@ -65,8 +64,8 @@ export const getLikedConcertCount = async (): Promise<ResponseData<number | null
       headers: {
         "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
-        cache: "no-store",
       },
+      cache: "no-store",
     });
     if (!res.ok) {
       throw new Error("찜한 공연 수를 불러오는데 실패했습니다.");
@@ -87,8 +86,8 @@ export const getLikedArtistList = async (): Promise<ResponseData<Artist[] | null
       headers: {
         "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
-        cache: "no-store",
       },
+      cache: "no-store",
     });
     if (!res.ok) {
       throw new Error("찜한 아티스트 목록을 불러오는데 실패했습니다.");

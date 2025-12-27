@@ -26,8 +26,8 @@ export default function MyPageLikedArtistList({ initialList }: { initialList: Ar
       </div>
       <div className="grid grid-cols-5 gap-8">
         {/* TODO: 나중에 아티스트 카드로 바꾸기 */}
-        {artistList.map((artist, index) => (
-          <MyPageLikedArtistListItem key={index} />
+        {artistList.map((artist) => (
+          <MyPageLikedArtistListItem key={artist.artistId} />
         ))}
       </div>
     </div>
