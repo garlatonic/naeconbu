@@ -5,11 +5,11 @@ import { ServerApi } from "@/utils/helpers/serverApi";
 import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 
 // 아티스트 팔로우
-export async function likeArtist(id: number): Promise<void> {
+export async function toggleArtistLike(id: number, currentStatus: boolean): Promise<void> {
   try {
     // fetch (네트워크 단계)
     const res = await ServerApi(`/api/v1/artists/likes/${id}`, {
-      method: "POST",
+      method: currentStatus ? "DELETE" : "POST",
     });
 
     // JSON 파싱 단계 (여기서도 에러 날 수 있음)

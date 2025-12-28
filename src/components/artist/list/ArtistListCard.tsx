@@ -7,8 +7,8 @@ import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 import React, { useState } from "react";
 import { ArtistListContent } from "@/types/artists";
-import { likeArtist } from "@/lib/artists/artists";
 import { toast } from "sonner";
+import { toggleArtistLike } from "@/lib/artists/artists.server";
 
 // TODO:
 //  - 아티스트 좋아요(팔로우) 상태를 서버에서 함께 내려받아 초기 상태로 관리해야 함
@@ -30,7 +30,7 @@ export default function ArtistListCard({ artist }: { artist: ArtistListContent }
     setIsLoading(true);
     try {
       // TODO: isLiked 상태에 따라 API 호출 분기 (likeArtist / unlikeArtist)
-      await likeArtist(artist.id);
+      await toggleArtistLike(artist.id, isLiked);
 
       const nextIsLiked = !isLiked;
       setIsLiked(nextIsLiked);
