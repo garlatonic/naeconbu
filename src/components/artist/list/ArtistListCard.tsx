@@ -29,7 +29,6 @@ export default function ArtistListCard({ artist }: { artist: ArtistListContent }
 
     setIsLoading(true);
     try {
-      // TODO: isLiked 상태에 따라 API 호출 분기 (likeArtist / unlikeArtist)
       await toggleArtistLike(artist.id, isLiked);
 
       const nextIsLiked = !isLiked;

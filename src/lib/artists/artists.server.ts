@@ -2,7 +2,7 @@
 
 import { ArtistDetail, ArtistDetailResponse, LikeArtistResponse } from "@/types/artists";
 import { ServerApi } from "@/utils/helpers/serverApi";
-import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
+import { revalidatePath } from "next/cache";
 
 // 아티스트 팔로우
 export async function toggleArtistLike(id: number, currentStatus: boolean): Promise<void> {

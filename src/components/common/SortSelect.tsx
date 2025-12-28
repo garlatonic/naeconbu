@@ -14,9 +14,8 @@ import { SortSelectProps } from "@/components/concert/ConcertType";
 export function SortSelect({
   onValueChange,
   sortList = [
-    { value: "popular", name: "인기순" },
-    { value: "new", name: "최신순" },
-    { value: "name", name: "이름순" },
+    { value: "LIKE", name: "인기순" },
+    { value: "NAME", name: "이름순" },
   ],
 }: SortSelectProps) {
   /**
@@ -26,7 +25,7 @@ export function SortSelect({
    * 참조 : @/components/concert/list/ListSortClient
    */
   return (
-    <Select onValueChange={onValueChange}>
+    <Select defaultValue={"NAME"} onValueChange={onValueChange}>
       <SelectTrigger size="default" className="w-28">
         <SelectValue placeholder="정렬" />
       </SelectTrigger>
