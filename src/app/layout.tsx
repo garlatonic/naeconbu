@@ -1,5 +1,5 @@
 import "@/css/globals.css";
-import Header from "@/components/common/Header";
+import Header from "@/components/home/header";
 import Footer from "@/components/common/Footer";
 
 import { pretendard } from "@/../public/fonts/local_fonts";
