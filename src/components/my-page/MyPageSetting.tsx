@@ -20,29 +20,38 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 import { User } from "@/types/user";
-import { getUsersSettings } from "@/lib/api/users";
+import {
+  changeNickname,
+  changeProfileImage,
+  changeUsersSettings,
+  getUsersSettings,
+} from "@/lib/api/users";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function MyPageSetting({ userData }: { userData: User }) {
   // TODO : 주석 다 지우기
   // TODO : 기본 핸들러 다 채우고 이슈 다시 체크
-  const { resolvedTheme, setTheme } = useTheme();
+  const router = useRouter();
+  const { setTheme } = useTheme();
 
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [open, setOpen] = useState(false);
 
   // 설정 값들
   const [previewImg, setPreviewImg] = useState(""); // 프로필 이미지
+  const [profileFile, setProfileFile] = useState<File | null>(null); // 프로필 이미지
   const [nickname, setNickname] = useState(userData.nickname); // 닉네임
   const [password, setPassword] = useState(""); // 비밀번호
   const [passwordConfirm, setPasswordConfirm] = useState(""); // 비밀번호 확인
   const [email, setEmail] = useState(userData.email); // 이메일
-  // const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
+  const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
   const [date, setDate] = useState<Date | undefined>(
     userData.birthdate ? new Date(userData.birthdate) : undefined
   ); // 생일
@@ -60,14 +69,6 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   const handlePWVisible = () => setIsVisible((prevState) => !prevState); // 비밀번호 가리기 관련
   const handlePWCVisible = () => setIsVisibleConfirm((prevState) => !prevState); // 비밀번호 가리기 관련
 
-  const handleDarkMode = () => {
-    if (resolvedTheme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
-  };
-
   // 이메일알림 및 다크모드 설정 상태 가져오기
   useEffect(() => {
     if (showEditDialog) {
@@ -84,9 +85,17 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     }
   }, [showEditDialog]);
 
+  // 다크모드 실시간 반영
+  const onSwitchChange = (checked: boolean) => {
+    setDarkMode(checked);
+    setTheme(checked ? "dark" : "light");
+  };
+
   // 이미지 파일 프리뷰 띄우기
   const handleImgChange = (file: File | null) => {
     if (file) {
+      setProfileFile(file);
+
       const url = URL.createObjectURL(file);
       setPreviewImg(url);
     }
@@ -94,23 +103,22 @@ export default function MyPageSetting({ userData }: { userData: User }) {
 
   // 모달 닫을 때 변한 값이 있을 때 막기
   const handleClose = (open: boolean) => {
-    if (!open) {
-      // 닫기 검문 조건
-      const emailChanged = userData.email !== email;
-      const nickNameChanged = userData.nickname !== nickname;
-      const birthDateChanged = userData.birthdate !== date;
-      const ProfileImageChanged = userData.profileImageUrl !== previewImg;
-      const emailAlertChanged = initialUsersSettings.current?.emailAlert !== emailAlert;
-      const darkModeChanged = initialUsersSettings.current?.darkMode !== darkMode;
-      const isChanged =
-        emailChanged ||
-        nickNameChanged ||
-        birthDateChanged ||
-        ProfileImageChanged ||
-        emailAlertChanged ||
-        darkModeChanged;
-      // TODO : 비밀번호 빈칸 추가
+    // 닫기 검문 조건
+    const emailChanged = userData.email !== email;
+    const nickNameChanged = userData.nickname !== nickname;
+    const birthDateChanged = userData.birthdate !== date;
+    const ProfileImageChanged = userData.profileImageUrl !== previewImg;
+    const emailAlertChanged = initialUsersSettings.current?.emailAlert !== emailAlert;
+    const darkModeChanged = initialUsersSettings.current?.darkMode !== darkMode;
+    const isChanged =
+      emailChanged ||
+      nickNameChanged ||
+      birthDateChanged ||
+      ProfileImageChanged ||
+      emailAlertChanged ||
+      darkModeChanged;
 
+    if (!open) {
       if (isChanged) {
         setIsConfirmOpen(true);
       } else {
@@ -124,12 +132,66 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     setPreviewImg("");
     setNickname(userData.nickname);
     setEmail(userData.email);
+    setEmailConfirm("");
     setDate(userData.birthdate ? new Date(userData.birthdate) : undefined);
     if (initialUsersSettings.current) {
-      setEmailAlert(initialUsersSettings.current.emailAlert);
-      setDarkMode(initialUsersSettings.current.darkMode);
+      const { emailAlert: originalEmail, darkMode: originalDark } = initialUsersSettings.current;
+
+      setEmailAlert(originalEmail);
+      setDarkMode(originalDark);
+
+      setTheme(originalDark ? "dark" : "light");
     }
-    // TODO : 비밀번호 추가
+    setPassword("");
+    setPasswordConfirm("");
+  };
+
+  // 수정 사항 제출
+  const handleSubmit = async () => {
+    if (!nickname.trim()) {
+      toast.error("닉네임을 입력해주세요.");
+      return;
+    }
+
+    if (!password.trim()) {
+      toast.error("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordConfirm.trim()) {
+      toast.error("비밀번호 확인이 필요합니다.");
+      return;
+    }
+    if (!email.trim()) {
+      toast.error("이메일을 입력해주세요.");
+      return;
+    }
+
+    // TODO : 수정 사항이 있는 경우에만 제출이 가능하도록 함
+
+    try {
+      const results = await Promise.all([
+        changeNickname({ nickname: nickname }),
+        changeProfileImage({ profileFile: profileFile }),
+        changeUsersSettings({
+          emailNotifications: emailAlert,
+          darkMode: darkMode,
+        }),
+      ]);
+
+      if (results.every((res) => res !== null)) {
+        toast.success("프로필 설정이 성공적으로 저장되었습니다.");
+
+        initialUsersSettings.current = { emailAlert, darkMode };
+        setShowEditDialog(false);
+
+        router.refresh();
+      } else {
+        toast.error("일부 설정 저장에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("서버 통신 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -223,10 +285,15 @@ export default function MyPageSetting({ userData }: { userData: User }) {
               </div>
             </Field>
             <Field>
-              <Label htmlFor="emailConfirm">이메일 확인 *</Label>
+              <Label htmlFor="emailConfirm">이메일 확인</Label>
               <div className="relative space-y-1">
                 <div className="flex gap-1">
-                  <Input type="emailConfirm" placeholder="이메일을 입력하세요." className="pr-9" />
+                  <Input
+                    type="emailConfirm"
+                    placeholder="이메일을 입력하세요."
+                    className="pr-9"
+                    value={emailConfirm}
+                  />
                   <Button>확인</Button>
                 </div>
                 <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p>
@@ -272,16 +339,13 @@ export default function MyPageSetting({ userData }: { userData: User }) {
                   </div>
                 </div>
               </div>
-              <div
-                className="border-border relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none"
-                onClick={handleDarkMode}
-              >
+              <div className="border-border relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                 <Switch
                   id="darkMode"
                   className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2.5 data-[state=checked]:[&_span]:rtl:-translate-x-2.5"
                   aria-describedby="다크모드 스위치"
                   checked={darkMode}
-                  onCheckedChange={(checked) => setDarkMode(checked)}
+                  onCheckedChange={onSwitchChange}
                 />
                 <div className="flex grow gap-3">
                   <div className="grid grow gap-2">
@@ -296,7 +360,9 @@ export default function MyPageSetting({ userData }: { userData: User }) {
             <DialogClose asChild>
               <Button variant="outline">취소</Button>
             </DialogClose>
-            <Button type="submit">수정</Button>
+            <Button type="submit" onClick={handleSubmit}>
+              수정
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
