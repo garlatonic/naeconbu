@@ -1,5 +1,5 @@
 import { ResponseData } from "@/types/api";
-import { ConcertDetail, ConcertVenueInfo, TicketOffice } from "@/types/concerts";
+import { ConcertDetail, ConcertVenueInfo, LikeConcert, TicketOffice } from "@/types/concerts";
 import { Concert, ConcertWithTicket } from "@/types/home";
 import { createEmptyResponse } from "@/utils/helpers/createEmptyResponse";
 import ServerApi from "@/utils/helpers/serverApi";
@@ -161,6 +161,26 @@ export const totalConcertCount = async () => {
     return data.data;
   } catch (error) {
     console.error("Error fetching total concert count:", error);
+    return null;
+  }
+};
+
+// 찜한 콘서트인지 확인
+export const getIsLikedConcert = async (concertId: string): Promise<LikeConcert | null> => {
+  try {
+    const res = await ServerApi(`/api/v1/concerts/isLike/${concertId}`, {
+      method: "GET",
+    });
+
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return null;
+    }
+
+    const data = await res.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error checking liked concert:", error);
     return null;
   }
 };

@@ -5,11 +5,18 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { twMerge } from "tailwind-merge";
 import { Badge } from "@/components/ui/badge";
 import ConcertHeaderInfo from "./ConcertHeaderInfo";
-import { formatDateRange, formatPrice } from "@/utils/helpers/formatters";
+import {
+  formatConcertPrice,
+  formatDateRange,
+  formatDateTimeRange,
+} from "@/utils/helpers/formatters";
 import ConcertLikeButton from "./ConcertLikeButton";
-import { getConcertDetail, getTicketOfficesByConcertId } from "@/lib/api/concerts.server";
+import {
+  getConcertDetail,
+  getIsLikedConcert,
+  getTicketOfficesByConcertId,
+} from "@/lib/api/concerts.server";
 import { getAuthStatus, getMe } from "@/lib/auth/auth.server";
-import { getIsLikedConcert } from "@/lib/api/concert.client";
 
 export default async function ConcertHeader({ concertId }: { concertId: string }) {
   const [concertDetail, concertTicketing, isAuthenticated] = await Promise.all([
@@ -78,7 +85,7 @@ export default async function ConcertHeader({ concertId }: { concertId: string }
             <ConcertHeaderInfo
               type="price"
               label="티켓 가격"
-              title={formatPrice(concertDetail.minPrice, concertDetail.maxPrice)}
+              title={formatConcertPrice(concertDetail.minPrice, concertDetail.maxPrice)}
             />
             {/* TODO : 관리자일 경우 예매일정 직접 입력하는 버튼 추가 */}
             <ConcertHeaderInfo
@@ -86,7 +93,7 @@ export default async function ConcertHeader({ concertId }: { concertId: string }
               label="예매 일정"
               title={
                 concertDetail?.ticketTime && concertDetail.ticketEndTime
-                  ? formatDateRange(concertDetail?.ticketTime, concertDetail?.ticketEndTime)
+                  ? formatDateTimeRange(concertDetail?.ticketTime, concertDetail?.ticketEndTime)
                   : "정보없음"
               }
             />
