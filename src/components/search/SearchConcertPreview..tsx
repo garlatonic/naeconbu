@@ -1,17 +1,43 @@
-import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 import SearchConcertCard from "@/components/search/SearchConcertCard";
+import { getSearchConcertsServer } from "@/lib/api/search.server";
+import { SpotlightIcon } from "lucide-react";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "../ui/empty";
 
-export default function SearchConcertPreview() {
+export default async function SearchConcertPreview({ keyword }: { keyword: string }) {
+  const concerts = await getSearchConcertsServer({ keyword: keyword, size: 8 });
+
+  if (concerts.length === 0) {
+    return (
+      <div className="mx-auto flex w-full max-w-400 flex-col gap-8">
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-bold">공연</h2>
+          <Link href={`/search/concerts?keyword=${keyword}`}>더보기</Link>
+        </div>
+        <div className="py-40">
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <SpotlightIcon />
+              </EmptyMedia>
+              <EmptyTitle>검색 결과 없음</EmptyTitle>
+              <EmptyDescription>검색어에 해당하는 공연이 없습니다.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={twMerge(`mx-auto flex w-full max-w-400 flex-col gap-8`)}>
+    <div className="mx-auto flex w-full max-w-400 flex-col gap-8">
       <div className="flex justify-between">
         <h2 className="text-2xl font-bold">공연</h2>
-        <Link href="/search/concerts">더보기</Link>
+        <Link href={`/search/concerts?keyword=${keyword}`}>더보기</Link>
       </div>
       <div className="flex flex-col gap-6">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <SearchConcertCard key={index} />
+        {concerts.map((concert) => (
+          <SearchConcertCard key={concert.id} concert={concert} />
         ))}
       </div>
     </div>

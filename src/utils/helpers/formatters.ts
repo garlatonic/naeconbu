@@ -68,3 +68,24 @@ export const formatDateRangeKorean = (startDate: string, endDate: string): strin
   }
   return `${formatDateKorean(startDate)} ~ ${formatDateKorean(endDate)}`;
 };
+
+/**
+ * 콘서트 가격을 포맷팅
+ * @param {number} minPrice - 최소 가격
+ * @param {number} maxPrice - 최대 가격
+ * @returns {string} 포맷팅된 가격 문자열
+ */
+export function formatConcertPrice(minPrice: number, maxPrice: number): string {
+  // 둘 다 0원인 경우
+  if (minPrice === 0 && maxPrice === 0) {
+    return "무료";
+  }
+
+  // 최소와 최대가 같은 경우
+  if (minPrice === maxPrice) {
+    return `${minPrice.toLocaleString("ko-KR")}원`;
+  }
+
+  // 최소와 최대가 다른 경우
+  return `${minPrice.toLocaleString("ko-KR")}원 ~ ${maxPrice.toLocaleString("ko-KR")}원`;
+}

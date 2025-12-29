@@ -4,7 +4,7 @@ import { ArrowRightIcon, SearchIcon } from "lucide-react";
 import { useEffect, useState, useTransition, useOptimistic } from "react";
 import { AutoCompleteConcerts } from "@/types/search";
 import { useRouter } from "next/navigation";
-import { getSearchConcertsAutoComplete } from "@/lib/api/search";
+import { getSearchConcertsAutoComplete } from "@/lib/api/search.server";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -82,6 +82,15 @@ export default function SearchModal() {
     return "검색 결과가 없습니다.";
   };
 
+  // 검색 이벤트
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && search.trim().length >= 2) {
+      e.preventDefault();
+      router.push(`/search/overview?keyword=${encodeURIComponent(search.trim())}`);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <Tooltip>
@@ -120,6 +129,7 @@ export default function SearchModal() {
               placeholder="공연이나 가수를 검색해보세요..."
               className="focus-visible:border-border border-border h-12 rounded-none border-0 border-b pr-12 pl-10 focus-visible:ring-0"
               autoFocus
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="max-h-200 overflow-y-auto">

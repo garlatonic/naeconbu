@@ -1,0 +1,52 @@
+import { ConcertDataWithLiked } from "@/components/concert/ConcertType";
+import ClientApi from "@/utils/helpers/clientApi";
+import { getIsLikedConcert } from "./concert.client";
+
+/**
+ * 검색어로 공연 목록을 가져옵니다.
+ * 클라이언트 사이드에서 사용됩니다.
+ *
+ * @param {string} keyword 검색어
+ * @param {number} page 페이지 번호 (기본값: 0)
+ * @param {number} size 페이지당 항목 수 (기본값: 12)
+ * @returns {Promise<ConcertData[]>} 공연 목록
+ */
+export const getSearchConcerts = async ({
+  keyword,
+  page = 0,
+  size = 12,
+}: {
+  keyword: string;
+  page?: number;
+  size?: number;
+}): Promise<ConcertDataWithLiked[]> => {
+  try {
+    const encodeKeyword = encodeURIComponent(keyword);
+    const res = await ClientApi(
+      `/api/v1/concerts/search?keyword=${encodeKeyword}&page=${page}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!res.ok) {
+      throw new Error("Failed to fetch search concerts");
+    }
+    const data = await res.json();
+
+    const concertsWithLiked = await Promise.all(
+      data.data.map(async (concert: ConcertDataWithLiked) => {
+        const concertId = concert.id.toString();
+        const isLiked = await getIsLikedConcert(concertId);
+        return {
+          ...concert,
+          isLiked: isLiked?.isLike ?? false,
+        };
+      })
+    );
+
+    return concertsWithLiked;
+  } catch (error) {
+    console.error("Error fetching search concerts:", error);
+    return [];
+  }
+};
