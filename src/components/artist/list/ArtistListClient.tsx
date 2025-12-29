@@ -57,7 +57,7 @@ export default function ArtistListClient({
 
       if (nextArtists.length < 20) {
         setHasMore(false);
-        toast.info("모든 아티스트를 불러왔습니다.");
+        // toast.info("모든 아티스트를 불러왔습니다.");
       }
     } catch (e) {
       console.error("무한 스크롤 데이터 페칭 에러:", e);
@@ -78,7 +78,7 @@ export default function ArtistListClient({
           fetchNextPage();
         }
       },
-      { threshold: 0, rootMargin: "0px 0px 300px 0px" }
+      { threshold: 0, rootMargin: "0px 0px 400px 0px" }
     );
 
     if (currentTarget) {
@@ -99,7 +99,7 @@ export default function ArtistListClient({
       <div ref={observeRef} className="flex min-h-[100px] justify-center py-10">
         {isLoading && <Loader2 className="text-primary h-8 w-8 animate-spin" />}
         {!hasMore && artists.length > 0 && (
-          <p className="text-text-main text-sm">모든 아티스트를 불러왔습니다.</p>
+          <h3 className="text-text-main text-base">모든 아티스트를 불러왔습니다.</h3>
         )}
       </div>
     </>
