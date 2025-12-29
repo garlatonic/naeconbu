@@ -52,8 +52,8 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   const [passwordConfirm, setPasswordConfirm] = useState(""); // 비밀번호 확인
   const [email, setEmail] = useState(userData.email); // 이메일
   const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
-  const [date, setDate] = useState<Date | undefined>(
-    userData.birthdate ? new Date(userData.birthdate) : undefined
+  const [date, setDate] = useState<Date | null>(
+    userData.birthdate ? new Date(userData.birthdate) : null
   ); // 생일
   const [emailAlert, setEmailAlert] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -78,7 +78,10 @@ export default function MyPageSetting({ userData }: { userData: User }) {
           setEmailAlert(res.emailNotifications);
           setDarkMode(res.darkMode);
           // TODO : 네트워크 느리면 느리게 뜰 수 있는 문제점
-          initialUsersSettings.current = res;
+          initialUsersSettings.current = {
+            emailAlert: res.emailNotifications,
+            darkMode: res.darkMode,
+          };
         }
       };
       loadData();
@@ -106,8 +109,10 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     // 닫기 검문 조건
     const emailChanged = userData.email !== email;
     const nickNameChanged = userData.nickname !== nickname;
-    const birthDateChanged = userData.birthdate !== date;
-    const ProfileImageChanged = userData.profileImageUrl !== previewImg;
+    const birthDateChanged =
+      (userData.birthdate ? new Date(userData.birthdate).getTime() : 0) !==
+      (date ? date.getTime() : 0);
+    const ProfileImageChanged = previewImg !== "" && userData.profileImageUrl !== previewImg;
     const emailAlertChanged = initialUsersSettings.current?.emailAlert !== emailAlert;
     const darkModeChanged = initialUsersSettings.current?.darkMode !== darkMode;
     const isChanged =
@@ -123,6 +128,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
         setIsConfirmOpen(true);
       } else {
         setIsConfirmOpen(false);
+        setShowEditDialog(false);
       }
     }
   };
@@ -133,7 +139,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     setNickname(userData.nickname);
     setEmail(userData.email);
     setEmailConfirm("");
-    setDate(userData.birthdate ? new Date(userData.birthdate) : undefined);
+    setDate(userData.birthdate ? new Date(userData.birthdate) : null);
     if (initialUsersSettings.current) {
       const { emailAlert: originalEmail, darkMode: originalDark } = initialUsersSettings.current;
 
@@ -152,6 +158,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
       toast.error("닉네임을 입력해주세요.");
       return;
     }
+    /*
     if (!password.trim()) {
       toast.error("비밀번호를 입력해주세요.");
       return;
@@ -164,7 +171,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
       toast.error("이메일을 입력해주세요.");
       return;
     }
-
+*/
     // TODO : 수정 사항이 있는 경우에만 제출이 가능하도록 함
 
     try {
@@ -312,10 +319,10 @@ export default function MyPageSetting({ userData }: { userData: User }) {
                 <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={date}
+                    selected={date || undefined}
                     captionLayout="dropdown"
                     onSelect={(date) => {
-                      setDate(date);
+                      setDate(date || null);
                       setOpen(false);
                     }}
                   />
