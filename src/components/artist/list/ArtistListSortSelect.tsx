@@ -14,9 +14,8 @@ import { ArtistListSortSelectProps } from "@/types/artists";
 export function ArtistListSortSelect({
   onValueChange,
   sortList = [
-    { value: "popular", name: "인기순" },
-    { value: "new", name: "최신순" },
-    { value: "name", name: "이름순" },
+    { value: "LIKE", name: "인기순" },
+    { value: "NAME", name: "이름순" },
   ],
   defaultValue = "NAME",
 }: ArtistListSortSelectProps) {

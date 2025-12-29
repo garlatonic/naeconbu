@@ -10,7 +10,7 @@ export async function getArtists(
   // typeof window가 undefined면 서버 object면 브라우저
   const isServer = typeof window === "undefined";
 
-  const baseUrl = isServer ? "http://localhost:3000" : "";
+  const baseUrl = isServer ? process.env.BASE_URL : "";
 
   try {
     // fetch (네트워크 단계)

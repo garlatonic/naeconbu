@@ -28,14 +28,17 @@ export default function ArtistListClient({
   const router = useRouter();
 
   const handleSortChange = async (value: string) => {
-    setSort(value);
-    setPage(0);
-    setHasMore(true);
-
-    router.replace(`?sort=${value}`);
-
-    const nextArtists = await getArtists(0, 20, value);
-    setArtists(nextArtists);
+    try {
+      const nextArtists = await getArtists(0, 20, value);
+      setSort(value);
+      setPage(0);
+      setHasMore(true);
+      setArtists(nextArtists);
+      router.replace(`?sort=${value}`);
+    } catch (e) {
+      console.error("정렬 변경 중 데이터 펯칭 에러:", e);
+      toast.error("정렬 변경 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
   };
 
   const fetchNextPage = useCallback(async () => {
