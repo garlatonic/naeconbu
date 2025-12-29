@@ -7,12 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import ConcertHeaderInfo from "./ConcertHeaderInfo";
 import { formatDateRange, formatPrice } from "@/utils/helpers/formatters";
 import ConcertLikeButton from "./ConcertLikeButton";
-import {
-  getConcertDetail,
-  getTicketOfficesByConcertId,
-  getIsLikedConcert,
-} from "@/lib/api/concerts";
+import { getConcertDetail, getTicketOfficesByConcertId } from "@/lib/api/concerts.server";
 import { getAuthStatus, getMe } from "@/lib/auth/auth.server";
+import { getIsLikedConcert } from "@/lib/api/concert.client";
 
 export default async function ConcertHeader({ concertId }: { concertId: string }) {
   const [concertDetail, concertTicketing, isAuthenticated] = await Promise.all([

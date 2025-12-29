@@ -7,9 +7,9 @@ import {
   getConcertDetail,
   getConcertVenueInfo,
   getTicketOfficesByConcertId,
-  getIsLikedConcert,
-} from "@/lib/api/concerts";
+} from "@/lib/api/concerts.server";
 import { getAuthStatus, getMe } from "@/lib/auth/auth.server";
+import { getIsLikedConcert } from "@/lib/api/concert.client";
 
 export default async function ConcertDetail({ concertId }: { concertId: string }) {
   const [concertDetail, concertVenue, concertTicketing, isAuthenticated] = await Promise.all([

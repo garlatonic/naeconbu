@@ -1,10 +1,20 @@
 export type ConcertData = {
   id: number;
-  posterUrl: string;
   name: string;
+  placeName: string;
+  ticketTime?: string | null;
+  ticketEndTime?: string | null;
   startDate: string;
   endDate: string;
-  placeName: string;
+  posterUrl: string;
+  maxPrice?: number;
+  minPrice?: number;
+  viewCount?: number;
+  likeCount?: number;
+};
+
+export type ConcertDataWithLiked = ConcertData & {
+  isLiked?: boolean;
 };
 
 export type SortSelectProps = {
