@@ -1,6 +1,6 @@
-import { ConcertDataWithLiked } from "@/components/concert/ConcertType";
 import ServerApi from "@/utils/helpers/serverApi";
 import { getIsLikedConcert } from "../concerts/concerts.server";
+import { ConcertDataWithLiked } from "@/types/concerts";
 
 /**
  * 검색어로 공연 목록을 가져옵니다.
@@ -11,7 +11,7 @@ import { getIsLikedConcert } from "../concerts/concerts.server";
  * @param {number} size 페이지당 항목 수 (기본값: 12)
  * @returns {Promise<ConcertData[]>} 공연 목록
  */
-export const getSearchConcertsServer = async ({
+export const getSearchConcerts = async ({
   keyword,
   isAuthenticated,
   page = 0,
