@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { ArrowUpIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function TopButton() {
   const [isVisible, setIsVisible] = useState(false);
-  const pathname = window.location.pathname;
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
