@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useOptimistic, useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { ConcertDatePicker } from "../concert/detail/ConcertDatePicker";
@@ -15,8 +14,8 @@ import { getConcertDetail } from "@/lib/api/concerts/concerts.client";
 import { ConcertDetail } from "@/types/concerts";
 import { toast } from "sonner";
 import { formatDateRange } from "@/utils/helpers/formatters";
-import { createPlanner } from "@/lib/api/planner/planner.client";
-import { getConcertStartDate, isSameDay } from "@/utils/helpers/handleDate";
+import { createNewPlan } from "@/lib/api/planner/planner.client";
+import { getConcertStartDate, isSameDay, dateToISOString } from "@/utils/helpers/handleDate";
 
 export default function PlannerCreate() {
   const router = useRouter();
@@ -32,10 +31,10 @@ export default function PlannerCreate() {
   // 선택된 콘서트 상태
   const [selectedConcert, setSelectedConcert] = useState<AutoCompleteConcerts | null>(null);
 
-  // ✅ 선택된 콘서트의 상세 정보
+  // 선택된 콘서트의 상세 정보
   const [concertDetail, setConcertDetail] = useState<ConcertDetail | null>(null);
 
-  // ✅ 콘서트 상세 정보 로딩 상태
+  // 콘서트 상세 정보 로딩 상태
   const [isLoadingConcertDetail, setIsLoadingConcertDetail] = useState(false);
 
   const [search, setSearch] = useState<string>("");
@@ -142,7 +141,7 @@ export default function PlannerCreate() {
   }, [plannerDialogOpen, router]);
 
   // 플래너 생성 핸들러
-  const handleCreatePlanner = async () => {
+  const handleCreateNewPlan = async () => {
     if (!selectedConcert?.id) {
       toast.error("선택된 공연이 없습니다.");
       return;
@@ -166,10 +165,10 @@ export default function PlannerCreate() {
     try {
       startTransition(async () => {
         try {
-          const data = await createPlanner({
+          const data = await createNewPlan({
             concertId: selectedConcert.id.toString(),
             title: plannerTitle.trim(),
-            planDate: plannerDate.toISOString(),
+            planDate: dateToISOString(plannerDate),
           });
 
           // 성공 후 링크 이동
@@ -315,7 +314,7 @@ export default function PlannerCreate() {
               취소
             </Button>
             <Button
-              onClick={handleCreatePlanner}
+              onClick={handleCreateNewPlan}
               disabled={!plannerTitle.trim() || !plannerDate || isPending}
             >
               {isPending ? "생성 중..." : "만들기"}

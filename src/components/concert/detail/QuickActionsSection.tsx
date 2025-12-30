@@ -37,11 +37,11 @@ import {
   AlertDialogFooter,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import { createPlanner } from "@/lib/api/planner/planner.client";
+import { createNewPlan } from "@/lib/api/planner/planner.client";
 import { useRouter } from "next/navigation";
 import { User } from "@/types/user";
 import { postLikeConcert } from "@/lib/api/concerts/concerts.client";
-import { getConcertStartDate, isSameDay } from "@/utils/helpers/handleDate";
+import { getConcertStartDate, isSameDay, dateToISOString } from "@/utils/helpers/handleDate";
 
 export default function QuickActionsSection({
   concertId,
@@ -109,7 +109,7 @@ export default function QuickActionsSection({
   };
 
   // 플래너 생성 핸들러
-  const handleCreatePlanner = async () => {
+  const handleCreateNewPlan = async () => {
     if (!concertId) {
       toast.error("선택된 공연이 없습니다.");
       return;
@@ -130,10 +130,10 @@ export default function QuickActionsSection({
       return;
     }
 
-    const data = await createPlanner({
+    const data = await createNewPlan({
       concertId: concertId,
       title: plannerTitle.trim(),
-      planDate: plannerDate.toISOString(),
+      planDate: dateToISOString(plannerDate),
     });
 
     if (!data) {
@@ -321,7 +321,7 @@ export default function QuickActionsSection({
             <Button variant="outline" onClick={handleClosePlannerModal}>
               취소
             </Button>
-            <Button onClick={handleCreatePlanner}>만들기</Button>
+            <Button onClick={handleCreateNewPlan}>만들기</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

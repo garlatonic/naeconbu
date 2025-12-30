@@ -12,7 +12,7 @@ interface Planner {
 }
 
 // 플래너 계획 생성
-export const createPlanner = async ({
+export const createNewPlan = async ({
   concertId,
   title,
   planDate,
@@ -25,6 +25,36 @@ export const createPlanner = async ({
     const res = await ClientApi("/api/v1/plans", {
       method: "POST",
       body: JSON.stringify({ concertId, title, planDate }),
+    });
+
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      throw new Error(`API 요청 실패: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error creating planner:", error);
+    throw error;
+  }
+};
+
+// 플래너 계획 수정
+export const updatePlanDetail = async ({
+  planId,
+  title,
+  planDate,
+}: {
+  planId: string;
+  title: string;
+  planDate: string;
+}): Promise<ResponseData<Planner>> => {
+  try {
+    const res = await ClientApi(`/api/v1/plans/update/${planId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ title, planDate }),
     });
 
     if (!res.ok) {

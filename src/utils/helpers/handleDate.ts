@@ -13,6 +13,17 @@ export const isSameDay = (date1: Date, date2: Date) => {
   );
 };
 
+// 로컬 Date를 ISO 8601 문자열로 변환 (타임존 무시)
+export const dateToISOString = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+};
+
 // 날짜 문자열을 로컬 날짜 객체로 변환 (타임존 무시)
 export const getConcertStartDate = (dateString: string): Date => {
   try {

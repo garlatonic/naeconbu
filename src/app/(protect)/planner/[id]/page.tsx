@@ -1,11 +1,13 @@
-import PlannerTopActions from "@/components/planner/PlannerTopActions";
-import PlannerTopHeader from "@/components/planner/PlannerTopHeader";
+import PlannerTopActions from "@/components/planner/top/PlannerTopActions";
+import PlannerTopHeader from "@/components/planner/top/PlannerTopHeader";
 import PlannerTimelineSection from "@/components/planner/PlannerTimelineSection";
 
-export default function Page() {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   return (
     <>
-      <PlannerTopHeader />
+      <PlannerTopHeader planId={id} />
       <PlannerTopActions />
       <PlannerTimelineSection />
     </>

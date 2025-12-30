@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, UserRoundPlusIcon, MapIcon, Share2Icon, SaveIcon } from "lucide-react";
-import AddScheduleDialog from "./dialogs/AddScheduleDialog";
-import InviteMemberDialog from "./dialogs/InviteMemberDialog";
-import LinkShareDialog from "./dialogs/LinkShareDialog";
+import AddScheduleDialog from "../dialogs/AddScheduleDialog";
+import InviteMemberDialog from "../dialogs/InviteMemberDialog";
+import LinkShareDialog from "../dialogs/LinkShareDialog";
 
 export default function PlannerTopActions() {
   const [showAdd, setShowAdd] = useState(false);

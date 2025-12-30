@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ConcertDetail } from "../concerts";
 
 export type ButtonProps = React.ComponentProps<"button"> & React.ComponentProps<typeof Button>;
 
@@ -69,4 +70,18 @@ export type ScheduleFormData = {
   location: string;
   notes: string;
   coords?: { lat?: string; lng?: string };
+};
+
+export type PlannerListWithDetails = {
+  concertId: number;
+  createdBy: number;
+  createdDate: string;
+  id: number;
+  modifiedDate: string;
+  planDate: string;
+  scheduleCount: number;
+  title: string;
+  totalDuration: number;
+  concertDetail: ConcertDetail;
+  planDetail: PlanDetail;
 };

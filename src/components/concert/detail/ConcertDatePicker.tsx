@@ -26,7 +26,7 @@ export function ConcertDatePicker({
 
   const handleSelect = (selected: Date | undefined) => {
     if (selected) {
-      // 선택된 날짜를 자정으로 정규화
+      // 선택된 날짜를 그대로 사용 (브라우저에서 자정으로 설정됨)
       const normalizedDate = new Date(
         selected.getFullYear(),
         selected.getMonth(),
