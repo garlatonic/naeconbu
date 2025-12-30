@@ -10,7 +10,7 @@ export default function ChatClient({ concert }: { concert: ConcertDetail | null 
       <ChatHeader concert={concert} />
       <div className="border-border bg-bg-main flex h-[calc(100dvh-92px)] overflow-hidden border-t">
         <ChatRoom />
-        <ChatAside />
+        <ChatAside concert={concert} />
       </div>
     </>
   );
