@@ -23,7 +23,7 @@ import { createPlanner } from "@/lib/api/planner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
-import { patchTicketTimeSet } from "@/lib/api/admin";
+import { patchTicketTimeSet } from "@/lib/api/admin.client";
 
 export default function ConcertHeaderBtn({
   concertDetail,

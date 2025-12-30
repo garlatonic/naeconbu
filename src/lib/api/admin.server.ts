@@ -1,5 +1,3 @@
-"use server";
-
 import { ConcertData } from "@/components/concert/ConcertType";
 import { ResponseData } from "@/types/api";
 import { ConcertDetail } from "@/types/concerts";
