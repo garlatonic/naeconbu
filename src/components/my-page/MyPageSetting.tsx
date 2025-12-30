@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 import { User } from "@/types/user";
 import {
+  changeBirth,
   changeNickname,
   changeProfileImage,
   changeUsersSettings,
@@ -51,7 +52,8 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   const [password, setPassword] = useState(""); // 비밀번호
   const [passwordConfirm, setPasswordConfirm] = useState(""); // 비밀번호 확인
   const [email, setEmail] = useState(userData.email); // 이메일
-  const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
+  // TODO : 이메일 변경 및 확인 기능 추가
+  // const [emailConfirm, setEmailConfirm] = useState(""); // 이메일 확인
   const [date, setDate] = useState<Date | null>(
     userData.birthdate ? new Date(userData.birthdate) : null
   ); // 생일
@@ -138,7 +140,6 @@ export default function MyPageSetting({ userData }: { userData: User }) {
     setPreviewImg("");
     setNickname(userData.nickname);
     setEmail(userData.email);
-    setEmailConfirm("");
     setDate(userData.birthdate ? new Date(userData.birthdate) : null);
     if (initialUsersSettings.current) {
       const { emailAlert: originalEmail, darkMode: originalDark } = initialUsersSettings.current;
@@ -167,11 +168,15 @@ export default function MyPageSetting({ userData }: { userData: User }) {
       toast.error("비밀번호 확인이 필요합니다.");
       return;
     }
+*/
     if (!email.trim()) {
       toast.error("이메일을 입력해주세요.");
       return;
     }
-*/
+
+    const birth = date
+      ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+      : undefined;
     // TODO : 수정 사항이 있는 경우에만 제출이 가능하도록 함
 
     try {
@@ -182,6 +187,8 @@ export default function MyPageSetting({ userData }: { userData: User }) {
           emailNotifications: emailAlert,
           darkMode: darkMode,
         }),
+        // TODO : 백엔드 코드 수정 후 적용 확인 필요
+        changeBirth({ birth: birth }),
       ]);
 
       if (results.every((res) => res !== null)) {
@@ -233,7 +240,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
               />
             </Field>
             <Field>
-              <Label htmlFor="nickname">비밀번호 *</Label>
+              <Label htmlFor="nickname">비밀번호</Label>
               <div className="relative space-y-1">
                 <Input
                   type={isVisible ? "text" : "password"}
@@ -255,7 +262,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
               </div>
             </Field>
             <Field>
-              <Label htmlFor="nickname">비밀번호 확인 *</Label>
+              <Label htmlFor="nickname">비밀번호 확인</Label>
               <div className="relative space-y-1">
                 <Input
                   type={isVisibleConfirm ? "text" : "password"}
@@ -286,12 +293,12 @@ export default function MyPageSetting({ userData }: { userData: User }) {
                   placeholder="이메일을 입력하세요."
                   className="pr-9"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  disabled
                 />
-                <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p>
+                {/* <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p> */}
               </div>
             </Field>
-            <Field>
+            {/* <Field>
               <Label htmlFor="emailConfirm">이메일 확인</Label>
               <div className="relative space-y-1">
                 <div className="flex gap-1">
@@ -305,7 +312,7 @@ export default function MyPageSetting({ userData }: { userData: User }) {
                 </div>
                 <p className="text-text-sub text-xs">유효한 이메일 주소를 입력하세요.</p>
               </div>
-            </Field>
+            </Field> */}
             <Field>
               <Label htmlFor="birth">생년월일</Label>
               <Popover open={open} onOpenChange={setOpen}>

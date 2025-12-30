@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { User } from "@/types/user";
 
 export default function MyPageHeader({ userData }: { userData: User }) {
-  const formattedDate = format(new Date(userData.createdDate), "yyyy-mm-dd");
+  const formattedDate = format(new Date(userData.createdDate), "yyyy-MM-dd");
   return (
     <header className="bg-zinc-900 px-15 py-20">
       <div className="mx-auto flex max-w-400 gap-10">

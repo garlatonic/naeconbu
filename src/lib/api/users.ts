@@ -89,4 +89,21 @@ export const changeNickname = async (data: { nickname: string }) => {
   }
 };
 
-// TODO : 생일 수정
+export const changeBirth = async (data: { birth?: string }) => {
+  try {
+    const res = await ClientApi(`/api/v1/users/birth`, {
+      method: "PATCH",
+      cache: "no-store",
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      return null;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching users birth date change:", error);
+    return null;
+  }
+};
