@@ -159,7 +159,7 @@ export default function PlannerCreate() {
     // 공연 당일 확인
     const concertStart = getConcertStartDate(concertDetail?.startDate || "");
     if (isSameDay(plannerDate, concertStart)) {
-      toast.error("공연 당일은 플래너를 생성할 수 없습니다.");
+      toast.error("오늘은 공연 시작일이므로 플래너를 생성할 수 없습니다.");
       return;
     }
 
