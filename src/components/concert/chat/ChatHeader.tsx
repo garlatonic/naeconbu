@@ -1,10 +1,10 @@
-// TODO: 공연 제목, 날짜, 인원 수를 서버 데이터 기반으로 치환
-// TODO: i18n 적용 시 헤더 텍스트 다국어 처리
+// TODO: 인원 수를 서버 데이터 기반으로 치환
 
 import { ArrowLeft, Calendar } from "lucide-react";
 import InfoBadge from "@/components/concert/chat/InfoBadge";
+import { ConcertDetail } from "@/types/concerts";
 
-export default function ChatHeader() {
+export default function ChatHeader({ concert }: { concert: ConcertDetail | null }) {
   return (
     <header className={`bg-bg-main flex gap-8`}>
       <div className={"flex w-full justify-between px-8 py-4"}>
@@ -14,7 +14,7 @@ export default function ChatHeader() {
             <ArrowLeft />
           </button>
           <div className={"flex flex-col"}>
-            <h2 className={"text-xl font-bold"}>The Midnight Echo Live</h2>
+            <h2 className={"text-xl font-bold"}>{concert?.name}</h2>
             <h3 className={"text-text-sub"}>실시간 채팅방</h3>
           </div>
         </div>
@@ -23,7 +23,7 @@ export default function ChatHeader() {
           {/*날짜*/}
           <InfoBadge>
             <Calendar size={14} className={"text-text-sub"} />
-            <span className="leading-5 font-medium">2025. 12. 08</span>
+            <span className="leading-5 font-medium">{concert?.startDate}</span>
           </InfoBadge>
           {/*인원*/}
           <InfoBadge>
