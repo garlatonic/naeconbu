@@ -1,10 +1,7 @@
-"use server";
-
 import { ConcertData } from "@/components/concert/ConcertType";
 import { ResponseData } from "@/types/api";
 import { ConcertDetail } from "@/types/concerts";
-import ClientApi from "@/utils/helpers/clientApi";
-import { cookies } from "next/headers";
+import ServerApi from "@/utils/helpers/serverApi";
 
 /**
  * 티켓팅 시간 등록
@@ -23,15 +20,9 @@ export const patchTicketTimeSet = async ({
   ticketTime: string;
   ticketEndTime: string;
 }): Promise<ResponseData<ConcertDetail | null>> => {
-  const cookieStore = await cookies();
-
   try {
-    const res = await ClientApi(`/api/v1/admin/concerts/ticketTimeSet`, {
+    const res = await ServerApi(`/api/v1/admin/concerts/ticketTimeSet`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
-      },
       body: JSON.stringify({
         concertId,
         ticketTime,
@@ -71,17 +62,11 @@ export const getNoTicketTimeLists = async ({
   page: number;
   size: number;
 }): Promise<ConcertData[] | null> => {
-  const cookieStore = await cookies();
   try {
-    const res = await ClientApi(
+    const res = await ServerApi(
       `/api/v1/admin/concerts/noTicketTimeList?page=${page}&size=${size}`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: cookieStore.toString(),
-        },
-        cache: "no-store",
       }
     );
 
