@@ -16,7 +16,7 @@ export default function ConcertLikeButton({
   isAuthenticated: boolean;
   isLiked?: boolean;
 }) {
-  const [liked, setLiked] = useState<boolean>(isLiked ?? false);
+  const [currentLiked, setCurrentLiked] = useState<boolean>(isLiked ?? false);
 
   // 알림 설정하기 핸들러 (찜하기)
   const handleLikeConcert = async () => {
@@ -26,14 +26,14 @@ export default function ConcertLikeButton({
       return;
     }
 
-    if (liked) {
+    if (currentLiked) {
       const ok = await deleteLikeConcert(concertId);
       if (!ok) {
         toast.error("알림 해제에 실패했습니다. 잠시 후 다시 시도해주세요.");
         return;
       }
       toast.success("알림이 해제되었습니다.");
-      setLiked(false);
+      setCurrentLiked(false);
     } else {
       const ok = await postLikeConcert(concertId);
       if (!ok) {
@@ -41,7 +41,7 @@ export default function ConcertLikeButton({
         return;
       }
       toast.success("알림이 설정되었습니다.");
-      setLiked(true);
+      setCurrentLiked(true);
     }
   };
 
@@ -55,7 +55,7 @@ export default function ConcertLikeButton({
       <HeartIcon
         className={twMerge(
           "transition-all group-active:scale-110",
-          liked && "fill-red-500 text-red-500"
+          currentLiked && "fill-red-500 text-red-500"
         )}
       />
     </Button>

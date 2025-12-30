@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
-export default function SearchNavigation({ keyword }: { keyword: string }) {
+export default function SearchNavigation() {
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+
   const searchTabs = [
     { id: "overview", label: "전체보기", href: "/search/overview" },
     { id: "artists", label: "아티스트", href: "/search/artists" },

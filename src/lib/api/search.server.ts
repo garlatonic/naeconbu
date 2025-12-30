@@ -23,9 +23,9 @@ export const getSearchConcertsServer = async ({
   size?: number;
 }): Promise<ConcertDataWithLiked[]> => {
   try {
-    const encodeKeyword = encodeURIComponent(keyword);
+    const encodedKeyword = encodeURIComponent(keyword);
     const res = await ServerApi(
-      `/api/v1/concerts/search?keyword=${encodeKeyword}&page=${page}&size=${size}`,
+      `/api/v1/concerts/search?keyword=${encodedKeyword}&page=${page}&size=${size}`,
       {
         method: "GET",
       }

@@ -72,6 +72,7 @@ export default async function ConcertHeader({ concertId }: { concertId: string }
             </div>
             <ConcertLikeButton
               concertId={concertDetail.concertId}
+              isAuthenticated={isAuthenticated}
               isLiked={isLikedConcert?.isLike}
             />
           </div>

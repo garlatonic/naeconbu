@@ -24,9 +24,9 @@ export const getSearchConcerts = async ({
   size?: number;
 }): Promise<ConcertDataWithLiked[]> => {
   try {
-    const encodeKeyword = encodeURIComponent(keyword);
+    const encodedKeyword = encodeURIComponent(keyword);
     const res = await ClientApi(
-      `/api/v1/concerts/search?keyword=${encodeKeyword}&page=${page}&size=${size}`,
+      `/api/v1/concerts/search?keyword=${encodedKeyword}&page=${page}&size=${size}`,
       {
         method: "GET",
       }
@@ -76,9 +76,9 @@ export const getSearchConcertsAutoComplete = async ({
   end?: number;
 }): Promise<AutoCompleteConcerts[]> => {
   try {
-    const encodeKeyword = encodeURIComponent(keyword);
+    const encodedKeyword = encodeURIComponent(keyword);
     const res = await ClientApi(
-      `/api/v1/concerts/autoComplete?keyword=${encodeKeyword}&start=${start}&end=${end}`,
+      `/api/v1/concerts/autoComplete?keyword=${encodedKeyword}&start=${start}&end=${end}`,
       {
         method: "GET",
       }

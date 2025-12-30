@@ -1,4 +1,11 @@
-export default function SearchIntro({ keyword }: { keyword: string }) {
+"use client";
+
+import { useSearchParams } from "next/navigation";
+
+export default function SearchIntro() {
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+
   return (
     <section className="bg-bg-sub px-15 py-16">
       <div className="mx-auto flex w-full max-w-400 flex-col gap-4">

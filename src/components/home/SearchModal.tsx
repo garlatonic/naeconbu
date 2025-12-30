@@ -115,7 +115,7 @@ export default function SearchModal() {
       </Tooltip>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-xl overflow-hidden">
-          <DialogHeader className="hidden">
+          <DialogHeader className="sr-only">
             <DialogTitle>검색</DialogTitle>
           </DialogHeader>
           <div className="relative">
@@ -151,7 +151,7 @@ export default function SearchModal() {
                       setOpen(false);
                     }}
                     className={cn(
-                      "hover:bg-accent hover:text-accent-foreground relative flex w-full cursor-pointer items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden",
+                      "hover:bg-accent hover:text-accent-foreground relative flex w-full cursor-pointer items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-sm outline-none",
                       isPending && "opacity-70"
                     )}
                   >
