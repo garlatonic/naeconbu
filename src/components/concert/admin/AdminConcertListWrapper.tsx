@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getNoTicketTimeLists } from "@/lib/api/admin.client";
 import AdminConcertListContent from "./AdminConcertListContent";
-import { ConcertData } from "@/components/concert/ConcertType";
+import { ConcertData } from "@/types/concerts";
 
 export default function AdminConcertListWrapper() {
   const [initialList, setInitialList] = useState<ConcertData[] | null>(null);

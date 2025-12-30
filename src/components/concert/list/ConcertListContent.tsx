@@ -2,11 +2,11 @@
 
 import ConcertCard from "@/components/concert/ConcertCard";
 import { twMerge } from "tailwind-merge";
-import { ConcertData } from "@/components/concert/ConcertType";
 import ListSortClient from "@/components/concert/list/ListSortClient";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { totalConcertCount } from "@/lib/api/concerts.server";
+import { ConcertData } from "@/types/concerts";
 
 export default function ConcertListContent({
   initialList,
@@ -106,9 +106,11 @@ export default function ConcertListContent({
             </span>
             <span className="text-text-main text-lg">items</span>
           </div>
+          {/* TODO : 정렬 API 수정 따라 수정 */}
           <ListSortClient />
         </div>
         <div className="list grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {/* TODO : 가끔 12개씩 안 불러지는 오류 해결 */}
           {concertsList.map((concert: ConcertData) => (
             <ConcertCard
               key={concert.id}
