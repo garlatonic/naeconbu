@@ -19,11 +19,11 @@ import { ConcertDetail, TicketOffice } from "@/types/concerts";
 import { Popover } from "@radix-ui/react-popover";
 import { PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { createPlanner } from "@/lib/api/planner";
+import { createPlanner } from "@/lib/api/planner/planner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
-import { patchTicketTimeSet } from "@/lib/api/admin.client";
+import { patchTicketTimeSet } from "@/lib/api/admin/admin.client";
 
 export default function ConcertHeaderBtn({
   concertDetail,

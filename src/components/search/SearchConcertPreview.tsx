@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SearchConcertCard from "@/components/search/SearchConcertCard";
-import { getSearchConcertsServer } from "@/lib/api/search.server";
+import { getSearchConcertsServer } from "@/lib/api/search/search.server";
 import { SpotlightIcon } from "lucide-react";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "../ui/empty";
 import { getAuthStatus } from "@/lib/auth/auth.server";

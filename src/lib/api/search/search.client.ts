@@ -1,6 +1,6 @@
 import { ConcertDataWithLiked } from "@/components/concert/ConcertType";
 import ClientApi from "@/utils/helpers/clientApi";
-import { getIsLikedConcert } from "./concert.client";
+import { getIsLikedConcert } from "../concerts/concerts.client";
 import { AutoCompleteConcerts } from "@/types/search";
 
 /**

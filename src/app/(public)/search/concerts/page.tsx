@@ -1,5 +1,5 @@
 import SearchConcerts from "@/components/search/SearchConcerts";
-import { getSearchConcertsServer } from "@/lib/api/search.server";
+import { getSearchConcertsServer } from "@/lib/api/search/search.server";
 import { getAuthStatus } from "@/lib/auth/auth.server";
 
 export default async function Page({

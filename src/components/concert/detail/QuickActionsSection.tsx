@@ -37,10 +37,10 @@ import {
   AlertDialogFooter,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import { createPlanner } from "@/lib/api/planner";
+import { createPlanner } from "@/lib/api/planner/planner";
 import { useRouter } from "next/navigation";
 import { User } from "@/types/user";
-import { postLikeConcert } from "@/lib/api/concert.client";
+import { postLikeConcert } from "@/lib/api/concerts/concerts.client";
 
 export default function QuickActionsSection({
   concertId,

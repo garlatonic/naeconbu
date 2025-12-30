@@ -6,7 +6,7 @@ import { ConcertDataWithLiked } from "../concert/ConcertType";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import SearchConcertCard from "./SearchConcertCard";
-import { getSearchConcerts } from "@/lib/api/search.client";
+import { getSearchConcerts } from "@/lib/api/search/search.client";
 
 export default function SearchConcerts({
   initialConcerts,
