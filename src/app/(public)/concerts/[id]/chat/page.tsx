@@ -8,5 +8,5 @@ export default async function ChatPage({ params }: { params: Promise<{ id: strin
   const concert = await getConcertDetail({ concertId: id });
   const ticketOffices = await getTicketOfficesByConcertId({ concertId: id });
 
-  return <ChatClient concert={concert} ticketOffices={ticketOffices} />;
+  return <ChatClient concert={concert} ticketOffices={ticketOffices} concertId={id} />;
 }

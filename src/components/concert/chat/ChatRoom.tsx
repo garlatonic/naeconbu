@@ -12,12 +12,34 @@
 "use client";
 
 import { Pin, Send } from "lucide-react";
-import InfoBadge from "@/components/concert/chat/InfoBadge";
-import ChatMessage from "@/components/concert/chat/ChatMessage";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { getChatMessages } from "@/lib/api/chat/chat.client";
+import { ChatMessageData } from "@/types/chat";
 
-export default function ChatRoom() {
+export default function ChatRoom({ concertId }: { concertId: string }) {
+  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchMessages = async () => {
+      const data = await getChatMessages(concertId);
+      if (mounted) {
+        setMessages(data);
+        setIsLoading(false);
+      }
+    };
+
+    fetchMessages();
+
+    return () => {
+      mounted = false;
+    };
+  }, [concertId]);
+
   return (
     <section className="bg-bg-main flex flex-1 flex-col border-r">
       <div className={"bg-bg-sub flex gap-3 border-b px-8 py-3"}>
@@ -35,41 +57,27 @@ export default function ChatRoom() {
           "scrollbar-hide bg-bg-main flex flex-1 flex-col gap-6 overflow-y-scroll border-b p-8"
         }
       >
-        <div className={"flex justify-center"}>
-          <InfoBadge>
-            <span className={"text-text-sub"}>오늘 - 2025년 12월 8일</span>
-          </InfoBadge>
-        </div>
-        <div className={"flex justify-center"}>
-          <span className={"text-text-sub"}>User_8472님이 입장했습니다</span>
-        </div>
-        <div className={"flex justify-center"}>
-          <span className={"text-text-sub"}>User_8472님이 입장했습니다</span>
-        </div>
-        <ChatMessage message={"헬로우"} username={"진환"} time={"10:19"} />
-        <ChatMessage message={"안녕하세요"} username={"민주"} time={"10:19"} isMe={true} />
-        <ChatMessage message={"지금 뭐하세요?"} username={"민주"} time={"10:19"} isMe={true} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage message={"지금 운동중입니다"} username={"진환"} time={"10:25"} />
-        <ChatMessage
-          message={"이야 열심히 하시네요"}
-          username={"민주"}
-          time={"10:30"}
-          isMe={true}
-        />
+        {/*TODO: 나중에 스켈레톤으로 변경 */}
+        {isLoading && (
+          <div className={"flex items-center justify-center"}>
+            <p>채팅 불러오는 중...</p>
+          </div>
+        )}
+        {/*<div className={"flex justify-center"}>*/}
+        {/*  <InfoBadge>*/}
+        {/*    <span className={"text-text-sub"}>오늘 - 2025년 12월 8일</span>*/}
+        {/*  </InfoBadge>*/}
+        {/*</div>*/}
+        {/*<div className={"flex justify-center"}>*/}
+        {/*  <span className={"text-text-sub"}>User_8472님이 입장했습니다</span>*/}
+        {/*</div>*/}
+        {/*<div className={"flex justify-center"}>*/}
+        {/*  <span className={"text-text-sub"}>User_8472님이 입장했습니다</span>*/}
+        {/*</div>*/}
+        {/*TODO: 자신이 보낸 메시지인지 판단 추가, 메시지가 없는 경우 알림 추가*/}
+        {messages.map((msg) => (
+          <p key={msg.messageId}>{msg.messageId}</p>
+        ))}
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
