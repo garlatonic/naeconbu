@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import SearchPlaces from "@/components/planner/SearchPlaces";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -46,6 +45,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import { ScheduleDetail, ScheduleType, TransportType } from "@/types/planner";
 import { Separator } from "@/components/ui/separator";
+import SearchPlaces from "../sidebar/SearchPlaces";
 
 const getIcon = (type: ScheduleType, onLast: boolean, transportType?: TransportType) => {
   switch (type) {
