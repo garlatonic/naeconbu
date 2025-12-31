@@ -4,10 +4,14 @@ import PlannerBanner from "@/components/home/PlannerBanner";
 import UpcomingSlider from "@/components/home/upcoming-slider";
 import UpcomingSkeleton from "@/components/loading/UpcomingSkeleton";
 import { getUpcomingConcerts } from "@/lib/api/concerts/concerts.server";
+import { getFeaturedArtists } from "@/lib/artists/artists.server";
+import { getAuthStatus } from "@/lib/auth/auth.server";
 import { Suspense } from "react";
 
 export default async function Page() {
+  const isLogined = await getAuthStatus();
   const concertData = await getUpcomingConcerts();
+  const artistData = await getFeaturedArtists({ page: 0, size: 20 });
 
   return (
     <>
@@ -15,7 +19,7 @@ export default async function Page() {
       <Suspense fallback={<UpcomingSkeleton />}>
         <UpcomingSlider concerts={concertData.data} />
       </Suspense>
-      <FeaturedSlider />
+      <FeaturedSlider artists={artistData.data} isLogined={isLogined} />
       <PlannerBanner />
     </>
   );
