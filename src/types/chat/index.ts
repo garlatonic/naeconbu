@@ -15,4 +15,13 @@ export type ChatMessageData = {
   senderName: string;
   content: string;
   sentDate: string;
+  profileImage?: string;
+};
+
+export type ChatMessageProps = {
+  profileImage?: string;
+  username: string;
+  message: string;
+  time: string; // 화면에 표시될 포맷팅된 시간 (예: "오후 5:46")
+  isMe: boolean;
 };
