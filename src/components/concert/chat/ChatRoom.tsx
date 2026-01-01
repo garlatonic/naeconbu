@@ -109,17 +109,30 @@ export default function ChatRoom({
         {/*<div className={"flex justify-center"}>*/}
         {/*  <span className={"text-text-sub"}>User_8472님이 입장했습니다</span>*/}
         {/*</div>*/}
-        {/*TODO: 자신이 보낸 메시지인지 판단 추가(isMe), 메시지가 없는 경우 알림 추가*/}
+
         {messages.map((msg, idx) => {
-          // 1. 내 정보와 메시지 발신자 ID 비교 (isMe 판단)
           const isMe = user?.id === msg.senderId;
 
-          // 2. 서버의 sentDate(ISO string)를 "오후 5:46" 형식으로 변환
-          const formattedTime = new Date(msg.sentDate).toLocaleTimeString("ko-KR", {
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-          });
+          const formattedTime = (dateStr: string) =>
+            new Date(dateStr).toLocaleTimeString("ko-KR", {
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            });
+
+          const currentTime = formattedTime(msg.sentDate);
+          const prevMsg = messages[idx - 1];
+          const nextMsg = messages[idx + 1];
+
+          const isContinuation =
+            idx > 0 &&
+            prevMsg.senderId === msg.senderId &&
+            formattedTime(prevMsg.sentDate) === currentTime;
+
+          const showTime =
+            !nextMsg ||
+            nextMsg.senderId !== msg.senderId ||
+            formattedTime(nextMsg.sentDate) !== currentTime;
 
           return (
             <ChatMessage
@@ -127,8 +140,10 @@ export default function ChatRoom({
               profileImage={msg.profileImage} // 서버 데이터에 프로필 이미지가 있는 경우
               username={msg.senderName}
               message={msg.content}
-              time={formattedTime}
+              time={currentTime}
               isMe={isMe}
+              isContinuation={isContinuation}
+              showTime={showTime}
             />
           );
         })}

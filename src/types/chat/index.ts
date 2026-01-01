@@ -22,6 +22,8 @@ export type ChatMessageProps = {
   profileImage?: string;
   username: string;
   message: string;
-  time: string; // 화면에 표시될 포맷팅된 시간 (예: "오후 5:46")
+  time: string;
   isMe: boolean;
+  isContinuation: boolean;
+  showTime: boolean;
 };
