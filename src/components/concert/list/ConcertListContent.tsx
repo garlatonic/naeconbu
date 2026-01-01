@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { totalConcertCount } from "@/lib/api/concerts/concerts.server";
 import { ConcertData } from "@/types/concerts";
+import ConcertCardSkeleton from "@/components/loading/concert/list/ConcertCardSkeleton";
 
 export default function ConcertListContent({
   initialList,
@@ -97,6 +98,7 @@ export default function ConcertListContent({
   }, []);
 
   return (
+    // 정렬 수정 시, 스켈레톤 사이즈 주의 <ConcertCardSkeleton/>
     <section className="px-15 py-16">
       <div className={twMerge(`mx-auto flex w-full max-w-400 flex-col gap-9`)}>
         <div className="header flex items-center justify-between">
@@ -123,6 +125,15 @@ export default function ConcertListContent({
             />
           ))}
         </div>
+
+        {/* 스켈레톤 */}
+        {loading && (
+          <div className="grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ConcertCardSkeleton key={i} />
+            ))}
+          </div>
+        )}
       </div>
       {hasMore && <div ref={oTarget} className="h-1 w-full" aria-hidden="true" />}
     </section>
