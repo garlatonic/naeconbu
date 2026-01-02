@@ -1,23 +1,29 @@
 import { PlanDetail, PlannerListWithDetails } from "@/types/planner";
 import ServerApi from "@/utils/helpers/serverApi";
 import { getConcertDetail } from "../concerts/concerts.server";
+import { notFound } from "next/navigation";
 
 // 플래너 계획 상세 조회
 export const getPlanDetail = async (planId: string): Promise<PlanDetail | null> => {
   try {
     const res = await ServerApi(`/api/v1/plans/${planId}`, { method: "GET" });
+
     if (!res.ok) {
-      const message =
-        res.status === 404
-          ? "존재하지 않는 플랜입니다."
-          : res.status === 403
-            ? "해당 플랜에 접근할 수 있는 권한이 없습니다."
-            : "플랜 정보를 불러오는데 실패했습니다.";
+      if (res.status === 404) {
+        notFound();
+      }
+
+      if (res.status === 403) {
+        throw new Error("FORBIDDEN");
+      }
+
+      const message = "플랜 정보를 불러오는데 실패했습니다.";
 
       const error = new Error(message);
       (error as Error & { statusCode?: number }).statusCode = res.status;
       throw error;
     }
+
     const data = await res.json();
     return data.data;
   } catch (error) {
