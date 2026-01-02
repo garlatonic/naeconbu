@@ -23,13 +23,14 @@ export default function ChatMessage({
         <AvatarImage src={profileImage} alt="아바타 이미지" />
         <AvatarFallback>{username?.[0]}</AvatarFallback>
       </Avatar>
-      <div className={"flex flex-col gap-1"}>
+      <div className={twMerge("flex flex-col gap-1", isMe ? "items-end" : "items-start")}>
         {!isMe && !isContinuation && (
           <span className="text-text-main text-xs font-semibold">{username}</span>
         )}
+
         <div
           className={twMerge(
-            "min-h-12 max-w-130 rounded-b-2xl px-4 py-3",
+            "min-h-12 w-fit max-w-130 rounded-b-2xl px-4 py-3",
             isMe
               ? "bg-point-main text-text-point-main rounded-tl-2xl rounded-tr-xs"
               : "bg-text-point-sub text-text-main rounded-tl-xs rounded-tr-2xl"
@@ -37,6 +38,7 @@ export default function ChatMessage({
         >
           {message}
         </div>
+
         {showTime && (
           <span className={twMerge("text-text-sub text-xs", isMe ? "text-end" : "")}>{time}</span>
         )}

@@ -26,7 +26,7 @@ export default function ConcertInfoCard({
       <div className="relative aspect-video overflow-hidden rounded-md bg-black">
         {/* 배경용 이미지 (blur) */}
         <Image
-          src={concert?.posterUrl ?? "/images/slide02.gif"}
+          src={concert?.posterUrl ?? "/ConcertPoster.png"}
           alt="배경 이미지"
           fill
           sizes="(max-width: 640px) 100vw, 400px"
@@ -35,7 +35,7 @@ export default function ConcertInfoCard({
 
         {/* 실제 포스터 */}
         <Image
-          src={concert?.posterUrl ?? "/images/slide02.gif"}
+          src={concert?.posterUrl ?? "/ConcertPoster.png"}
           alt="공연 포스터"
           fill
           sizes="(max-width: 640px) 100vw, 400px"
