@@ -1,4 +1,4 @@
-export type TicketVendor = "nol" | "ticketlink" | "melon";
+export type TicketVendor = "NOL" | "YES24" | "MELON" | "TICKETLINK";
 
 export type ChatResponse = {
   status: number;
