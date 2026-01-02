@@ -1,5 +1,3 @@
-// TODO: 인원 수를 서버 데이터 기반으로 치환
-
 import { ArrowLeft, Calendar } from "lucide-react";
 import InfoBadge from "@/components/concert/chat/InfoBadge";
 import { ConcertDetail } from "@/types/concerts";

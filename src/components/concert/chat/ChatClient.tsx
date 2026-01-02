@@ -79,7 +79,7 @@ export default function ChatClient({
       <ChatHeader concert={concert} stompClient={activeClient} />
       <div className="border-border bg-bg-main flex h-[calc(100dvh-92px)] overflow-hidden border-t">
         <ChatRoom concertId={concertId} stompClient={activeClient} user={user} />
-        <ChatAside concert={concert} ticketOffices={ticketOffices} />
+        <ChatAside concert={concert} ticketOffices={ticketOffices} stompClient={activeClient} />
       </div>
     </>
   );

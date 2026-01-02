@@ -1,6 +1,3 @@
-// TODO: 모바일 환경에서는 ChatAside를 Drawer/BottomSheet 형태로 전환
-"use client";
-
 import { useState } from "react";
 import { TicketVendor } from "@/types/chat";
 import ChatTimeCard from "@/components/concert/chat/ChatTimeCard";
@@ -8,13 +5,16 @@ import ConcertInfoCard from "@/components/concert/chat/ConcertInfoCard";
 import ChatRulesCard from "@/components/concert/chat/ChatRulesCard";
 import ActiveParticipantsCard from "@/components/concert/chat/ActiveParticipantsCard";
 import { ConcertDetail, TicketOffice } from "@/types/concerts";
+import { Client } from "@stomp/stompjs";
 
 export default function ChatAside({
   concert,
   ticketOffices,
+  stompClient,
 }: {
   concert: ConcertDetail | null;
   ticketOffices: TicketOffice[] | null;
+  stompClient: Client | null;
 }) {
   const [vendor, setVendor] = useState<TicketVendor>("nol");
 
@@ -23,7 +23,7 @@ export default function ChatAside({
       <ChatTimeCard vendor={vendor} setVendor={setVendor} />
       <ConcertInfoCard concert={concert} ticketOffices={ticketOffices} />
       <ChatRulesCard />
-      <ActiveParticipantsCard />
+      <ActiveParticipantsCard concertId={concert?.concertId} stompClient={stompClient} />
     </aside>
   );
 }
