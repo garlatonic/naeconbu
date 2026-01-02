@@ -22,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SearchPlaces from "@/components/planner/SearchPlaces"; // 경로 확인 필요
 import { CarFrontIcon, ClockIcon, StarIcon, UtensilsIcon } from "lucide-react";
+import SearchPlaces from "../sidebar/SearchPlaces";
 
 interface AddScheduleDialogProps {
   open: boolean;
@@ -32,7 +32,7 @@ interface AddScheduleDialogProps {
 
 export default function AddScheduleDialog({ open, onOpenChange }: AddScheduleDialogProps) {
   const [value, setValue] = useState("");
-  const [coords, setCoords] = useState<{ lat?: string; lng?: string } | null>(null);
+  const [coords, setCoords] = useState<{ lat?: number; lng?: number } | null>(null);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,7 +46,7 @@ export default function AddScheduleDialog({ open, onOpenChange }: AddScheduleDia
             <ToggleGroup
               type="single"
               variant="outline"
-              className="*:border-border *:fill-text-sub *:text-text-sub *:data-[state=on]:bg-point-main *:data-[state=on]:[svg]:fill-point-sub *:data-[state=on]:text-point-sub flex flex-wrap justify-start gap-2"
+              className="*:border-border *:fill-text-sub *:text-text-sub *:data-[state=on]:bg-point-main *:data-[state=on]:[svg]:fill-point-sub *:data-[state=on]:text-point-sub flex flex-wrap justify-start"
             >
               <ToggleGroupItem value="transport" aria-label="이동수단">
                 <CarFrontIcon className="h-4 w-4" />

@@ -23,36 +23,36 @@ export type PlanDetail = {
   totalDuration: number;
 };
 
-export type ScheduleType = "TRANSPORT" | "MEAL" | "WAITING" | "ACTIVITY" | "OTHER" | "CONCERT";
+export type ScheduleType = "TRANSPORT" | "MEAL" | "WAITING" | "ACTIVITY" | "OTHER";
 
 export type TransportType = "WALK" | "PUBLIC_TRANSPORT" | "CAR" | null;
 
 export type ScheduleDetail = {
-  id: number;
+  id?: number; // planId가 아닌 scheduleId
   scheduleType: ScheduleType;
   title: string;
   startAt: string;
   duration: number;
   location: string;
-  locationLat: number;
-  locationLon: number;
   estimatedCost: number;
   details: string;
-  startPlaceLat: number | null;
-  startPlaceLon: number | null;
-  endPlaceLat: number | null;
-  endPlaceLon: number | null;
-  distance: number | null;
-  transportType: TransportType;
-  isMainEvent: boolean;
-  concertId: number;
-  concertName: string;
-  concertPosterUrl: string;
-  concertPlaceName: string;
-  concertMinPrice: number;
-  concertMaxPrice: number;
-  createdDate: string;
-  modifiedDate: string;
+  locationLat?: number;
+  locationLon?: number;
+  startPlaceLat?: number | null;
+  startPlaceLon?: number | null;
+  endPlaceLat?: number | null;
+  endPlaceLon?: number | null;
+  distance?: number | null;
+  transportType?: TransportType;
+  isMainEvent?: boolean;
+  concertId?: number;
+  concertName?: string;
+  concertPosterUrl?: string;
+  concertPlaceName?: string;
+  concertMinPrice?: number;
+  concertMaxPrice?: number;
+  createdDate?: string;
+  modifiedDate?: string;
 };
 
 export type ScheduleLocationProps = {
@@ -84,4 +84,91 @@ export type PlannerListWithDetails = {
   totalDuration: number;
   concertDetail: ConcertDetail;
   planDetail: PlanDetail;
+};
+
+export type UserPlace = {
+  lat: number;
+  lon: number;
+  address: string;
+  placeName?: string;
+};
+
+export type SearchPlace = {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: number;
+  y: number;
+};
+
+export type TMapSummary = {
+  metaData: {
+    plan: {
+      itineraries: [
+        {
+          pathType: number;
+          totalTime: number;
+          transferCount: number;
+          totalWalkDistance: number;
+          totalDistance: number;
+          totalWalkTime: number;
+          fare: {
+            regular: {
+              currency: {
+                symbol: "￦";
+                currency: "원";
+                currencyCode: "KRW";
+              };
+              totalFare: number;
+            };
+          };
+        },
+      ];
+    };
+    requestParameters: {
+      reqDttm: string;
+      startX: string;
+      startY: string;
+      endX: string;
+      endY: string;
+    };
+  };
+};
+
+export type KakaoMapSummary = {
+  distance: number;
+  duration: number;
+};
+
+export type KakaoCarRouteGuide = {
+  /** 지점 이름 (예: "교보타워사거리", "출발지", "목적지") */
+  name: string;
+
+  /** 경도 (Longitude) */
+  x: number;
+
+  /** 위도 (Latitude) */
+  y: number;
+
+  /** 이전 지점부터의 거리 (단위: m) */
+  distance: number;
+
+  /** 이전 지점부터 소요 시간 (단위: 초) */
+  duration: number;
+
+  /** 안내 타입 코드 (100: 출발, 101: 도착, 1~: 회전 안내 등) */
+  type: number;
+
+  /** 안내 문구 (예: "코엑스 방면으로 우회전") */
+  guidance: string;
+
+  /** 도로 인덱스 (-1은 목적지) */
+  road_index: number;
 };

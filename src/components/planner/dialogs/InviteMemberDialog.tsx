@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { PlannerMembers } from "../PlannerMembers"; // 경로 확인 필요
+import { PlannerMembers } from "../sidebar/PlannerMembers"; // 경로 확인 필요
 
 interface InviteMemberDialogProps {
   open: boolean;
