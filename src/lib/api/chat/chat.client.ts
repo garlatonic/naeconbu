@@ -35,9 +35,17 @@ export async function joinChatRoom(concertId: number) {
 }
 
 // 채팅 메시지 조회
-export async function getChatMessages(concertId: string): Promise<ChatMessageData[]> {
+export async function getChatMessages(
+  concertId: string,
+  before?: string,
+  size: number = 20
+): Promise<ChatMessageData[]> {
   try {
-    const res = await ClientApi(`/api/v1/chats/${concertId}/messages`);
+    const params = new URLSearchParams();
+    if (before) params.append("before", before);
+    params.append("size", size.toString());
+
+    const res = await ClientApi(`/api/v1/chats/${concertId}/messages?${params.toString()}`);
 
     let json: ChatResponse | null = null;
 
