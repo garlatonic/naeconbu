@@ -107,3 +107,68 @@ export type SearchPlace = {
   x: number;
   y: number;
 };
+
+export type TMapSummary = {
+  metaData: {
+    plan: {
+      itineraries: [
+        {
+          pathType: number;
+          totalTime: number;
+          transferCount: number;
+          totalWalkDistance: number;
+          totalDistance: number;
+          totalWalkTime: number;
+          fare: {
+            regular: {
+              currency: {
+                symbol: "￦";
+                currency: "원";
+                currencyCode: "KRW";
+              };
+              totalFare: number;
+            };
+          };
+        },
+      ];
+    };
+    requestParameters: {
+      reqDttm: string;
+      startX: string;
+      startY: string;
+      endX: string;
+      endY: string;
+    };
+  };
+};
+
+export type KakaoMapSummary = {
+  distance: number;
+  duration: number;
+};
+
+export type KakaoCarRouteGuide = {
+  /** 지점 이름 (예: "교보타워사거리", "출발지", "목적지") */
+  name: string;
+
+  /** 경도 (Longitude) */
+  x: number;
+
+  /** 위도 (Latitude) */
+  y: number;
+
+  /** 이전 지점부터의 거리 (단위: m) */
+  distance: number;
+
+  /** 이전 지점부터 소요 시간 (단위: 초) */
+  duration: number;
+
+  /** 안내 타입 코드 (100: 출발, 101: 도착, 1~: 회전 안내 등) */
+  type: number;
+
+  /** 안내 문구 (예: "코엑스 방면으로 우회전") */
+  guidance: string;
+
+  /** 도로 인덱스 (-1은 목적지) */
+  road_index: number;
+};
