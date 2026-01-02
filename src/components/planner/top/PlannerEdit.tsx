@@ -98,25 +98,20 @@ export default function PlannerEdit({
 
   // 플래너 삭제 핸들러
   const handleDeletePlanner = () => {
-    try {
-      startTransition(async () => {
-        try {
-          await deletePlan({
-            planId: planDetail.id.toString(),
-          });
+    startTransition(async () => {
+      try {
+        await deletePlan({
+          planId: planDetail.id.toString(),
+        });
 
-          // 성공 후 링크 이동
-          toast.success("플래너가 삭제되었습니다.");
-          router.replace(`/planner`);
-          setEditDialogOpen(false);
-        } catch (error) {
-          console.error(error);
-        }
-      });
-    } catch (error) {
-      console.error("플래너 수정 오류:", error);
-      toast.error("플래너 수정에 실패했습니다.");
-    }
+        toast.success("플래너가 삭제되었습니다.");
+        setEditDialogOpen(false);
+        router.replace("/planner");
+      } catch (error) {
+        console.error("플래너 삭제 오류:", error);
+        toast.error("플래너 삭제에 실패했습니다.");
+      }
+    });
   };
 
   return (

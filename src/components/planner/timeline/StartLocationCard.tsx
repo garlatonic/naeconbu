@@ -47,15 +47,13 @@ export default function StartLocationCard({
       const address = await getAddressFromCoordsKakao(lat, lon);
 
       // location 상태가 있으면 수정(PATCH), 없으면 생성(POST)
-      let savedData;
       if (location) {
-        savedData = await updateMyLocation({ lat, lon });
+        await updateMyLocation({ lat, lon });
       } else {
-        savedData = await saveMyLocation({ lat, lon });
+        await saveMyLocation({ lat, lon });
       }
 
       setLocation({
-        ...savedData,
         lat,
         lon,
         address,
@@ -79,15 +77,13 @@ export default function StartLocationCard({
       const lon = place.x;
 
       // location 상태가 있으면 수정(PATCH), 없으면 생성(POST)
-      let savedData;
       if (location) {
-        savedData = await updateMyLocation({ lat, lon });
+        await updateMyLocation({ lat, lon });
       } else {
-        savedData = await saveMyLocation({ lat, lon });
+        await saveMyLocation({ lat, lon });
       }
 
       setLocation({
-        ...savedData,
         lat,
         lon,
         address: place.address_name, // 검색 결과의 주소 사용
@@ -161,7 +157,8 @@ export default function StartLocationCard({
             <div className="text-text-sub flex items-center gap-1">
               <MapPinIcon className="size-4" />
               <p className="text-sm">
-                {location.address} {location?.placeName}
+                {location.address}
+                {location.placeName && `· ${location.placeName}`}
               </p>
             </div>
           </div>
@@ -238,7 +235,9 @@ export default function StartLocationCard({
                 <MapPinIcon className="size-3.5" />
                 <p className="text-text-main">
                   <span className="text-text-sub font-medium">현재 설정된 위치 : </span>
-                  {location.placeName || location.address || "주소 정보 없음"}
+                  {location.address && location.placeName
+                    ? `${location.address} · ${location.placeName}`
+                    : location.address || location.placeName || "주소 정보 없음"}
                 </p>
               </div>
             </>

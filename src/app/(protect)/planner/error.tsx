@@ -15,7 +15,6 @@ export default function Error({
   const router = useRouter();
 
   useEffect(() => {
-    // 에러 로깅 (프로덕션에서는 센트리 등으로 전송 가능)
     console.error("Error detected:", error);
   }, [error]);
 
@@ -103,7 +102,6 @@ export default function Error({
             )}
           </div>
 
-          {/* 5. 하단 지원 링크 */}
           <div className="border-border/50 border-t pt-6">
             <p className="text-text-sub/70 mb-4 text-center text-sm">문제가 해결되지 않나요?</p>
             <Button

@@ -103,11 +103,11 @@ export default function RouteCard({ start, end }: RouteCardProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="">
                 <h5 className="text-text-sub text-xs font-medium">소요 시간</h5>
-                <p className="text-text-sm">{Math.round(carData.duration / 60)} 분</p>
+                <p className="text-sm">{Math.round(carData.duration / 60)} 분</p>
               </div>
               <div className="">
                 <h5 className="text-text-sub text-xs font-medium">이동 거리</h5>
-                <p className="text-text-sm">{(carData.distance / 1000).toFixed(1)} km</p>
+                <p className="text-sm">{(carData.distance / 1000).toFixed(1)} km</p>
               </div>
             </div>
           ) : (

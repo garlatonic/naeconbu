@@ -93,7 +93,7 @@ export default function EditScheduleDialog({
       return;
     }
     toast.success("일정이 성공적으로 수정되었습니다.");
-    router.replace(`/planner/${planId}`); // 데이터 갱신
+    router.refresh(); // 데이터 갱신
     onOpenChange(false);
   };
 
