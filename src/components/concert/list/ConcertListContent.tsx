@@ -28,6 +28,8 @@ export default function ConcertListContent({
     setLoading(true);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // TODO : 스크롤 많이 내릴 수록 로딩 지연 증가
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/concerts/list/${sortType}?page=${pageRef.current}&size=12`
       );
@@ -41,11 +43,14 @@ export default function ConcertListContent({
 
       if (addList.length > 0) {
         setConcertsList((prev) => {
-          const uniqueAddList = addList.filter(
+          /**
+           * TODO : DB 중복 처리 해결 필요
+           * const uniqueAddList = addList.filter(
             (addItem: ConcertData) => !prev.some((prevItem) => prevItem.id === addItem.id)
           );
+           */
 
-          return [...prev, ...uniqueAddList];
+          return [...prev, ...addList];
         });
         pageRef.current += 1;
       }
@@ -112,10 +117,9 @@ export default function ConcertListContent({
           <ListSortClient />
         </div>
         <div className="list grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {/* TODO : 가끔 12개씩 안 불러지는 오류 해결 */}
-          {concertsList.map((concert: ConcertData) => (
+          {concertsList.map((concert: ConcertData, index: number) => (
             <ConcertCard
-              key={concert.id}
+              key={`${concert.id}-${index}`} // 중복 처리 로직 지울 때 에러 해결용
               id={concert.id}
               posterUrl={concert.posterUrl}
               name={concert.name}
@@ -124,16 +128,23 @@ export default function ConcertListContent({
               placeName={concert.placeName}
             />
           ))}
+          {/* 스켈레톤 */}
+          {loading && (
+            <>
+              {/* 1~2번째 스켈레톤 : 모든 화면에서 보임 (최소 2열) */}
+              <ConcertCardSkeleton />
+              <ConcertCardSkeleton />
+              {/* 3번째 스켈레톤: 3열(md) 이상에서만 보임 */}
+              <div className="hidden md:block">
+                <ConcertCardSkeleton />
+              </div>
+              {/* 4번째 스켈레톤: 4열(lg) 이상에서만 보임 */}
+              <div className="hidden lg:block">
+                <ConcertCardSkeleton />
+              </div>
+            </>
+          )}
         </div>
-
-        {/* 스켈레톤 */}
-        {loading && (
-          <div className="grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <ConcertCardSkeleton key={i} />
-            ))}
-          </div>
-        )}
       </div>
       {hasMore && <div ref={oTarget} className="h-1 w-full" aria-hidden="true" />}
     </section>

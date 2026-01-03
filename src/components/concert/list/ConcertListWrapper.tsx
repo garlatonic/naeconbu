@@ -2,6 +2,7 @@ import ConcertListContent from "@/components/concert/list/ConcertListContent";
 
 async function getConcerts(sortType: string = "LIKE") {
   // 기본 : 좋아요 순 정렬
+  // TODO : sort가 변경될 떄도 스켈레톤이 뜨게 함
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/concerts/list/${sortType}?page=0&size=12`
   );
