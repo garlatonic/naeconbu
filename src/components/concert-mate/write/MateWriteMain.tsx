@@ -51,14 +51,10 @@ export default function MateWriteMain() {
   const onSubmitMate = async (data: MatePostWrite) => {
     const finalData = {
       ...data,
-      maxParticipants: Number(data.maxParticipants),
-      ageRangeMin: Number(data.ageRangeMin),
-      ageRangeMax: Number(data.ageRangeMax),
     };
 
     try {
       const isSuccess = await createMatePost(finalData);
-      // console.log("서버로 보낼 최종 데이터:", finalData);
 
       if (isSuccess) {
         toast.success("구인글이 성공적으로 등록되었습니다!");
@@ -104,6 +100,7 @@ export default function MateWriteMain() {
               onCancel={onCancelMate}
               isPending={isSubmitting}
               isDisabled={!isConfirmed}
+              buttonText={"구인글 등록"}
             />
           </Card>
         </form>

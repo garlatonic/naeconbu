@@ -14,7 +14,7 @@ export function FileUploadBox({ value, onFileChange, onClick }: FileUploadBoxPro
       className={`border-border hover:bg-bg-sub relative cursor-pointer rounded-lg border-2 border-dashed text-center transition ${value ? "overflow-hidden" : ""}`}
       onClick={onClick}
     >
-      <div className={value ? "hover:opacity-150 hover:blur-sm" : ""}>
+      <div className={value ? "hover:opacity-50 hover:blur-sm" : ""}>
         {value ? (
           <Image
             src={value}

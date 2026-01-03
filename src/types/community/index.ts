@@ -25,6 +25,7 @@ export interface PostSubmitProps {
   onCancel: () => void;
   isPending?: boolean;
   isDisabled?: boolean;
+  buttonText?: string;
 }
 
 export type PostConfirmSectionProps = {

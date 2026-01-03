@@ -18,7 +18,6 @@ export function MateDatePicker() {
   const { setValue, watch } = useFormContext<MatePostWrite>();
 
   const meetingAt = watch("meetingAt");
-  // console.log(`기지국 추적값 : ${meetingAt}`);
 
   const [localTime, setLocalTime] = React.useState(
     meetingAt ? format(parseISO(meetingAt), "HH:mm") : "10:00"

@@ -32,8 +32,16 @@ export default function PreferenceSelectSection() {
           {...register("maxParticipants", {
             valueAsNumber: true,
             required: "인원수를 입력해주세요",
+            min: {
+              value: 1,
+              message: "최소 1명 이상 모집해야 합니다.",
+            },
+            max: {
+              value: 20,
+              message: "최대 20명까지만 모집 가능합니다.",
+            },
           })}
-          placeholder="ex. 2"
+          placeholder="ex. 1"
           className="h-13"
         />
         {errors.maxParticipants && (
@@ -68,8 +76,18 @@ export default function PreferenceSelectSection() {
         <div className="flex gap-2">
           <Input
             type="number"
-            {...register("ageRangeMin", { valueAsNumber: true })}
-            placeholder="ex. 20 (~)"
+            {...register("ageRangeMin", {
+              valueAsNumber: true,
+              min: {
+                value: 19,
+                message: "만 19세 이상 성인만 모집 가능합니다.",
+              },
+              max: {
+                value: 99,
+                message: "입력 가능한 연령 범위가 아닙니다.",
+              },
+            })}
+            placeholder="ex. 12 (~)"
             className="h-13"
           />
           <Input
@@ -82,7 +100,7 @@ export default function PreferenceSelectSection() {
                 return !val || !min || val >= min || "최소값보다 커야 합니다";
               },
             })}
-            placeholder="ex. 29"
+            placeholder="ex. 100"
             className="h-13"
           />
         </div>

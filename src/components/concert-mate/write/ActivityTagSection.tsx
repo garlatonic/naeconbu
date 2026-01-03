@@ -25,7 +25,6 @@ export default function ActivityTagSection() {
     name: "activityTags",
     defaultValue: [],
   });
-  // console.log(`지금 가진 태그 추적 : ${selectedTags}`);
 
   // 태그 클릭 핸들러 (넣었다 뺐다)
   const toggleTag = (tagLabel: string) => {
@@ -69,7 +68,7 @@ export default function ActivityTagSection() {
       </div>
       <Input
         className={"h-13"}
-        value={selectedTags}
+        defaultValue={selectedTags}
         placeholder={
           "직접 태그를 추가해보세요 (Enter 입력)" /*
            * TODO: Enter 입력 시

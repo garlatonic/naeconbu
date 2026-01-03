@@ -84,6 +84,7 @@ export default function ReviewWriteMain() {
               onCancel={onCancelMate}
               isPending={isSubmitting}
               isDisabled={!isConfirmed}
+              buttonText={"리뷰 등록"}
             />
           </Card>
         </div>

@@ -120,6 +120,7 @@ export default function SelectedConcert() {
           setConcertsResult(data);
         } catch (error) {
           console.error("검색 오류:", error);
+          toast.error("검색 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
           setConcertsResult([]);
         }
       });

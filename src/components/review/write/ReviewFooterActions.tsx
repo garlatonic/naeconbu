@@ -25,6 +25,7 @@ export default function ReviewFooterActions({
   onCancel,
   isPending,
   isDisabled,
+  buttonText = "등록",
 }: PostSubmitProps) {
   return (
     <CardFooter className={"flex justify-end gap-3"}>
@@ -43,7 +44,7 @@ export default function ReviewFooterActions({
         onClick={onSubmit}
         disabled={isPending || isDisabled}
       >
-        <Send /> 등록
+        <Send /> {buttonText}
       </Button>
       {/* TODO : 로딩 중 처리 다시 보기 */}
     </CardFooter>

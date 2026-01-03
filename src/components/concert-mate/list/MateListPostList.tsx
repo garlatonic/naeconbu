@@ -7,8 +7,6 @@ export default async function MateListPostList() {
   const posts = res?.content || [];
   // const totalPages = res?.totalPages || 0;
 
-  // console.log(res);
-
   return (
     <section className="px-15">
       <div className="mx-auto w-full max-w-400">
@@ -16,7 +14,9 @@ export default async function MateListPostList() {
           {/* {Array.from({ length: 5 }).map((_, index) => (
             <MateListCard key={index} />
           ))} */}
-          {posts.length > 0 ? posts.map((_, index) => <MateListCard key={index} />) : "빈화면처리"}
+          {posts.length > 0
+            ? posts.map((post) => <MateListCard key={post.postId} />)
+            : "데이터 없음"}
         </div>
         <PagePagination />
       </div>
