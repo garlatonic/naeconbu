@@ -78,7 +78,10 @@ export default function ChatRoom({
       const oldestMsgId = messages[0].messageId;
       const newData = await getChatMessages(concertId, oldestMsgId);
 
-      if (newData.length < 20) setHasMore(false);
+      if (newData.length < 20) {
+        setHasMore(false);
+        toast.info("마지막 메시지입니다.");
+      }
 
       if (newData.length > 0) {
         // 중복 제거 및 데이터 병합

@@ -46,7 +46,12 @@ export default function ConcertInfoCard({
       <div className={"flex flex-col gap-3"}>
         <InfoRow
           icon={<Calendar size={20} />}
-          title={format(new Date("2026-02-08"), "yyyy년 M월 d일 (EEE)", { locale: ko }) ?? "-"}
+          title={
+            concert?.startDate && concert?.endDate
+              ? `${format(new Date(concert.startDate), "yyyy년 M월 d일 (EEE)", { locale: ko })} ~ 
+         ${format(new Date(concert.endDate), "yyyy년 M월 d일 (EEE)", { locale: ko })}`
+              : "-"
+          }
         />
         <InfoRow icon={<MapPin size={20} />} title={concert?.placeAddress ?? "-"} />
       </div>

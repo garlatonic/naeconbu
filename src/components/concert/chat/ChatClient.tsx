@@ -5,7 +5,7 @@ import ChatHeader from "@/components/concert/chat/ChatHeader";
 import ChatRoom from "@/components/concert/chat/ChatRoom";
 import ChatAside from "@/components/concert/chat/ChatAside";
 import { useChatStore } from "@/stores/useChatStore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import { toast } from "sonner";
 import { User } from "@/types/user";
@@ -22,7 +22,6 @@ export default function ChatClient({
   user: User | null;
 }) {
   const { addMessage } = useChatStore();
-  const stompClientRef = useRef<Client | null>(null);
 
   const [activeClient, setActiveClient] = useState<Client | null>(null);
 
@@ -67,7 +66,6 @@ export default function ChatClient({
     });
 
     client.activate(); // 연결 시작
-    stompClientRef.current = client;
 
     return () => {
       client.deactivate(); // 컴포넌트 언마운트 시 연결 해제
