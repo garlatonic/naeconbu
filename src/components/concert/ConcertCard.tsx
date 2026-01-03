@@ -12,6 +12,7 @@ export default function ConcertCard({
   placeName,
 }: ConcertData) {
   return (
+    // 정렬 수정 시, 스켈레톤 사이즈 주의 <ConcertCardSkeleton/>
     <Link
       href={`/concerts/${id}`}
       className="flex cursor-pointer flex-col gap-3 transition-opacity duration-300 hover:opacity-70 lg:gap-5"
