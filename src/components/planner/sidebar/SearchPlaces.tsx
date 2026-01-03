@@ -26,7 +26,7 @@ interface SearchPlacesProps {
   isStart?: boolean;
   defaultValue?: string;
   defaultCoords?: ConcertCoords;
-  scheduleType?: ScheduleType | "CAFE";
+  scheduleType?: ScheduleType;
 }
 
 export default function SearchPlaces({
@@ -64,13 +64,13 @@ export default function SearchPlaces({
           setResults(data?.documents ?? []);
         } else if (defaultCoords) {
           setIsRecommendation(true);
-          if (!defaultCoords.lat || !defaultCoords.lon) {
+          if (!defaultCoords || !defaultCoords.lat || !defaultCoords.lon) {
             setResults([]);
             setIsLoading(false);
             return;
           }
           let data = null;
-          if (scheduleType === "CAFE") {
+          if (scheduleType === "WAITING") {
             data = await getNearbyCafes(defaultCoords.lat, defaultCoords.lon);
           }
           if (scheduleType === "MEAL") {
@@ -158,8 +158,8 @@ export default function SearchPlaces({
               <span>공연장 주변 맛집</span>
             </>
           )}
-          {/* 스케줄 타입이 "CAFE"일 때 */}
-          {scheduleType === "CAFE" && (
+          {/* 스케줄 타입이 "WAITING"일 때 */}
+          {scheduleType === "WAITING" && (
             <>
               <CoffeeIcon className="size-3" />
               <span>공연장 주변 카페</span>
@@ -172,7 +172,7 @@ export default function SearchPlaces({
       {results.length > 0 && (
         <div className={cn("max-h-[60vh] space-y-3 overflow-y-auto", defaultCoords && "max-h-46")}>
           <ul className="space-y-2">
-            {results.map((place, index) => {
+            {results.map((place) => {
               const placeLat = Number(place.y);
               const placeLon = Number(place.x);
 
@@ -181,7 +181,7 @@ export default function SearchPlaces({
                   ? calculateDistance(defaultCoords.lat, defaultCoords.lon, placeLat, placeLon)
                   : 0;
 
-              const itemKey = `${place.place_name}-${index}`;
+              const itemKey = `${place.x}-${place.y}-${place.place_name}`;
 
               return (
                 <li
@@ -194,7 +194,11 @@ export default function SearchPlaces({
                 >
                   <div className="bg-muted flex size-10 items-center justify-center rounded-full">
                     {isRecommendation ? (
-                      <UtensilsIcon className="stroke-text-sub group-hover:text-foreground size-4 shrink-0 transition-colors" />
+                      scheduleType === "WAITING" ? (
+                        <CoffeeIcon className="stroke-text-sub group-hover:text-foreground size-4 shrink-0 transition-colors" />
+                      ) : (
+                        <UtensilsIcon className="stroke-text-sub group-hover:text-foreground size-4 shrink-0 transition-colors" />
+                      )
                     ) : (
                       <MapPinnedIcon className="stroke-text-sub group-hover:text-foreground size-4 shrink-0 transition-colors" />
                     )}

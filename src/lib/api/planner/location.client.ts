@@ -158,7 +158,7 @@ export const getNearbyRestaurants = async (lat: number, lon: number): Promise<Ne
  * 주변 카페를 조회합니다.
  * @param {number} lat - 위도
  * @param {number} lon - 경도
- * @returns {Promise<any[]>} 주변 음식점 목록
+ * @returns {Promise<any[]>} 주변 카페 목록
  */
 export const getNearbyCafes = async (lat: number, lon: number): Promise<NearbyPlaces[]> => {
   try {
@@ -171,7 +171,7 @@ export const getNearbyCafes = async (lat: number, lon: number): Promise<NearbyPl
     const data = await res.json();
     return data || [];
   } catch (error) {
-    console.error("getNearbyRestaurants Error:", error);
+    console.error("getNearbyCafes Error:", error);
     throw error;
   }
 };

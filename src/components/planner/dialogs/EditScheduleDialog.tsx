@@ -61,7 +61,7 @@ export default function EditScheduleDialog({
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
-  const [scheduleType, setScheduleType] = useState<ScheduleType | "CAFE">(schedule.scheduleType);
+  const [scheduleType, setScheduleType] = useState<ScheduleType>(schedule.scheduleType);
   const [placeName, setPlaceName] = useState(schedule.location.split(", ")[1] || "");
   const [placeAddress, setPlaceAddress] = useState(schedule.location.split(", ")[0] || "");
   const [coords, setCoords] = useState<{ lat?: number; lon?: number } | null>({
@@ -87,7 +87,7 @@ export default function EditScheduleDialog({
 
     const scheduleData = {
       ...schedule,
-      scheduleType: scheduleType === "CAFE" ? "MEAL" : scheduleType,
+      scheduleType,
       title,
       duration,
       location: [placeAddress, placeName].filter(Boolean).join(", "),
@@ -107,13 +107,14 @@ export default function EditScheduleDialog({
           updatedData: scheduleData,
         });
         toast.success("일정이 성공적으로 수정되었습니다.");
+        router.replace(`/planner/${planId}`);
       } catch (error) {
         console.error("Error creating schedule:", error);
         toast.error("일정 수정에 실패했습니다. 다시 시도해주세요.");
+      } finally {
+        onOpenChange(false);
       }
     });
-    router.replace(`/planner/${planId}`);
-    onOpenChange(false);
   };
 
   // 장소 선택 핸들러
@@ -153,7 +154,7 @@ export default function EditScheduleDialog({
                     type="single"
                     variant="outline"
                     value={scheduleType}
-                    onValueChange={(val: ScheduleType | "CAFE") => val && setScheduleType(val)}
+                    onValueChange={(val: ScheduleType) => val && setScheduleType(val)}
                     className="flex-wrap justify-start"
                   >
                     <ToggleGroupItem value="MEAL" aria-label="식사" className="flex gap-2">

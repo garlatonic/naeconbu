@@ -40,15 +40,15 @@ export default function PlannerTimelineItem({
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  // 메인 이벤트(공연)거나 식사일 때는 하단 그리드(비용/경로 등)를 숨김
-  // const showDetailGrid = !schedule.isMainEvent;
-
   const handleDeleteConfirm = async () => {
     if (!planId || !schedule.id) return;
-    // TODO: 삭제 API 호출 로직
-    await deletePlanSchedule({ planId, scheduleId: schedule.id });
-    setShowDeleteDialog(false);
-    router.refresh();
+    try {
+      await deletePlanSchedule({ planId, scheduleId: schedule.id });
+      setShowDeleteDialog(false);
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete schedule", error);
+    }
   };
 
   return (

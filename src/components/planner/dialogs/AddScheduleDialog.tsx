@@ -48,7 +48,7 @@ export default function AddScheduleDialog({
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
-  const [scheduleType, setScheduleType] = useState<ScheduleType | "CAFE">("MEAL");
+  const [scheduleType, setScheduleType] = useState<ScheduleType>("MEAL");
   const [placeName, setPlaceName] = useState("");
   const [placeAddress, setPlaceAddress] = useState("");
   const [coords, setCoords] = useState<{ lat?: number; lon?: number } | null>(null);
@@ -70,7 +70,7 @@ export default function AddScheduleDialog({
     const normalizedStartAt = startTime ? `${toMinutePrecision(startTime)}:00` : "";
 
     const scheduleData = {
-      scheduleType: scheduleType === "CAFE" ? "MEAL" : scheduleType,
+      scheduleType,
       title,
       duration,
       location: [placeAddress, placeName].filter(Boolean).join(", "),
@@ -89,13 +89,14 @@ export default function AddScheduleDialog({
           scheduleData,
         });
         toast.success("일정이 성공적으로 생성되었습니다.");
+        router.refresh();
       } catch (error) {
         console.error("Error creating schedule:", error);
         toast.error("일정 생성에 실패했습니다. 다시 시도해주세요.");
+      } finally {
+        onOpenChange(false);
       }
     });
-    router.refresh();
-    onOpenChange(false);
   };
 
   // 장소 선택 핸들러
@@ -128,7 +129,7 @@ export default function AddScheduleDialog({
                   <UtensilsIcon className="size-4" />
                   <span>식사</span>
                 </ToggleGroupItem>
-                <ToggleGroupItem value="CAFE" aria-label="카페" className="flex gap-2">
+                <ToggleGroupItem value="WAITING" aria-label="카페" className="flex gap-2">
                   <CoffeeIcon className="size-4" />
                   <span>카페</span>
                 </ToggleGroupItem>
@@ -223,14 +224,14 @@ export default function AddScheduleDialog({
             {scheduleType === "TRANSPORT" && (
               <Field>
                 <Label htmlFor="transportType">이동 수단</Label>
-                <Select name="transportType" defaultValue="public">
+                <Select name="transportType" defaultValue="PUBLIC_TRANSPORT">
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="public">대중교통</SelectItem>
-                    <SelectItem value="car">자동차 / 택시</SelectItem>
-                    <SelectItem value="walk">도보</SelectItem>
+                    <SelectItem value="PUBLIC_TRANSPORT">대중교통</SelectItem>
+                    <SelectItem value="CAR">자동차 / 택시</SelectItem>
+                    <SelectItem value="WALK">도보</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>

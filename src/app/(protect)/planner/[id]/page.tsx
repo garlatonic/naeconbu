@@ -4,6 +4,7 @@ import PlannerBodySection from "@/components/planner/PlannerBodySection";
 import { getPlanDetail } from "@/lib/api/planner/planner.server";
 import { getUsersMe } from "@/lib/api/user/user.server";
 import PlannerError from "@/components/planner/PlannerError";
+import { ScheduleDetail } from "@/types/planner";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -14,7 +15,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   }
 
   // planDetail.schedules에서 콘서트 일정만 필터링
-  const concertSchedules = planDetail.schedules.filter((schedule) => schedule.isMainEvent)[0];
+  const concertSchedules = planDetail.schedules.find(
+    (schedule) => schedule.isMainEvent
+  ) as ScheduleDetail;
 
   // 플랜에 참여자로 등록되어 있지 않을 경우
   const me = await getUsersMe();
