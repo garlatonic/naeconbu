@@ -2,11 +2,12 @@
 
 import ConcertCard from "@/components/concert/ConcertCard";
 import { twMerge } from "tailwind-merge";
-import { ConcertData } from "@/components/concert/ConcertType";
 import ListSortClient from "@/components/concert/list/ListSortClient";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { totalConcertCount } from "@/lib/api/concerts";
+import { ConcertData } from "@/types/concerts";
+import ConcertCardSkeleton from "@/components/loading/concert/list/ConcertCardSkeleton";
+import { totalConcertCount } from "@/lib/api/concerts/concerts.client";
 
 export default function ConcertListContent({
   initialList,
@@ -27,6 +28,8 @@ export default function ConcertListContent({
     setLoading(true);
 
     try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      // TODO : 스크롤 많이 내릴 수록 로딩 지연 증가
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/concerts/list/${sortType}?page=${pageRef.current}&size=12`
       );
@@ -40,11 +43,14 @@ export default function ConcertListContent({
 
       if (addList.length > 0) {
         setConcertsList((prev) => {
-          const uniqueAddList = addList.filter(
+          /**
+           * TODO : DB 중복 처리 해결 필요
+           * const uniqueAddList = addList.filter(
             (addItem: ConcertData) => !prev.some((prevItem) => prevItem.id === addItem.id)
           );
+           */
 
-          return [...prev, ...uniqueAddList];
+          return [...prev, ...addList];
         });
         pageRef.current += 1;
       }
@@ -97,6 +103,7 @@ export default function ConcertListContent({
   }, []);
 
   return (
+    // 정렬 수정 시, 스켈레톤 사이즈 주의 <ConcertCardSkeleton/>
     <section className="px-15 py-16">
       <div className={twMerge(`mx-auto flex w-full max-w-400 flex-col gap-9`)}>
         <div className="header flex items-center justify-between">
@@ -106,12 +113,13 @@ export default function ConcertListContent({
             </span>
             <span className="text-text-main text-lg">items</span>
           </div>
+          {/* TODO : 정렬 API 수정 따라 수정 */}
           <ListSortClient />
         </div>
         <div className="list grid gap-8 pb-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {concertsList.map((concert: ConcertData) => (
+          {concertsList.map((concert: ConcertData, index: number) => (
             <ConcertCard
-              key={concert.id}
+              key={`${concert.id}-${index}`} // 중복 처리 로직 지울 때 에러 해결용
               id={concert.id}
               posterUrl={concert.posterUrl}
               name={concert.name}
@@ -120,6 +128,22 @@ export default function ConcertListContent({
               placeName={concert.placeName}
             />
           ))}
+          {/* 스켈레톤 */}
+          {loading && (
+            <>
+              {/* 1~2번째 스켈레톤 : 모든 화면에서 보임 (최소 2열) */}
+              <ConcertCardSkeleton />
+              <ConcertCardSkeleton />
+              {/* 3번째 스켈레톤: 3열(md) 이상에서만 보임 */}
+              <div className="hidden md:block">
+                <ConcertCardSkeleton />
+              </div>
+              {/* 4번째 스켈레톤: 4열(lg) 이상에서만 보임 */}
+              <div className="hidden lg:block">
+                <ConcertCardSkeleton />
+              </div>
+            </>
+          )}
         </div>
       </div>
       {hasMore && <div ref={oTarget} className="h-1 w-full" aria-hidden="true" />}

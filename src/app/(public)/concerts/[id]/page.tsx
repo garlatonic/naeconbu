@@ -17,11 +17,11 @@
 import ConcertDetail from "@/components/concert/detail/ConcertDetail";
 import ConcertHeader from "@/components/concert/detail/ConcertHeader";
 import ConcertSimilar from "@/components/concert/detail/ConcertSimilar";
-import ConcertDetailSkeleton from "@/components/loading/concert-detail/ConcertDetailSkeleton";
-import ConcertHeaderSkeleton from "@/components/loading/concert-detail/ConcertHeaderSkeleton";
-import ConcertSimilarSkeleton from "@/components/loading/concert-detail/ConcertSimilarSkeleton";
+import ConcertDetailSkeleton from "@/components/loading/concert/detail/ConcertDetailSkeleton";
+import ConcertHeaderSkeleton from "@/components/loading/concert/detail/ConcertHeaderSkeleton";
+import ConcertSimilarSkeleton from "@/components/loading/concert/detail/ConcertSimilarSkeleton";
 import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
-import { getConcertDetail } from "@/lib/api/concerts";
+import { getConcertDetail } from "@/lib/api/concerts/concerts.server";
 import { Suspense } from "react";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

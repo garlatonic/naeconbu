@@ -1,8 +1,8 @@
 // TODO: 모바일 환경에서 ChatAside를 토글/Drawer 형태로 전환
 
 import ChatClient from "@/components/concert/chat/ChatClient";
-import { getConcertDetail, getTicketOfficesByConcertId } from "@/lib/api/concerts";
 import { getMe } from "@/lib/api/auth/auth.server";
+import { getConcertDetail, getTicketOfficesByConcertId } from "@/lib/api/concerts/concerts.server";
 import { redirect } from "next/navigation";
 
 export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
