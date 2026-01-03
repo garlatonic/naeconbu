@@ -21,6 +21,7 @@ import { ScheduleDetail } from "@/types/planner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { updatePlanSchedule } from "@/lib/api/planner/schedule.client";
+import { toMinutePrecision } from "@/utils/helpers/formatters";
 
 interface EditScheduleDialogProps {
   open: boolean;
@@ -48,7 +49,7 @@ export default function EditScheduleDialog({
 }: EditScheduleDialogProps) {
   const router = useRouter();
 
-  const [startTime, setStartTime] = useState(schedule.startAt); // 일정 시작 시간 (HH:MM:SS 형식으로 저장해야함)
+  const [startTime, setStartTime] = useState(toMinutePrecision(schedule.startAt));
   const [duration, setDuration] = useState(schedule.duration); // 일정 소요 시간(분)
   const [details, setDetails] = useState(schedule.details); // 일정 메모
 
@@ -76,9 +77,11 @@ export default function EditScheduleDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const normalizedStartAt = startTime ? `${startTime}:00` : "";
+
     const updatedData = {
       ...schedule,
-      startAt: startTime,
+      startAt: normalizedStartAt,
       duration,
       details,
     };
@@ -157,7 +160,7 @@ export default function EditScheduleDialog({
                   <Input
                     type="time"
                     id="startTime"
-                    step="1"
+                    step="60"
                     value={startTime}
                     onChange={handleStartTimeChange}
                   />

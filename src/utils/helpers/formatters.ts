@@ -97,3 +97,33 @@ export function formatConcertPrice(minPrice: number, maxPrice: number): string {
   // 최소와 최대가 다른 경우
   return `${minPrice.toLocaleString("ko-KR")}원 ~ ${maxPrice.toLocaleString("ko-KR")}원`;
 }
+
+/**
+ * 시간 문자열을 "오전 HH:MM" 형식으로 포맷팅
+ * @param {string} timeStr - 시간 문자열 (예: "14:30:00")
+ * @returns {string} 포맷팅된 시간 문자열 (예: "오후 02:30")
+ */
+export function formatTimeToKoreanAMPM(timeStr: string): string {
+  const [hourStr, minuteStr] = timeStr.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = parseInt(minuteStr, 10);
+  const period = hour < 12 ? "오전" : "오후";
+
+  if (hour === 0) {
+    hour = 12; // 오전 12시
+  } else if (hour > 12) {
+    hour -= 12; // 오후 시간 변환
+  }
+  const formattedHour = String(hour).padStart(2, "0");
+  const formattedMinute = String(minute).padStart(2, "0");
+  return `${period} ${formattedHour}:${formattedMinute}`;
+}
+
+/** HH:mm:ss 혹은 HH:mm을 받아 분 단위(HH:mm)로 자릅니다.
+ * 빈 값이면 빈 문자열 반환.
+ *
+ * @param {string} time 시간 문자열
+ * @returns {string} 분 단위 시간 문자열
+ */
+export const toMinutePrecision = (time?: string): string =>
+  time?.split(":").slice(0, 2).join(":") || "";
