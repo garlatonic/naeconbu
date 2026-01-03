@@ -142,3 +142,12 @@ export const formatDistance = (distance: number): string => {
     return `${(distance / 1000).toFixed(1)}km`;
   }
 };
+
+/**
+ * 가격 포맷팅
+ * @param {number} price - 가격 (숫자)
+ * @returns {string} 포맷팅된 가격 문자열 (예: "1,000원")
+ */
+export const formatPrice = (price: number): string => {
+  return `${price.toLocaleString("ko-KR")}원`;
+};

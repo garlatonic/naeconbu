@@ -2,10 +2,14 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Bus, BusFrontIcon, Car, CarFrontIcon, Loader2 } from "lucide-react";
-import { getCarRouteSummaryByKakaoMap } from "@/lib/api/planner/transport.client";
+import {
+  getCarRouteSummaryByKakaoMap,
+  getTransitRouteSummaryByTmap,
+} from "@/lib/api/planner/transport.client";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { KakaoMapSummary } from "@/types/planner";
+import { KakaoMapSummary, TMapSummary } from "@/types/planner";
 import { Separator } from "@/components/ui/separator";
+import { formatDistance, formatPrice } from "@/utils/helpers/formatters";
 
 interface RouteCardProps {
   start: { lat: number; lon: number; name: string };
@@ -15,6 +19,7 @@ interface RouteCardProps {
 export default function RouteCard({ start, end }: RouteCardProps) {
   const [transportType, setTransportType] = useState<"car" | "transit">("car");
   const [carData, setCarData] = useState<KakaoMapSummary | null>(null);
+  const [transitData, setTransitData] = useState<TMapSummary | null>(null);
   const [loadingCar, setLoadingCar] = useState(false);
   const [loadingTransit, setLoadingTransit] = useState(false);
 
@@ -43,9 +48,17 @@ export default function RouteCard({ start, end }: RouteCardProps) {
 
   // TODO : 대중교통 API 연동
   const fetchTransit = useCallback(async () => {
+    if (transitData) return;
     setLoadingTransit(true);
-    setTimeout(() => setLoadingTransit(false), 500);
-  }, []);
+    try {
+      const res = await getTransitRouteSummaryByTmap(coords);
+      setTransitData(res);
+    } catch (e) {
+      console.error("대중교통 탐색 실패", e);
+    } finally {
+      setLoadingTransit(false);
+    }
+  }, [coords, transitData]);
 
   useEffect(() => {
     fetchCar();
@@ -101,13 +114,13 @@ export default function RouteCard({ start, end }: RouteCardProps) {
             </div>
           ) : carData ? (
             <div className="grid grid-cols-2 gap-4">
-              <div className="">
+              <div className="flex flex-col">
                 <h5 className="text-text-sub text-xs font-medium">소요 시간</h5>
                 <p className="text-sm">{Math.round(carData.duration / 60)} 분</p>
               </div>
               <div className="">
                 <h5 className="text-text-sub text-xs font-medium">이동 거리</h5>
-                <p className="text-sm">{(carData.distance / 1000).toFixed(1)} km</p>
+                <p className="text-sm">{formatDistance(carData.distance)}</p>
               </div>
             </div>
           ) : (
@@ -117,10 +130,40 @@ export default function RouteCard({ start, end }: RouteCardProps) {
           <div className="flex justify-center py-2">
             <Loader2 className="text-primary size-5 animate-spin" />
           </div>
-        ) : (
-          <div className="py-2 text-center">
-            <p className="text-sm text-gray-500">대중교통 정보 준비 중 🚧</p>
+        ) : transitData ? (
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <h5 className="text-text-sub text-xs font-medium">소요 시간</h5>
+              <p className="text-sm">
+                {Math.round(transitData.metaData.plan.itineraries[0].totalTime / 60)} 분
+              </p>
+            </div>
+            <div className="flex flex-col">
+              <h5 className="text-text-sub text-xs font-medium">이동 거리</h5>
+              <p className="text-sm">
+                {formatDistance(transitData.metaData.plan.itineraries[0].totalDistance)}
+              </p>
+            </div>
+            {/* 1, 2, 3일 경우 대중교통 */}
+            {transitData.metaData.plan.itineraries[0].pathType < 4 && (
+              <>
+                <div className="flex flex-col">
+                  <h5 className="text-text-sub text-xs font-medium">환승 횟수</h5>
+                  <p className="text-sm">
+                    {transitData.metaData.plan.itineraries[0].transferCount}회
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <h5 className="text-text-sub text-xs font-medium">예상 금액</h5>
+                  <p className="text-sm">
+                    {formatPrice(transitData.metaData.plan.itineraries[0].fare.regular.totalFare)}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
+        ) : (
+          <p className="py-2 text-center text-xs text-gray-400">경로를 찾을 수 없습니다.</p>
         )}
       </div>
     </div>

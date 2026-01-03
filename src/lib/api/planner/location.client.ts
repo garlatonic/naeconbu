@@ -169,7 +169,7 @@ export const getNearbyCafes = async (lat: number, lon: number): Promise<NearbyPl
       throw new Error(`Server Error: ${res.status}`);
     }
     const data = await res.json();
-    return data.data || [];
+    return data || [];
   } catch (error) {
     console.error("getNearbyRestaurants Error:", error);
     throw error;

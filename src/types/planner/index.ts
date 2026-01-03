@@ -108,6 +108,19 @@ export type SearchPlace = {
   y: number;
 };
 
+/** TMAP 경로탐색 결과의 pathType 숫자 매핑
+ * 1-지하철, 2-버스, 3-버스+지하철
+ * 4-고속/시외버스, 5-기차, 6-항공, 7-해운 */
+export enum TMapPathType {
+  SUBWAY = 1,
+  BUS = 2,
+  BUS_SUBWAY = 3,
+  EXPRESS_BUS = 4,
+  TRAIN = 5,
+  AIRPLANE = 6,
+  SHIP = 7,
+}
+
 export type TMapSummary = {
   metaData: {
     plan: {
