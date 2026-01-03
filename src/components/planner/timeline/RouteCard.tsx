@@ -60,7 +60,7 @@ export default function RouteCard({ start, end }: RouteCardProps) {
   return (
     <div className="relative flex gap-4 lg:gap-6">
       <div className="z-10 flex-none">
-        <div className="border-bg-main bg-bg-sub flex size-10 items-center justify-center rounded-full border-2 shadow-sm lg:size-16 lg:border-4">
+        <div className="border-bg-main bg-bg-sub flex size-10 items-center justify-center rounded-full border-2 lg:size-16 lg:border-4">
           {transportType === "car" ? (
             <CarFrontIcon className="size-4 lg:size-7" />
           ) : (
@@ -69,7 +69,7 @@ export default function RouteCard({ start, end }: RouteCardProps) {
         </div>
       </div>
 
-      <div className="border-border bg-bg-sub flex-1 space-y-4 rounded-xl border p-4 shadow-sm lg:p-6">
+      <div className="border-border bg-bg-sub flex-1 space-y-4 rounded-xl border p-4 lg:p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
             <h4 className="text-text-main text-lg font-bold lg:text-xl">
