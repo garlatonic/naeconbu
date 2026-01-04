@@ -18,10 +18,10 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   CarFrontIcon,
   MapPinIcon,
-  PlayIcon,
   UtensilsIcon,
   CoffeeIcon,
   Loader2,
+  NotepadTextIcon,
 } from "lucide-react";
 import SearchPlaces from "../sidebar/SearchPlaces";
 import {
@@ -164,7 +164,7 @@ export default function EditScheduleDialog({
                       <CoffeeIcon className="size-4" /> <span>카페</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem value="ACTIVITY" aria-label="활동" className="flex gap-2">
-                      <PlayIcon className="size-4" /> <span>활동</span>
+                      <NotepadTextIcon className="size-4" /> <span>활동</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem value="TRANSPORT" aria-label="이동" className="flex gap-2">
                       <CarFrontIcon className="size-4" /> <span>이동</span>

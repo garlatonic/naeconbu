@@ -71,7 +71,7 @@ export default function RouteCard({ start, end }: RouteCardProps) {
   };
 
   return (
-    <div className="relative flex gap-4 lg:gap-6">
+    <article className="relative flex gap-2 lg:gap-6">
       <div className="z-10 flex-none">
         <div className="border-bg-main bg-bg-sub flex size-10 items-center justify-center rounded-full border-2 lg:size-16 lg:border-4">
           {transportType === "car" ? (
@@ -82,14 +82,16 @@ export default function RouteCard({ start, end }: RouteCardProps) {
         </div>
       </div>
 
-      <div className="border-border bg-bg-sub flex-1 space-y-4 rounded-xl border p-4 lg:p-6">
+      <div className="border-border bg-bg-sub text-text-main flex-1 space-y-3 rounded-xl border p-4 lg:space-y-4 lg:p-6">
         <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <h4 className="text-text-main text-lg font-bold lg:text-xl">
+          <div className="space-y-1 lg:space-y-2">
+            <h4 className="text-base font-bold lg:text-lg">
               {transportType === "car" ? "자동차 경로" : "대중교통 경로"}
             </h4>
-            <div className="text-text-sub text-sm">
-              {start.name} → {end.name}
+            <div className="text-text-sub text-xs leading-normal lg:text-sm">
+              <p className="whitespace-pre-wrap">
+                {start.name} → {end.name}
+              </p>
             </div>
           </div>
           <ToggleGroup
@@ -98,11 +100,19 @@ export default function RouteCard({ start, end }: RouteCardProps) {
             onValueChange={(value) => value && handleModeChange(value as "car" | "transit")}
             className="bg-muted"
           >
-            <ToggleGroupItem value="transit" aria-label="대중교통 경로" size="sm">
-              <Bus className="size-4" />
+            <ToggleGroupItem
+              value="transit"
+              aria-label="대중교통 경로"
+              className="size-auto px-2 py-1.5 lg:px-3"
+            >
+              <Bus className="size-3 lg:size-4" />
             </ToggleGroupItem>
-            <ToggleGroupItem value="car" aria-label="자동차 경로" size="sm">
-              <Car className="size-4" />
+            <ToggleGroupItem
+              value="car"
+              aria-label="자동차 경로"
+              className="size-auto px-2 py-1.5 lg:px-3"
+            >
+              <Car className="size-3 lg:size-4" />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -166,6 +176,6 @@ export default function RouteCard({ start, end }: RouteCardProps) {
           <p className="text-text-sub py-2 text-center text-xs">경로를 찾을 수 없습니다.</p>
         )}
       </div>
-    </div>
+    </article>
   );
 }

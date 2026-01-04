@@ -36,8 +36,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <PlannerTopHeader planDetail={planDetail} role={myRole} />
       <PlannerTopActions
         concertCoords={{
-          lat: concertSchedules.locationLat,
-          lon: concertSchedules.locationLon,
+          lat: concertSchedules.locationLat as number,
+          lon: concertSchedules.locationLon as number,
         }}
         planId={id}
         schedules={planDetail.schedules}
@@ -46,8 +46,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         planId={id}
         schedules={planDetail.schedules}
         concertCoords={{
-          lat: concertSchedules.locationLat,
-          lon: concertSchedules.locationLon,
+          lat: concertSchedules.locationLat as number,
+          lon: concertSchedules.locationLon as number,
         }}
         role={myRole}
         totalDuration={planDetail.totalDuration}

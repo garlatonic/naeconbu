@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CarFrontIcon, UtensilsIcon, StarIcon, CoffeeIcon, Loader2 } from "lucide-react"; // 아이콘 정리
+import { CarFrontIcon, UtensilsIcon, CoffeeIcon, Loader2, NotepadTextIcon } from "lucide-react"; // 아이콘 정리
 import SearchPlaces from "../sidebar/SearchPlaces";
 import { createPlanSchedule } from "@/lib/api/planner/schedule.client";
 import {
@@ -70,7 +70,7 @@ export default function AddScheduleDialog({
 
   // 이동 일정 관련 state
   const transportCandidates = useMemo(
-    () => schedules.filter((s) => s.id && s.scheduleType !== "TRANSPORT"),
+    () => schedules.filter((s) => s.id && s.scheduleType !== "TRANSPORT" && s.location),
     [schedules]
   );
   const [startScheduleId, setStartScheduleId] = useState<string | undefined>(undefined);
@@ -269,21 +269,21 @@ export default function AddScheduleDialog({
                 value={scheduleType}
                 onValueChange={(val: ScheduleType) => val && setScheduleType(val)}
               >
-                <ToggleGroupItem value="MEAL" aria-label="식사" className="flex gap-2">
+                <ToggleGroupItem value="MEAL" aria-label="식사" className="flex-1 gap-2">
                   <UtensilsIcon className="size-4" />
                   <span>식사</span>
                 </ToggleGroupItem>
-                <ToggleGroupItem value="WAITING" aria-label="카페" className="flex gap-2">
+                <ToggleGroupItem value="WAITING" aria-label="카페" className="flex-1 gap-2">
                   <CoffeeIcon className="size-4" />
                   <span>카페</span>
                 </ToggleGroupItem>
-                <ToggleGroupItem value="ACTIVITY" aria-label="활동" className="flex gap-2">
-                  <StarIcon className="size-4" />
-                  <span>관람 / 활동</span>
-                </ToggleGroupItem>
-                <ToggleGroupItem value="TRANSPORT" aria-label="이동" className="flex gap-2">
+                <ToggleGroupItem value="TRANSPORT" aria-label="이동" className="flex-1 gap-2">
                   <CarFrontIcon className="size-4" />
                   <span>이동</span>
+                </ToggleGroupItem>
+                <ToggleGroupItem value="ACTIVITY" aria-label="기타" className="flex-1 gap-2">
+                  <NotepadTextIcon className="size-4" />
+                  <span>기타</span>
                 </ToggleGroupItem>
               </ToggleGroup>
             </Field>
@@ -455,11 +455,19 @@ export default function AddScheduleDialog({
 
             {/* 6. 메모 */}
             <Field>
-              <Label htmlFor="scheduleNotes">메모 (선택)</Label>
+              <Label htmlFor="scheduleNotes">메모</Label>
               <Textarea
                 id="scheduleNotes"
                 name="scheduleNotes"
-                placeholder="메뉴, 예약 정보 등을 적어두세요."
+                placeholder={
+                  scheduleType === "MEAL"
+                    ? "메뉴, 예산 등 식사 관련 메모를 남겨보세요."
+                    : scheduleType === "WAITING"
+                      ? "원하는 카페 분위기나 메뉴 등을 메모해보세요."
+                      : scheduleType === "ACTIVITY"
+                        ? "활동에 필요한 준비물이나 주의사항을 기록해보세요."
+                        : "이동 시 주의할 사항이나 참고할 내용을 메모해보세요."
+                }
                 className="h-20 resize-none"
               />
             </Field>

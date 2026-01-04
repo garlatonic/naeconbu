@@ -279,4 +279,4 @@ export type NearbyPlaces = {
 };
 
 // 콘서트 장소 좌표 타입
-export type ConcertCoords = { lat?: number; lon?: number };
+export type ConcertCoords = { lat: number; lon: number };
