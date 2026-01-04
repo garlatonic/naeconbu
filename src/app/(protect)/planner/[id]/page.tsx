@@ -51,16 +51,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <PlannerTopHeader planDetail={planDetail} role={myRole} />
-      <PlannerTopActions
-        concertCoords={{
-          lat: concertSchedules.locationLat as number,
-          lon: concertSchedules.locationLon as number,
-        }}
-        planId={id}
-        schedules={planDetail.schedules}
-        role={myRole}
-        shareLink={shareLink}
-      />
+      {(myRole === "OWNER" || myRole === "EDITOR") && (
+        <PlannerTopActions
+          concertCoords={{
+            lat: concertSchedules.locationLat as number,
+            lon: concertSchedules.locationLon as number,
+          }}
+          planId={id}
+          schedules={planDetail.schedules}
+          role={myRole}
+          shareLink={shareLink}
+        />
+      )}
       <PlannerBodySection
         planId={id}
         schedules={planDetail.schedules}

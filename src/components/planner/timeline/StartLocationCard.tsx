@@ -26,13 +26,7 @@ import {
 const tabTriggerClass =
   "data-[state=active]:bg-primary dark:data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:text-primary-foreground dark:data-[state=active]:border-transparent h-auto py-2";
 
-export default function StartLocationCard({
-  isEditable,
-  myLocation,
-}: {
-  isEditable: boolean;
-  myLocation: UserPlace | null;
-}) {
+export default function StartLocationCard({ myLocation }: { myLocation: UserPlace | null }) {
   const [location, setLocation] = useState<UserPlace | null>(myLocation);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -137,21 +131,19 @@ export default function StartLocationCard({
                 </p>
               </div>
               {/* 드롭다운 메뉴 */}
-              {isEditable && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" aria-label="메뉴 열기" className="size-8 p-0">
-                      <MoreHorizontalIcon className="size-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={() => setOpenDialog(true)}>
-                      출발지 변경
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={handleDeleteLocation}>출발지 삭제</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" aria-label="메뉴 열기" className="size-8 p-0">
+                    <MoreHorizontalIcon className="size-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => setOpenDialog(true)}>
+                    출발지 변경
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleDeleteLocation}>출발지 삭제</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <Separator />
             <div className="text-text-sub flex items-center gap-1">
@@ -171,11 +163,9 @@ export default function StartLocationCard({
                 출발지를 설정하고 최고의 하루를 위한 외출 플래너를 시작해보세요!
               </p>
             </div>
-            {isEditable && (
-              <Button size="sm" onClick={openSearchModal}>
-                출발지 등록
-              </Button>
-            )}
+            <Button size="sm" onClick={openSearchModal}>
+              출발지 등록
+            </Button>
           </div>
         )}
       </div>

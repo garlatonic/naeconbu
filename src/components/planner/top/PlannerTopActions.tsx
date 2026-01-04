@@ -65,7 +65,7 @@ export default function PlannerTopActions({
 
   return (
     <>
-      <section className="border-border border-y px-5 py-4 lg:px-15">
+      <section className="border-border border-t px-5 py-4 lg:px-15">
         <div className="mx-auto max-w-400">
           <div className="flex justify-between gap-3">
             {/* 왼쪽 그룹: 추가, 초대, 지도 */}
