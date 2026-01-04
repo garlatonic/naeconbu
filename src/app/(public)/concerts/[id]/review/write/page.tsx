@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           { label: "리뷰 작성" },
         ]}
       />
-      <ReviewWriteMain />
+      <ReviewWriteMain concertId={Number(id)} />
     </>
   );
 }

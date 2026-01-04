@@ -3,7 +3,6 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ReviewWriteHeader from "@/components/review/write/ReviewWriteHeader";
-import SelectedConcertCard from "@/components/review/write/SelectedConcertCard";
 import ReviewTitleSection from "@/components/review/write/ReviewTitleSection";
 import ReviewRatingSection from "@/components/review/write/ReviewRatingSection";
 import ReviewConcertSection from "@/components/review/write/ReviewConcertSection";
@@ -23,19 +22,21 @@ import { FormProvider, useForm } from "react-hook-form";
 type ReviewPostWrite = {
   concertId: number;
   title: string;
-  content: string;
   rating: number;
+  content: string;
   images: string;
+  activityTags: string[];
 };
 
-export default function ReviewWriteMain() {
+export default function ReviewWriteMain({ concertId }: { concertId: number }) {
   const methods = useForm<ReviewPostWrite>({
     defaultValues: {
-      concertId: 0,
+      concertId: concertId,
       title: "",
+      rating: 0,
       content: "",
-      rating: undefined,
       images: "",
+      activityTags: [],
     },
   });
 
@@ -61,13 +62,9 @@ export default function ReviewWriteMain() {
         <div className={"flex w-full max-w-400 flex-col gap-8"}>
           <Card className={"gap-8 p-12"}>
             <ReviewWriteHeader />
-            {/* 공연 선택칸 + 선택 모달 */}
-            {/*<ModalContainer />*/}
-            <SelectedConcertCard />
             <ReviewTitleSection />
             <ReviewRatingSection />
             <ReviewConcertSection />
-            {/*<SeatInfoSection />*/}
             <PhotoUploadSection />
             <div className="px-6">
               <Separator />
