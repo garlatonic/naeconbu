@@ -1,11 +1,19 @@
 import MateListCard from "@/components/concert-mate/list/MateListCard";
-import PagePagination from "@/components/common/PagePagination";
 import { getPostsList } from "@/lib/api/community/community.server";
+import { MatePagination } from "@/components/concert-mate/list/MatePagination";
 
-export default async function MateListPostList() {
-  const res = await getPostsList({ category: "JOIN", page: 1 });
+export default async function MateListPostList({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const pageParam = Number(params.page) || 1;
+
+  const res = await getPostsList({ category: "JOIN", page: pageParam });
   const posts = res?.content || [];
-  // const totalPages = res?.totalPages || 0;
+  const currentPage = res?.page || 0;
+  const totalPages = res?.totalPages || 0;
 
   return (
     <section className="px-15">
@@ -16,7 +24,7 @@ export default async function MateListPostList() {
             ? posts.map((post) => <MateListCard key={post.postId} post={post} />)
             : "데이터 없음"}
         </div>
-        <PagePagination />
+        <MatePagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </section>
   );

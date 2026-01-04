@@ -40,7 +40,7 @@ export default async function MateListCard({ post }: { post: Post }) {
             <div>
               <strong className="text-text-main text-sm">{concertInfoRes?.name}</strong>
               <p className="text-text-sub text-sm">
-                {concertInfoRes?.placeName} · {concertInfoRes?.startDate}~{concertInfoRes?.endDate}
+                {concertInfoRes?.placeName} · {concertInfoRes?.startDate}
               </p>
             </div>
           </div>
