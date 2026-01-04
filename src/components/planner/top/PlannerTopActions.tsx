@@ -13,6 +13,7 @@ import {
   ScheduleDetail,
 } from "@/types/planner";
 import { createPlanShareLink } from "@/lib/api/planner/planner.client";
+import { getShareBaseUrl } from "@/utils/helpers/domain";
 
 interface PlannerTopActionsProps {
   planId: string;
@@ -32,7 +33,7 @@ export default function PlannerTopActions({
   const [isPending, startTransition] = useTransition();
 
   const [showAdd, setShowAdd] = useState(false);
-  const [showInvite, setShowInvite] = useState(true);
+  const [showInvite, setShowInvite] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
   // 공유링크 state
@@ -47,10 +48,10 @@ export default function PlannerTopActions({
     startTransition(async () => {
       try {
         const data = await createPlanShareLink(planId);
+        const baseUrl = getShareBaseUrl(plannerShareLink.domain);
         setPlannerShareLink({
           ...plannerShareLink,
-          url: `${plannerShareLink.domain}/planner/share?code=${data.shareToken}`,
-          status: "",
+          url: `${baseUrl}/planner/share?code=${data.shareToken}`,
         });
       } catch (error) {
         setPlannerShareLink({
@@ -112,8 +113,8 @@ export default function PlannerTopActions({
         open={showInvite}
         onOpenChange={setShowInvite}
         role={role}
-        shareLink={shareLink}
         isPending={isPending}
+        shareLink={plannerShareLink}
         onCreateShareLink={handleCreateShareLink}
       />
       {/* 링크 공유하기 */}

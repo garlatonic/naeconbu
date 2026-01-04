@@ -6,6 +6,7 @@ import { getUsersMe } from "@/lib/api/user/user.server";
 import PlannerError from "@/components/planner/PlannerError";
 import { PlannerParticipantRole, PlannerShareLink, ScheduleDetail } from "@/types/planner";
 import { headers } from "next/headers";
+import { getShareBaseUrl } from "@/utils/helpers/domain";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -42,7 +43,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   try {
     const data = await getPlanShareLink(id);
-    shareLink.url = `${domain}/planner/share?code=${data.shareToken}`;
+    const baseUrl = getShareBaseUrl(domain);
+    shareLink.url = `${baseUrl}/planner/share?code=${data.shareToken}`;
   } catch (error) {
     shareLink.status =
       error instanceof Error ? error.message : "공유 링크를 불러오는 중 오류가 발생했습니다.";

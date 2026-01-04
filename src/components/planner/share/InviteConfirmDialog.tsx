@@ -27,20 +27,34 @@ export function InviteConfirmDialog({ planDetail, inviteCode }: InviteConfirmDia
 
   const handleJoin = () => {
     startJoinTransition(async () => {
-      const result = await joinPlanAsParticipant(inviteCode);
-      if (result) {
-        toast.success("플래너에 참가했습니다!");
-        router.push(`/planner/${planDetail.id}`);
+      try {
+        const result = await joinPlanAsParticipant(inviteCode);
+        if (result) {
+          toast.success("플래너에 참가했습니다!");
+          router.push(`/planner/${planDetail.id}`);
+        } else {
+          toast.error("플래너 참가에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
+      } catch (error) {
+        console.error("Error joining plan as participant:", error);
+        toast.error("플래너 참가 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       }
     });
   };
 
   const handleCancel = () => {
     startDeclineTransition(async () => {
-      const result = await declinePlanAsParticipant(inviteCode);
-      if (result) {
-        toast.success("초대를 거절했습니다.");
-        router.push("/");
+      try {
+        const result = await declinePlanAsParticipant(inviteCode);
+        if (result) {
+          toast.success("초대를 거절했습니다.");
+          router.push("/");
+        } else {
+          toast.error("초대 거절에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
+      } catch (error) {
+        console.error("Error declining plan as participant:", error);
+        toast.error("초대 거절 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       }
     });
   };
