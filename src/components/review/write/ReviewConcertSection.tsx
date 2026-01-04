@@ -29,8 +29,7 @@ export default function ReviewConcertSection() {
         </Label>
         <Textarea
           className={"h-50 resize-none"}
-          placeholder="공연의 분위기, 무대 연출, 관객 반응까지
-느꼈던 그대로 자유롭게 적어주세요."
+          placeholder="공연의 분위기, 무대 연출, 관객 반응까지 느꼈던 그대로 자유롭게 적어주세요."
           id="message-2"
         />
         <p className="text-text-sub text-xs">
