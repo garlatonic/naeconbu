@@ -10,7 +10,8 @@ export interface PostListResponse {
 export interface Post {
   postId: number;
   userId: number;
-  nickname: string;
+  // concertId: number;
+  nickname: string; // 삭제 예정
   title: string;
   content: string;
   category: string;
