@@ -61,7 +61,10 @@ export default function TransitRouteList({ itineraries, onSelect }: TransitRoute
                   const routeColor = leg.routeColor ? `#${leg.routeColor}` : "#9ca3af";
                   return (
                     <>
-                      <div key={i} className="text-muted-foreground flex items-center text-[10px]">
+                      <div
+                        key={`${leg.start}-${leg.end}`}
+                        className="text-muted-foreground flex items-center text-[10px]"
+                      >
                         <span
                           className="flex items-center justify-center gap-0.5 rounded px-1.5 py-0.5 font-bold text-white"
                           style={{ backgroundColor: routeColor }}

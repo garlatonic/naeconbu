@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CarFrontIcon, UtensilsIcon, CoffeeIcon, Loader2, NotepadTextIcon } from "lucide-react"; // 아이콘 정리
+import { CarFrontIcon, UtensilsIcon, CoffeeIcon, Loader2, NotepadTextIcon } from "lucide-react";
 import SearchPlaces from "../sidebar/SearchPlaces";
 import { createPlanSchedule } from "@/lib/api/planner/schedule.client";
 import {
@@ -34,10 +34,24 @@ import {
 } from "@/types/planner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { toMinutePrecision } from "@/utils/helpers/formatters";
+import { formatTimeToKoreanAMPM, toMinutePrecision } from "@/utils/helpers/formatters";
 import { cn } from "@/lib/utils";
 import { getTransitRouteDetailsByTmap } from "@/lib/api/planner/transport.client";
 import TransitRouteList from "../timeline/TransitRouteList";
+
+// 시간에 분 단위 더하기
+function addMinutesToTime(timeStr: string, minutes: number): string {
+  const [hours, mins] = timeStr.split(":").map(Number);
+  const totalMinutes = hours * 60 + mins + minutes;
+  const newHours = Math.floor(totalMinutes / 60) % 24;
+  const newMins = totalMinutes % 60;
+  return `${String(newHours).padStart(2, "0")}:${String(newMins).padStart(2, "0")}`;
+}
+
+// 스케줄의 종료 시간 계산
+function getScheduleEndTime(schedule: ScheduleDetail): string {
+  return addMinutesToTime(schedule.startAt.substring(0, 5), schedule.duration);
+}
 
 interface AddScheduleDialogProps {
   planId: string;
@@ -81,6 +95,38 @@ export default function AddScheduleDialog({
   const [transportData, setRouteData] = useState<Itinerary[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<Itinerary | null>(null);
 
+  // 일반 일정(비TRANSPORT) 선택지 - 콘서트 제외, 모든 타입의 일정들
+  const regularScheduleCandidates = useMemo(
+    () =>
+      schedules.filter(
+        (s) => s.id && s.scheduleType !== "TRANSPORT" && !s.isMainEvent && s.location
+      ),
+    [schedules]
+  );
+
+  const [selectedRegularScheduleId, setSelectedRegularScheduleId] = useState<string | undefined>(
+    undefined
+  );
+
+  // 시간 범위 계산
+  const timeRange = useMemo(() => {
+    // 시간별로 정렬된 일정들 (공연 이벤트 제외)
+    const sortedSchedules = schedules
+      .filter((s) => s.startAt && !s.isMainEvent)
+      .sort((a, b) => a.startAt.localeCompare(b.startAt));
+
+    let minTime: string | undefined;
+    let maxTime: string | undefined;
+
+    // 현재 선택된 시간이 없으면 전체 범위를 허용
+    if (sortedSchedules.length > 0) {
+      minTime = "00:00"; // 첫 번째 일정 시작 시간
+      maxTime = "23:59"; // 마지막 일정 끝나는 시간
+    }
+
+    return { minTime, maxTime };
+  }, [schedules]);
+
   // 스케줄 타입 변경 시 초기화
   useEffect(() => {
     setIsPlaceSelected(false);
@@ -89,6 +135,7 @@ export default function AddScheduleDialog({
     setCoords(null);
     setRouteData([]);
     setSelectedRoute(null);
+    setSelectedRegularScheduleId(undefined);
 
     if (scheduleType !== "TRANSPORT") {
       setStartScheduleId(undefined);
@@ -103,6 +150,27 @@ export default function AddScheduleDialog({
       }
     }
   }, [scheduleType, transportCandidates]);
+
+  // 다이얼로그가 닫히면 모든 state 초기화
+  useEffect(() => {
+    if (!open) {
+      setScheduleType("MEAL");
+      setIsPlaceSelected(false);
+      setPlaceName("");
+      setPlaceAddress("");
+      setCoords(null);
+      setRouteData([]);
+      setSelectedRoute(null);
+      setSelectedRegularScheduleId(undefined);
+      setStartScheduleId(undefined);
+      setEndScheduleId(undefined);
+
+      // 폼 입력값도 초기화
+      if (formRef.current) {
+        formRef.current.reset();
+      }
+    }
+  }, [open]);
 
   // 길찾기 API 호출 핸들러
   const handleFetchRoute = useCallback(
@@ -153,6 +221,42 @@ export default function AddScheduleDialog({
       handleFetchRoute(startScheduleId, endScheduleId);
     }
   }, [startScheduleId, endScheduleId, scheduleType, handleFetchRoute]);
+
+  // 출발 일정이 선택되면 자동으로 시작 시간 설정
+  useEffect(() => {
+    if (scheduleType === "TRANSPORT" && startScheduleId && formRef.current) {
+      const startSchedule = transportCandidates.find((s) => String(s.id) === startScheduleId);
+      if (startSchedule) {
+        // 출발 일정의 끝나는 시간을 시작 시간으로 설정
+        const endTime = getScheduleEndTime(startSchedule);
+        const timeInput = formRef.current.querySelector(
+          'input[name="scheduleStartTime"]'
+        ) as HTMLInputElement;
+        if (timeInput) {
+          timeInput.value = endTime;
+        }
+      }
+    }
+  }, [startScheduleId, scheduleType, transportCandidates]);
+
+  // 기존 일정이 선택되면 시작 시간만 자동 설정
+  useEffect(() => {
+    if (selectedRegularScheduleId && formRef.current) {
+      const selectedSchedule = regularScheduleCandidates.find(
+        (s) => String(s.id) === selectedRegularScheduleId
+      );
+      if (selectedSchedule) {
+        // 시작 시간 설정 (선택한 일정의 끝나는 시간)
+        const endTime = getScheduleEndTime(selectedSchedule);
+        const timeInput = formRef.current.querySelector(
+          'input[name="scheduleStartTime"]'
+        ) as HTMLInputElement;
+        if (timeInput) {
+          timeInput.value = endTime;
+        }
+      }
+    }
+  }, [selectedRegularScheduleId, regularScheduleCandidates]);
 
   // 폼 제출 핸들러
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -233,12 +337,12 @@ export default function AddScheduleDialog({
           scheduleData,
         });
         toast.success("일정이 성공적으로 생성되었습니다.");
-      } catch (error) {
-        console.error("Error creating schedule:", error);
-        toast.error("일정 생성에 실패했습니다. 다시 시도해주세요.");
-      } finally {
-        router.refresh();
         onOpenChange(false);
+        router.refresh();
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "일정 생성에 실패했습니다. 다시 시도해주세요.";
+        toast.error(errorMessage);
       }
     });
   };
@@ -262,7 +366,9 @@ export default function AddScheduleDialog({
           <FieldGroup className="max-h-[70vh] overflow-y-auto p-4">
             {/* 일정 타입 */}
             <Field>
-              <FieldLabel>어떤 일정인가요?</FieldLabel>
+              <Label className="gap-0.5">
+                어떤 일정인가요?<span className="text-red-500">*</span>
+              </Label>
               <ToggleGroup
                 type="single"
                 variant="outline"
@@ -289,47 +395,92 @@ export default function AddScheduleDialog({
             </Field>
             {/* 장소 검색 */}
             {scheduleType !== "TRANSPORT" && (
-              <Field>
-                <Label htmlFor="scheduleLocation">장소</Label>
-                <div className={!isPlaceSelected ? "block" : "hidden"}>
-                  <SearchPlaces
-                    placeholder="식당, 카페, 관광지 검색..."
-                    onSelect={handlePlaceSelect}
-                    scheduleType={scheduleType}
-                    defaultCoords={defaultCoords}
-                  />
-                </div>
-                <div
-                  className={cn(
-                    "border-input dark:bg-input/30 items-center justify-between rounded-md border p-3",
-                    isPlaceSelected ? "flex" : "hidden"
+              <>
+                <Field>
+                  <Label htmlFor="scheduleLocation">일정 선택</Label>
+                  {/* 기존 일정이 있으면 선택 옵션 제공 */}
+                  {regularScheduleCandidates.length > 0 && (
+                    <Select
+                      value={selectedRegularScheduleId || "new"}
+                      onValueChange={(value) => {
+                        if (value === "new") {
+                          setSelectedRegularScheduleId(undefined);
+                          setIsPlaceSelected(false);
+                          setPlaceName("");
+                          setPlaceAddress("");
+                          setCoords(null);
+                        } else {
+                          setSelectedRegularScheduleId(value);
+                        }
+                      }}
+                      name="selectedSchedule"
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="이전 일정 이어서 시작" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="new">직접 시간 설정</SelectItem>
+                        {regularScheduleCandidates.map((item) => (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            <span>
+                              {item.title} ({formatTimeToKoreanAMPM(item.startAt)}, {item.duration}
+                              분)
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-semibold">{placeName}</span>
-                      <span className="text-xs text-gray-500">{placeAddress}</span>
-                    </div>
+                </Field>
+                <Field>
+                  <Label htmlFor="scheduleLocation" className="gap-0.5">
+                    장소
+                    {scheduleType === "MEAL" || scheduleType === "WAITING" ? (
+                      <span className="text-red-500">*</span>
+                    ) : null}
+                  </Label>
+                  <div className={!isPlaceSelected ? "block" : "hidden"}>
+                    <SearchPlaces
+                      placeholder="식당, 카페, 관광지 검색..."
+                      onSelect={handlePlaceSelect}
+                      scheduleType={scheduleType}
+                      defaultCoords={defaultCoords}
+                    />
                   </div>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      setIsPlaceSelected(false);
-                      setPlaceName("");
-                      setPlaceAddress("");
-                      setCoords(null);
-                    }}
-                    className="h-8 text-xs"
-                    type="button"
+                  <div
+                    className={cn(
+                      "border-input dark:bg-input/30 items-center justify-between rounded-md border p-3",
+                      isPlaceSelected ? "flex" : "hidden"
+                    )}
                   >
-                    다시 검색
-                  </Button>
-                </div>
-              </Field>
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-sm font-semibold">{placeName}</span>
+                        <span className="text-xs text-gray-500">{placeAddress}</span>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setIsPlaceSelected(false);
+                        setPlaceName("");
+                        setPlaceAddress("");
+                        setCoords(null);
+                      }}
+                      className="h-8 text-xs"
+                      type="button"
+                    >
+                      다시 검색
+                    </Button>
+                  </div>
+                </Field>
+              </>
             )}
             {/* 일정 제목 */}
             <Field>
-              <Label htmlFor="scheduleTitle">일정 이름</Label>
+              <Label htmlFor="scheduleTitle" className="gap-0.5">
+                일정 이름<span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="scheduleTitle"
                 name="scheduleTitle"
@@ -342,17 +493,24 @@ export default function AddScheduleDialog({
             {scheduleType !== "TRANSPORT" && (
               <div className="flex gap-4">
                 <Field className="flex-1">
-                  <Label htmlFor="scheduleStartTime">시작 시간</Label>
+                  <Label htmlFor="scheduleStartTime" className="gap-0.5">
+                    시작 시간<span className="text-red-500">*</span>
+                  </Label>
                   <Input
                     type="time"
                     id="scheduleStartTime"
                     name="scheduleStartTime"
                     step="60"
                     defaultValue={toMinutePrecision(defaultStartTime) || "12:00"}
+                    min={timeRange.minTime || "00:00"}
+                    max={timeRange.maxTime || "23:59"}
                   />
                 </Field>
                 <Field className="flex-1">
-                  <Label htmlFor="scheduleDuration">예상 소요시간 (분)</Label>
+                  <Label htmlFor="scheduleDuration" className="gap-0.5">
+                    예상 소요시간
+                    <span className="text-red-500">*</span>
+                  </Label>
                   <Select name="scheduleDuration" defaultValue="60">
                     <SelectTrigger>
                       <SelectValue placeholder="소요 시간" />
@@ -373,7 +531,6 @@ export default function AddScheduleDialog({
             )}
 
             {/* 이동 수단 상세 (이동 타입일 때만 노출) */}
-            {/* 5. 이동 수단 상세 (이동 타입일 때) */}
             {scheduleType === "TRANSPORT" && (
               <>
                 {transportCandidates.length < 2 ? (
@@ -383,7 +540,9 @@ export default function AddScheduleDialog({
                 ) : (
                   <div className="grid grid-cols-2 gap-4">
                     <Field>
-                      <Label htmlFor="startSchedule">출발</Label>
+                      <Label htmlFor="startSchedule" className="gap-0.5">
+                        출발 일정<span className="text-red-500">*</span>
+                      </Label>
                       <Select
                         value={startScheduleId}
                         onValueChange={setStartScheduleId}
@@ -402,7 +561,9 @@ export default function AddScheduleDialog({
                       </Select>
                     </Field>
                     <Field>
-                      <Label htmlFor="endSchedule">도착</Label>
+                      <Label htmlFor="endSchedule" className="gap-0.5">
+                        도착 일정<span className="text-red-500">*</span>
+                      </Label>
                       <Select
                         value={endScheduleId}
                         onValueChange={setEndScheduleId}
@@ -425,7 +586,9 @@ export default function AddScheduleDialog({
 
                 <div className="space-y-2">
                   <Field>
-                    <Label htmlFor="transportType">이동 수단</Label>
+                    <Label htmlFor="transportType" className="gap-0.5">
+                      이동 수단<span className="text-red-500">*</span>
+                    </Label>
                     <Select name="transportType" defaultValue="PUBLIC_TRANSPORT">
                       <SelectTrigger>
                         <SelectValue />
@@ -453,9 +616,11 @@ export default function AddScheduleDialog({
               </>
             )}
 
-            {/* 6. 메모 */}
+            {/* 메모 */}
             <Field>
-              <Label htmlFor="scheduleNotes">메모</Label>
+              <Label htmlFor="scheduleNotes" className="gap-0.5">
+                상세 정보<span className="text-red-500">*</span>
+              </Label>
               <Textarea
                 id="scheduleNotes"
                 name="scheduleNotes"

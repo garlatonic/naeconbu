@@ -24,17 +24,16 @@ import { Separator } from "@/components/ui/separator";
 
 interface PlannerTimelineItemProps {
   planId: string;
-  schedule: ScheduleDetail;
   role?: string;
-  // 실제 사용시에는 onUpdate, onDelete 등의 props가 필요할 것입니다.
   concertCoords: ConcertCoords;
+  schedule: ScheduleDetail;
 }
 
 export default function PlannerTimelineItem({
-  schedule,
-  role,
   planId,
+  role,
   concertCoords,
+  schedule,
 }: PlannerTimelineItemProps) {
   const router = useRouter();
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -146,11 +145,10 @@ export default function PlannerTimelineItem({
       {/* 다이얼로그 컴포넌트들 */}
       <EditScheduleDialog
         key={schedule.id}
+        planId={planId}
         open={showEditDialog}
         onOpenChange={setShowEditDialog}
         schedule={schedule}
-        planId={planId}
-        defaultCoords={concertCoords}
       />
 
       <DeleteScheduleDialog
