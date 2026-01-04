@@ -26,13 +26,7 @@ import {
 const tabTriggerClass =
   "data-[state=active]:bg-primary dark:data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:text-primary-foreground dark:data-[state=active]:border-transparent h-auto py-2";
 
-export default function StartLocationCard({
-  isEditable,
-  myLocation,
-}: {
-  isEditable: boolean;
-  myLocation: UserPlace | null;
-}) {
+export default function StartLocationCard({ myLocation }: { myLocation: UserPlace | null }) {
   const [location, setLocation] = useState<UserPlace | null>(myLocation);
   const [openDialog, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -113,10 +107,10 @@ export default function StartLocationCard({
   };
 
   return (
-    <div className="relative flex gap-2 lg:gap-6">
+    <article className="relative flex gap-2 lg:gap-6">
       {/* 왼쪽 아이콘 */}
       <div className="z-10 flex-none">
-        <div className="border-bg-main bg-bg-sub flex size-10 items-center justify-center rounded-full border-2 shadow-sm lg:size-16 lg:border-4">
+        <div className="border-bg-main bg-bg-sub flex size-10 items-center justify-center rounded-full border-2 lg:size-16 lg:border-4">
           {location ? (
             <Navigation className="text-primary size-4 lg:size-6" />
           ) : (
@@ -126,56 +120,52 @@ export default function StartLocationCard({
       </div>
 
       {/* 오른쪽 컨텐츠 카드 */}
-      <div className="border-border bg-bg-sub flex-1 rounded-xl border p-4 shadow-sm lg:p-6">
+      <div className="border-border bg-bg-sub text-text-main flex-1 space-y-3 rounded-xl border p-4 lg:space-y-4 lg:p-6">
         {location && (
-          <div className="flex flex-col gap-4">
+          <>
             <div className="flex justify-between">
-              <div className="space-y-4">
-                <h4 className="text-lg font-bold">완벽한 하루의 시작!</h4>
-                <p className="text-text-sub text-sm">
+              <div className="space-y-1 lg:space-y-2">
+                <h4 className="text-base font-bold lg:text-lg">완벽한 하루의 시작!</h4>
+                <p className="text-text-sub text-xs leading-normal lg:text-sm">
                   경유지를 추가하면 자동으로 최적 경로가 생성됩니다.
                 </p>
               </div>
               {/* 드롭다운 메뉴 */}
-              {isEditable && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" aria-label="메뉴 열기" className="size-8 p-0">
-                      <MoreHorizontalIcon className="size-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={() => setOpenDialog(true)}>
-                      출발지 변경
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={handleDeleteLocation}>출발지 삭제</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" aria-label="메뉴 열기" className="size-8 p-0">
+                    <MoreHorizontalIcon className="size-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => setOpenDialog(true)}>
+                    출발지 변경
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleDeleteLocation}>출발지 삭제</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <Separator />
             <div className="text-text-sub flex items-center gap-1">
-              <MapPinIcon className="size-4" />
-              <p className="text-sm">
+              <MapPinIcon className="size-3 lg:size-4" />
+              <p className="text-xs leading-normal lg:text-sm">
                 {location.address}
                 {location.placeName && `· ${location.placeName}`}
               </p>
             </div>
-          </div>
+          </>
         )}
         {!location && (
           <div className="flex justify-between">
-            <div className="space-y-4">
-              <h4 className="text-lg font-bold">콘서트 가는 날, 어디서 출발하세요?</h4>
-              <p className="text-text-sub text-sm">
+            <div className="space-y-1 lg:space-y-2">
+              <h4 className="text-base font-bold lg:text-lg">콘서트 가는 날, 어디서 출발하세요?</h4>
+              <p className="text-text-sub text-xs leading-normal lg:text-sm">
                 출발지를 설정하고 최고의 하루를 위한 외출 플래너를 시작해보세요!
               </p>
             </div>
-            {isEditable && (
-              <Button size="sm" onClick={openSearchModal}>
-                출발지 등록
-              </Button>
-            )}
+            <Button size="sm" onClick={openSearchModal}>
+              출발지 등록
+            </Button>
           </div>
         )}
       </div>
@@ -204,8 +194,12 @@ export default function StartLocationCard({
                 <MapPin className="size-10" />
               </div>
               <div className="space-y-1 text-center">
-                <p className="text-lg font-medium">현재 계신 곳을 출발지로 설정할까요?</p>
-                <p className="text-text-sub text-sm">브라우저 위치 권한 허용이 필요합니다.</p>
+                <p className="text-base font-medium lg:text-lg">
+                  현재 계신 곳을 출발지로 설정할까요?
+                </p>
+                <p className="text-text-sub text-xs leading-normal lg:text-sm">
+                  브라우저 위치 권한 허용이 필요합니다.
+                </p>
               </div>
               <Button
                 onClick={handleCurrentLocation}
@@ -244,6 +238,6 @@ export default function StartLocationCard({
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </article>
   );
 }

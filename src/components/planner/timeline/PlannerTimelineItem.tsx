@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontalIcon } from "lucide-react";
+import { MoreVerticalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,36 +10,49 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { ScheduleDetail } from "@/types/planner";
+import { ConcertCoords, PlannerParticipantRole, ScheduleDetail } from "@/types/planner";
 
 // 분리한 하위 컴포넌트들 임포트
 import TimelineIcon from "./TimelineIcon";
 import TimelineInfoGrid from "./TimelineInfoGrid";
 import EditScheduleDialog from "../dialogs/EditScheduleDialog";
 import DeleteScheduleDialog from "../dialogs/DeleteScheduleDialog";
+import { formatTimeToKoreanAMPM } from "@/utils/helpers/formatters";
+import { deletePlanSchedule } from "@/lib/api/planner/schedule.client";
+import { useRouter } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 interface PlannerTimelineItemProps {
+  planId: string;
+  role: PlannerParticipantRole;
+  concertCoords: ConcertCoords;
   schedule: ScheduleDetail;
-  role?: string;
-  // 실제 사용시에는 onUpdate, onDelete 등의 props가 필요할 것입니다.
-  planId: number;
 }
 
-export default function PlannerTimelineItem({ schedule, role, planId }: PlannerTimelineItemProps) {
+export default function PlannerTimelineItem({
+  planId,
+  role,
+  concertCoords,
+  schedule,
+}: PlannerTimelineItemProps) {
+  const router = useRouter();
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  // 메인 이벤트(공연)거나 식사일 때는 하단 그리드(비용/경로 등)를 숨김
-  const showDetailGrid = !schedule.isMainEvent && schedule.scheduleType !== "MEAL";
-
-  const handleDeleteConfirm = () => {
-    // TODO: 삭제 API 호출 로직
-    setShowDeleteDialog(false);
+  const handleDeleteConfirm = async () => {
+    if (!planId || !schedule.id) return;
+    try {
+      await deletePlanSchedule({ planId, scheduleId: schedule.id });
+      setShowDeleteDialog(false);
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete schedule", error);
+    }
   };
 
   return (
     <>
-      <article className="flex gap-6">
+      <article className="relative flex gap-2 lg:gap-6">
         {/* 좌측: 아이콘 영역 */}
         <TimelineIcon
           type={schedule.scheduleType}
@@ -52,80 +64,91 @@ export default function PlannerTimelineItem({ schedule, role, planId }: PlannerT
         {/* 우측: 컨텐츠 영역 */}
         <div
           className={cn(
-            "border-border bg-bg-sub text-text-main flex-1 space-y-4 rounded-xl border p-6",
+            "border-border bg-bg-sub text-text-main flex-1 space-y-3 rounded-xl border p-4 lg:space-y-4 lg:p-6",
             // 메인 이벤트 강조
-            schedule.isMainEvent && "bg-point-main text-text-point-main",
-            // 식사 일정 강조
-            schedule.scheduleType === "MEAL" && "border-border-point bg-bg-main border-2"
+            schedule.isMainEvent && "bg-point-main",
+            // 식사 일정
+            schedule.scheduleType === "MEAL" &&
+              "border-border-point bg-bg-main border-3 lg:border-4",
+            // 대기(카페) 일정
+            schedule.scheduleType === "WAITING" && "border-border bg-bg-main border-3 lg:border-4"
           )}
         >
           {/* 헤더: 제목, 시간, 메뉴버튼 */}
-          <div className="flex items-center justify-between">
-            <h4 className="text-lg font-bold">{schedule.title}</h4>
-            <div className="flex items-center gap-2">
-              <span
+          <div
+            className={cn("space-y-1 lg:space-y-2", schedule.isMainEvent && "text-text-point-main")}
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h4 className="text-base font-bold lg:text-lg">{schedule.title}</h4>
+              <div className="flex items-center gap-1">
+                <span
+                  className={cn(
+                    "text-xs leading-normal font-medium whitespace-nowrap lg:text-sm",
+                    schedule.isMainEvent ? "text-bg-main" : "text-text-sub"
+                  )}
+                >
+                  {formatTimeToKoreanAMPM(schedule.startAt)}
+                </span>
+
+                {/* 드롭다운 메뉴 */}
+                {(role === "OWNER" || role === "EDITOR") && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        aria-label="메뉴 열기"
+                        className="size-6 p-0 lg:size-7"
+                      >
+                        <MoreVerticalIcon className="size-3 lg:size-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {/* 메인 이벤트 시간 등록/수정용 (공연 시작시간이 등록 안됨) */}
+                      <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
+                        {schedule.isMainEvent ? "공연 시간 설정" : "수정"}
+                      </DropdownMenuItem>
+
+                      {/* 메인 이벤트가 아닐 때만 삭제 허용 */}
+                      {!schedule.isMainEvent && (
+                        <DropdownMenuItem
+                          onSelect={() => setShowDeleteDialog(true)}
+                          className="text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950"
+                        >
+                          삭제
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+            </div>
+
+            {/* 본문: 상세 설명 */}
+            {schedule.details && (
+              <div
                 className={cn(
-                  "font-medium whitespace-nowrap",
-                  schedule.isMainEvent ? "text-bg-main" : "text-text-sub"
+                  "text-text-sub text-xs leading-normal lg:text-sm",
+                  schedule.isMainEvent && "text-text-point-sub"
                 )}
               >
-                {schedule.startAt}
-              </span>
-
-              {/* 드롭다운 메뉴 */}
-              {(role === "OWNER" || role === "EDITOR") && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" aria-label="메뉴 열기" className="size-8 p-0">
-                      <MoreHorizontalIcon className="size-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {/* 메인 이벤트 시간 등록/수정용 (공연 시작시간이 등록 안됨) */}
-                    <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
-                      {schedule.isMainEvent ? "공연 시간 설정" : "수정"}
-                    </DropdownMenuItem>
-
-                    {/* 메인 이벤트가 아닐 때만 삭제 허용 */}
-                    {!schedule.isMainEvent && (
-                      <DropdownMenuItem
-                        onSelect={() => setShowDeleteDialog(true)}
-                        className="text-red-600 focus:bg-red-50 focus:text-red-700 dark:focus:bg-red-950"
-                      >
-                        삭제
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
+                <p className="whitespace-pre-wrap">{schedule.details}</p>
+              </div>
+            )}
           </div>
 
-          {/* 본문: 상세 설명 */}
-          {schedule.details && (
-            <div
-              className={cn("text-text-sub text-sm", schedule.isMainEvent && "text-text-point-sub")}
-            >
-              <p className="whitespace-pre-wrap">{schedule.details}</p>
-            </div>
-          )}
-
-          {/* 하단: 이동수단 상세 정보 (구분선 포함) */}
-          {showDetailGrid && (
-            <>
-              <Separator className="bg-border my-3" />
-              <TimelineInfoGrid schedule={schedule} />
-            </>
-          )}
+          {schedule.scheduleType === "TRANSPORT" && <Separator className="bg-muted" />}
+          {/* 하단 상세 정보 */}
+          <TimelineInfoGrid schedule={schedule} concertCoords={concertCoords} />
         </div>
       </article>
 
       {/* 다이얼로그 컴포넌트들 */}
       <EditScheduleDialog
+        key={schedule.id}
+        planId={planId}
         open={showEditDialog}
         onOpenChange={setShowEditDialog}
         schedule={schedule}
-        planId={planId}
       />
 
       <DeleteScheduleDialog

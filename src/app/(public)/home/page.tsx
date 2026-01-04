@@ -4,9 +4,9 @@ import PlannerBanner from "@/components/home/PlannerBanner";
 import UpcomingSlider from "@/components/home/upcoming-slider";
 import FeaturedArtistsSkeleton from "@/components/loading/home/FeaturedArtistsSkeleton";
 import UpcomingSkeleton from "@/components/loading/home/UpcomingSkeleton";
+import { getFeaturedArtists } from "@/lib/api/artists/artists.server";
+import { getAuthStatus } from "@/lib/api/auth/auth.server";
 import { getUpcomingConcerts } from "@/lib/api/concerts/concerts.server";
-import { getFeaturedArtists } from "@/lib/artists/artists.server";
-import { getAuthStatus } from "@/lib/auth/auth.server";
 import { Suspense } from "react";
 
 export default async function Page() {
@@ -17,7 +17,6 @@ export default async function Page() {
   return (
     <>
       <HeroSlider />
-      <UpcomingSkeleton />
       <Suspense fallback={<UpcomingSkeleton />}>
         <UpcomingSlider concerts={concertData.data} />
       </Suspense>
