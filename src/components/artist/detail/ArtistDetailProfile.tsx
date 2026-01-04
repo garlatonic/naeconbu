@@ -11,7 +11,7 @@ import { toast } from "sonner";
 export default function ArtistDetailProfile({
   artist,
   artistId,
-  initialIsLiked = false,
+  initialIsLiked,
 }: {
   artist: ArtistDetail;
   artistId: number;
