@@ -1,7 +1,7 @@
 import PlannerQuickTips from "./timeline/PlannerQuickTips";
 import PlannerTimelineSection from "./timeline/PlannerTimelineSection";
 import PlannerSidebarContents from "./sidebar/PlannerSidebarContents";
-import { ConcertCoords, ScheduleDetail } from "@/types/planner";
+import { ConcertCoords, PlannerParticipantRole, ScheduleDetail } from "@/types/planner";
 
 export default function PlannerBodySection({
   planId,
@@ -13,11 +13,11 @@ export default function PlannerBodySection({
   planId: string;
   schedules: ScheduleDetail[];
   concertCoords: ConcertCoords;
-  role: string;
+  role: PlannerParticipantRole;
   totalDuration: number;
 }) {
   return (
-    <section className="bg-bg-sub px-5 py-8 lg:px-15 lg:py-10">
+    <section className="border-border bg-bg-sub border-t px-5 py-8 lg:px-15 lg:py-10">
       <div className="mx-auto flex w-full max-w-400 gap-8">
         {/* === 메인 타임라인 영역 (모바일/데스크톱 모두 보임) === */}
         <div className="*:bg-bg-main *:border-border w-full flex-1 space-y-6 *:rounded-2xl *:border *:p-5 lg:flex-3 lg:space-y-8 lg:*:p-8">
