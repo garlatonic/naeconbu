@@ -7,12 +7,10 @@ import SelectedConcertCard from "@/components/review/write/SelectedConcertCard";
 import ReviewTitleSection from "@/components/review/write/ReviewTitleSection";
 import ReviewRatingSection from "@/components/review/write/ReviewRatingSection";
 import ReviewConcertSection from "@/components/review/write/ReviewConcertSection";
-import SeatInfoSection from "@/components/review/write/SeatInfoSection";
 import PhotoUploadSection from "@/components/review/write/PhotoUploadSection";
 import ReviewTagSection from "@/components/review/write/ReviewTagSection";
 import ReviewConfirmSection from "@/components/review/write/ReviewConfirmSection";
 import ReviewFooterActions from "@/components/review/write/ReviewFooterActions";
-import ModalContainer from "@/components/concert-mate/modal/ModalContainer";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -64,12 +62,12 @@ export default function ReviewWriteMain() {
           <Card className={"gap-8 p-12"}>
             <ReviewWriteHeader />
             {/* 공연 선택칸 + 선택 모달 */}
-            <ModalContainer />
+            {/*<ModalContainer />*/}
             <SelectedConcertCard />
             <ReviewTitleSection />
             <ReviewRatingSection />
             <ReviewConcertSection />
-            <SeatInfoSection />
+            {/*<SeatInfoSection />*/}
             <PhotoUploadSection />
             <div className="px-6">
               <Separator />

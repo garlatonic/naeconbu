@@ -1,6 +1,5 @@
 import { CardContent, CardTitle } from "@/components/ui/card";
 import { Star } from "lucide-react";
-import ReviewDetailRating from "@/components/review/write/ReviewDetailRating";
 
 /*
  * TODO: 종합 평점 별점 기능 구현
@@ -47,13 +46,13 @@ export default function ReviewRatingSection() {
         </CardTitle>
       </CardContent>
 
-      <CardContent className={"flex flex-col gap-4"}>
-        <CardTitle>세부 평가</CardTitle>
-        <ReviewDetailRating title={"퍼포먼스 완성도"} />
-        <ReviewDetailRating title={"공연장 & 시설"} />
-        <ReviewDetailRating title={"음향 퀄리티"} />
-        <ReviewDetailRating title={"가격 대비 만족도"} />
-      </CardContent>
+      {/*<CardContent className={"flex flex-col gap-4"}>*/}
+      {/*  <CardTitle>세부 평가</CardTitle>*/}
+      {/*  <ReviewDetailRating title={"퍼포먼스 완성도"} />*/}
+      {/*  <ReviewDetailRating title={"공연장 & 시설"} />*/}
+      {/*  <ReviewDetailRating title={"음향 퀄리티"} />*/}
+      {/*  <ReviewDetailRating title={"가격 대비 만족도"} />*/}
+      {/*</CardContent>*/}
     </>
   );
 }
