@@ -105,3 +105,15 @@ export const createPlanShareLink = async (
     throw error;
   }
 };
+
+// 공유받은 링크로 접속 후 액세스 토큰 검증까지 완료되면 참가자로 넣기
+export const joinPlanAsParticipant = async (shareToken: string): Promise<boolean> => {
+  const res = await ClientApi(`/api/v1/plans/share/${shareToken}/accept`, { method: "POST" });
+  return res.ok;
+};
+
+// 공유받은 링크로 접속 후 초대 거절
+export const declinePlanAsParticipant = async (shareToken: string): Promise<boolean> => {
+  const res = await ClientApi(`/api/v1/plans/share/${shareToken}/decline`, { method: "POST" });
+  return res.ok;
+};

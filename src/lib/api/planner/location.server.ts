@@ -7,6 +7,7 @@ export const getMyLocation = async (): Promise<UserPlace | null> => {
     const res = await ServerApi(`/api/v1/location/my`, {
       method: "GET",
     });
+    // console.log(res)
     if (!res.ok) {
       throw new Error(`Server Error: ${res.status}`);
     }

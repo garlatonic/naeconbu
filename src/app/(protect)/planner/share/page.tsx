@@ -1,21 +1,29 @@
-import { getSharedPlan, joinPlanAsParticipant } from "@/lib/api/planner/planner.server";
-import { notFound, redirect } from "next/navigation";
+import PlannerTimelineSectionSkeleton from "@/components/loading/planner/PlannerTimelineSectionSkeleton";
+import PlannerTopActionsSkeleton from "@/components/loading/planner/PlannerTopActionsSkeleton";
+import PlannerTopHeaderSkeleton from "@/components/loading/planner/PlannerTopHeaderSkeleton";
+import { InviteConfirmDialog } from "@/components/planner/share/InviteConfirmDialog";
+import { getSharedPlan } from "@/lib/api/planner/planner.server";
+import { notFound } from "next/navigation";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ code: string }> }) {
   const { code } = await searchParams;
 
+  if (!code || code.trim() === "") {
+    notFound();
+  }
+
   // 유효한 액세스 토큰인지 확인
-  const sharedPlanDetail = await getSharedPlan(code);
-  if (!sharedPlanDetail) {
+  const sharedPlan = await getSharedPlan(code);
+  if (!sharedPlan) {
     notFound();
   }
 
-  // 참가자로 넣기
-  const acceptResult = await joinPlanAsParticipant(code);
-  if (!acceptResult) {
-    notFound();
-  }
-
-  // 성공적으로 됐으면 이동
-  redirect(`/planner/${sharedPlanDetail.id}`);
+  return (
+    <>
+      <PlannerTopHeaderSkeleton />
+      <PlannerTopActionsSkeleton />
+      <PlannerTimelineSectionSkeleton />
+      <InviteConfirmDialog planDetail={sharedPlan} inviteCode={code} />
+    </>
+  );
 }
