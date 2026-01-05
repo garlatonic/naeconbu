@@ -44,10 +44,10 @@ export default function PlannerTimelineItem({
     try {
       await deletePlanSchedule({ planId, scheduleId: schedule.id });
       setShowDeleteDialog(false);
-      router.refresh();
     } catch (error) {
       console.error("Failed to delete schedule", error);
     }
+    router.refresh();
   };
 
   return (

@@ -45,7 +45,7 @@ export default function TransitRouteList({ itineraries, onSelect }: TransitRoute
               </span>
             </div>
             <div className="text-muted-foreground flex items-center gap-2 text-xs">
-              <span>도보 {Math.round(totalWalkTime / 60)}분</span>
+              {totalWalkTime && <span>도보 {Math.round(totalWalkTime / 60)}분</span>}
               <Separator orientation="vertical" className="h-2!" />
               <span>환승 {transferCount}회</span>
               <Separator orientation="vertical" className="h-2!" />

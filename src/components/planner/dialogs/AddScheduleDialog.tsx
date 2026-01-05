@@ -200,7 +200,7 @@ export default function AddScheduleDialog({
             endX: endSchedule.locationLon!,
             endY: endSchedule.locationLat!,
           });
-          setRouteData(data.metaData.plan.itineraries || []);
+          setRouteData(data?.metaData?.plan.itineraries || []);
         } else {
           // TODO: 자동차(CAR), 도보(WALK) 로직 추가
           setRouteData([]);
