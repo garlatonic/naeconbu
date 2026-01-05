@@ -4,15 +4,30 @@ import ReviewConcertCard from "@/components/review/post/info/ReviewConcertCard";
 import ReviewPostBody from "@/components/review/post/body/ReviewPostBody";
 import ReviewPostComments from "@/components/review/post/comments/ReviewPostComments";
 import ReviewPostSidebar from "@/components/review/post/sidebar/ReviewPostSidebar";
+import { ConcertDetail } from "@/types/concerts";
+import { ReviewDetailData } from "@/types/community/concert-review";
 
-export default function ReviewPostMain() {
+export default function ReviewPostMain({
+  concertDetail,
+  reviewDetail,
+  isAuthor,
+}: {
+  concertDetail: ConcertDetail;
+  reviewDetail: ReviewDetailData;
+  isAuthor: boolean;
+}) {
   return (
     <section className={"px-15 py-16"}>
       <div className="mx-auto flex w-full max-w-400 gap-12">
         {/*왼쪽 파트*/}
         <section className={"flex w-full flex-col gap-8"}>
-          <ReviewConcertCard />
-          <ReviewPostHeader />
+          <ReviewConcertCard concertDetail={concertDetail} />
+          <ReviewPostHeader
+            title={reviewDetail.post.title}
+            createdDate={reviewDetail.post.createdDate}
+            modifiedDate={reviewDetail.post.modifiedDate}
+            isAuthor={isAuthor}
+          />
           <Separator />
           <ReviewPostBody showBadge={false} />
           <ReviewPostComments />
