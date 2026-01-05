@@ -4,7 +4,7 @@ export type ReviewPostWrite = {
   rating: number;
   content: string;
   images?: File[];
-  activityTags?: string[];
+  activityTags: string[];
 };
 
 export type PhotoUploadSectionProps = {
