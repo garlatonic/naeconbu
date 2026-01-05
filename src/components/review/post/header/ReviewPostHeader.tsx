@@ -110,7 +110,11 @@ export default function ReviewPostHeader({ isAuthor, post }: PostHeaderProps) {
 
             <DropdownMenuContent className="w-40" align="end">
               <DropdownMenuGroup>
-                <DropdownMenuItem>신고하기</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => toast("신고 기능은 준비 중입니다. 조금만 기다려 주세요.")}
+                >
+                  신고하기
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

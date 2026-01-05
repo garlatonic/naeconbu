@@ -49,18 +49,22 @@ export default function ReviewPostBody({ reviewDetail }: { reviewDetail: ReviewD
   }, [reviewDetail.post.postId]);
 
   const handleToggleLike = async () => {
+    const prevIsLiked = isLiked;
+    const prevLikeCount = likeCount;
+
     if (isLikePending) return;
     setIsLikePending(true);
     try {
       await togglePostLike(reviewDetail.post.postId);
 
-      const nextIsLiked = !isLiked;
-
+      const nextIsLiked = !prevIsLiked;
       setIsLiked(nextIsLiked);
       setLikeCount((prev) => (prev === null ? prev : prev + (nextIsLiked ? 1 : -1)));
 
       toast.success(nextIsLiked ? "좋아요를 눌렀습니다." : "좋아요가 취소되었습니다.");
     } catch (e) {
+      setIsLiked(prevIsLiked);
+      setLikeCount(prevLikeCount);
       toast.error(e instanceof Error ? e.message : "좋아요 처리 중 오류가 발생했습니다.");
     } finally {
       setIsLikePending(false);
@@ -87,7 +91,7 @@ export default function ReviewPostBody({ reviewDetail }: { reviewDetail: ReviewD
                         sizes="(max-width: 768px) 100vw, 800px"
                         fill
                         onError={(e) => {
-                          e.currentTarget.src = "/image-fallback.png";
+                          e.currentTarget.src = "/ConcertPoster.png";
                         }}
                       />
                     </div>

@@ -4,8 +4,8 @@ import { ReviewDetailData, ReviewDetailResponse } from "@/types/community/concer
 /**
  * post ID로 후기글 상세 정보 가져오기
  *
- * @param {string} postId - 공연 ID
- * @returns {Promise<ReviewDetailData | null>} - 공연 상세 정보 또는 null
+ * @param {number} postId - 후기글 ID
+ * @returns {Promise<ReviewDetailData | null>} - 후기글 상세 정보 또는 null
  */
 export const getReviewDetail = async (postId: number): Promise<ReviewDetailData | null> => {
   try {

@@ -14,6 +14,7 @@ export default function PosterBox({ posterUrl }: { posterUrl: string | null }) {
         alt={`Concert Poster`}
         fill
         sizes={"128px"}
+        priority
         onError={() => setSrc(fallbackImage)}
       />
     </div>

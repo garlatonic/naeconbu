@@ -65,7 +65,7 @@ export default function SharePosts() {
                   ref={shareInputRef}
                   readOnly
                   value={typeof window !== "undefined" ? window.location.href : ""}
-                  className="read-only:bg-muted"
+                  className="bg-muted"
                 />
 
                 <Button
