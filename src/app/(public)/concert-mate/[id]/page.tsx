@@ -1,7 +1,7 @@
 import MateDetailMain from "@/components/concert-mate/detail/MateDetailMain";
 import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
 
-export default function Page() {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
       <BreadcrumbNavbar
@@ -11,7 +11,7 @@ export default function Page() {
           { label: "글 상세" },
         ]}
       />
-      <MateDetailMain />
+      <MateDetailMain params={params} />
     </>
   );
 }

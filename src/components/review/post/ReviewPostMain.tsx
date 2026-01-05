@@ -5,7 +5,7 @@ import ReviewPostBody from "@/components/review/post/body/ReviewPostBody";
 import ReviewPostComments from "@/components/review/post/comments/ReviewPostComments";
 import ReviewPostSidebar from "@/components/review/post/sidebar/ReviewPostSidebar";
 
-export default function ReviewPostMain() {
+export default function ReviewPostMain({ params }: { params: Promise<{ id: string }> }) {
   return (
     <section className={"px-15 py-16"}>
       <div className="mx-auto flex w-full max-w-400 gap-12">
@@ -15,7 +15,7 @@ export default function ReviewPostMain() {
           <ReviewPostHeader />
           <Separator />
           <ReviewPostBody showBadge={false} />
-          <ReviewPostComments />
+          <ReviewPostComments params={params} />
         </section>
         {/*오른쪽 파트*/}
         <ReviewPostSidebar showMeetingDetail={false} />

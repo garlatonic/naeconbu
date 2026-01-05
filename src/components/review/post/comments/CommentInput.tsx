@@ -10,10 +10,15 @@ import { toast } from "sonner";
 import { createComment } from "@/lib/api/community/community.client";
 import { useParams } from "next/navigation";
 
-export default function CommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function CommentInput({
+  isLoggedIn,
+  totalComments,
+}: {
+  isLoggedIn: boolean;
+  totalComments: number;
+}) {
   /**
    * TODO:
-   * - 댓글 총 갯수 props 받아오기
    * - 댓글 작성 성공 시 리프레시 처리하면 되는지 아니면 data 받은걸 보여주는 방법을 쓰는지
    * - 최대 글자 수 제한 및 안내 문구 추가 여부 검토
    * - 엔터/쉬프트+엔터 입력 정책 결정
@@ -56,7 +61,7 @@ export default function CommentInput({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <>
       <div className={"flex justify-between"}>
-        <h3 className={"text-xl font-bold"}>댓글 (38)</h3>
+        <h3 className={"text-xl font-bold"}>댓글 ({totalComments})</h3>
         {/**
            * TODO:
            * - 댓글 정렬

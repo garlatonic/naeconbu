@@ -38,10 +38,22 @@ export interface CreateCommentRequest {
 }
 
 export interface CommentResponse {
-  content: string[];
+  content: CommentData[];
   page: number;
   size: number;
   totalPages: number;
   totalElements: number;
   hasNext: boolean;
 }
+
+export interface CommentData {
+  commentId: number;
+  userId: number;
+  content: string;
+  createdDate: string;
+}
+
+export type CommentAddUser = CommentData & {
+  author: string;
+  avatar: string;
+};

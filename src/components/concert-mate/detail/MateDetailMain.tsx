@@ -5,7 +5,7 @@ import ReviewConcertCard from "@/components/review/post/info/ReviewConcertCard";
 import { Separator } from "@/components/ui/separator";
 import ReviewPostSidebar from "@/components/review/post/sidebar/ReviewPostSidebar";
 
-export default function MateDetailMain() {
+export default function MateDetailMain({ params }: { params: Promise<{ id: string }> }) {
   return (
     <section className="px-15 py-16">
       <div className="mx-auto flex w-full max-w-400 gap-12">
@@ -15,7 +15,7 @@ export default function MateDetailMain() {
           <ReviewPostHeader />
           <Separator />
           <ReviewPostBody showBadge={true} />
-          <ReviewPostComments />
+          <ReviewPostComments params={params} />
         </section>
         {/*오른쪽 파트*/}
         <ReviewPostSidebar showMeetingDetail={true} />
