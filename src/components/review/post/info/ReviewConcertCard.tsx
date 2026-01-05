@@ -3,11 +3,12 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import InfoRow from "@/components/review/post/info/InfoRow";
 import { ConcertDetail } from "@/types/concerts";
 import { formatDateRangeKorean } from "@/utils/helpers/formatters";
+import Link from "next/link";
 
 export default function ReviewConcertCard({ concertDetail }: { concertDetail: ConcertDetail }) {
   return (
     <Card className={"p-6"}>
-      <div className={"flex items-center gap-6"}>
+      <Link href={`/concerts/${concertDetail.concertId}`} className={"flex items-center gap-6"}>
         <PosterBox posterUrl={concertDetail.posterUrl} />
 
         <CardContent className={"flex flex-1 flex-col gap-2"}>
@@ -25,7 +26,7 @@ export default function ReviewConcertCard({ concertDetail }: { concertDetail: Co
             </div>
           </div>
         </CardContent>
-      </div>
+      </Link>
     </Card>
   );
 }
