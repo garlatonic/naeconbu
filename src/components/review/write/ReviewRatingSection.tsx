@@ -20,6 +20,7 @@ export default function ReviewRatingSection() {
 
   const currentRating = hoverRating ?? rating;
 
+  // TODO: controller를 활용해 수정 예정
   const ratingInput = (
     <input
       type="hidden"

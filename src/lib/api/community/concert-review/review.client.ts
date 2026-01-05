@@ -2,9 +2,7 @@
 import { ReviewPostWrite } from "@/types/community/concert-review";
 import ClientApi from "@/utils/helpers/clientApi";
 
-export const createReviewPost = async (
-  data: ReviewPostWrite & { images?: File[] }
-): Promise<boolean> => {
+export const createReviewPost = async (data: ReviewPostWrite): Promise<boolean> => {
   try {
     const formData = new FormData();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 
@@ -9,8 +9,9 @@ export default function ImagePreview({ file, onRemove }: { file: File; onRemove:
 
   useEffect(() => {
     const url = URL.createObjectURL(file);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPreview(url);
+    startTransition(() => {
+      setPreview(url);
+    });
 
     return () => {
       URL.revokeObjectURL(url);
@@ -21,13 +22,7 @@ export default function ImagePreview({ file, onRemove }: { file: File; onRemove:
 
   return (
     <div className="relative aspect-square overflow-hidden rounded-md border">
-      <Image
-        src={preview}
-        alt="preview"
-        className="h-full w-full object-cover"
-        width={50}
-        height={50}
-      />
+      <Image src={preview} alt="preview" className="h-full w-full object-cover" fill />
       <button
         type="button"
         onClick={onRemove}
