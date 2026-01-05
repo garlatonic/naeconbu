@@ -14,15 +14,18 @@ export const MatePagination = ({
   currentPage: number;
   totalPages: number;
 }) => {
-  if (totalPages <= 1) return null;
+  if (totalPages === 0) return null;
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const isFirstPage = currentPage <= 1;
+  const isLastPage = currentPage >= totalPages;
 
   return (
     <Pagination className="py-12">
       <PaginationContent>
         <PaginationItem>
           <PaginationLink
-            href={`?page=${currentPage - 1}`}
+            href={isFirstPage ? "#" : `?page=${currentPage - 1}`}
             aria-label="Go to previous page"
             size="icon"
           >
@@ -40,7 +43,7 @@ export const MatePagination = ({
 
         <PaginationItem>
           <PaginationLink
-            href={`?page=${currentPage + 1}`}
+            href={isLastPage ? "#" : `?page=${currentPage + 1}`}
             aria-label="Go to next page"
             size="icon"
           >
