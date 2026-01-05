@@ -5,12 +5,12 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import MateListBtn from "@/components/concert-mate/list/MateListBtn";
+import ProfileNoImage from "@/components/common/ProfileNoImage";
 
 export default async function MateListCard({ post }: { post: Post }) {
   // TODO : 유저프로필사진 추가 : userId 기반으로 조회 가능한 API 생성 예정 / nickname 부분도 교체 예정
   // const userInfoRes = await getUsersMe();
-  // TODO : 콘서트 id(콘서트 이름, 공연날자, 위치 정보) 추가 : post 안에 concertId 추가 예정
-  const concertInfoRes = await getConcertDetail({ concertId: "11" });
+  const concertInfoRes = await getConcertDetail({ concertId: String(post.concertId) });
 
   const formattedDate = format(new Date(post.createdDate), "yyyy-MM-dd");
 
@@ -24,10 +24,12 @@ export default async function MateListCard({ post }: { post: Post }) {
                 src="https://nconb-assets.s3.ap-northeast-2.amazonaws.com/users/profile/48161b51-0938-49da-9f76-d213ffeeb810_747f96f7277fd87afd27b9d9b666f19f.jpg"
                 alt="아티스트"
               />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>
+                <ProfileNoImage size="xs" />
+              </AvatarFallback>
             </Avatar>
             <div>
-              <strong className="text-text-main text-lg">{post.nickname}</strong>
+              <strong className="text-text-main text-lg">닉네임추가</strong>
               <div className="flex items-center gap-2">
                 <p className="text-text-sub text-sm">{formattedDate}</p>
               </div>
@@ -44,7 +46,7 @@ export default async function MateListCard({ post }: { post: Post }) {
               </p>
             </div>
           </div>
-          <p className="text-text-sub text-sm">{post.content}</p>
+          <p className="text-text-sub text-smㄴ line-clamp-4">{post.content}</p>
         </div>
       </Link>
       <MateListBtn postId={post.postId} />
