@@ -143,7 +143,10 @@ export default function EditScheduleDialog({
                       예상 소요시간
                       <span className="text-red-500">*</span>
                     </Label>
-                    <Select name="scheduleDuration" defaultValue="60">
+                    <Select
+                      name="scheduleDuration"
+                      defaultValue={schedule.duration?.toString() ?? "60"}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="소요 시간" />
                       </SelectTrigger>

@@ -10,7 +10,6 @@ import { twMerge } from "tailwind-merge";
 import { PlannerMembers } from "../sidebar/PlannerMembers"; // 경로 확인 필요
 import { PlannerParticipant, PlannerParticipantRole, PlannerShareLink } from "@/types/planner";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
 import {
   createPlanShareLink,
   deletePlanParticipant,
@@ -36,7 +35,6 @@ export default function InviteMemberDialog({
   role,
   shareLink,
 }: InviteMemberDialogProps) {
-  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const [isCreatingShareLink, startCreatingShareLink] = useTransition();
@@ -87,7 +85,7 @@ export default function InviteMemberDialog({
         setPlannerShareLink({ ...plannerShareLink, url: "", status: "공유 링크가 없습니다." }); // 상태 업데이트
         toast.success("공유 링크가 삭제되었습니다.");
       } catch (error) {
-        console.error("Failed to copy text: ", error);
+        console.error("Failed to delete share link: ", error);
         toast.error("공유 링크 삭제에 실패했습니다. 다시 시도해주세요.");
       }
     });
@@ -112,14 +110,24 @@ export default function InviteMemberDialog({
           ownerParticipantId: ownerParticipant ? ownerParticipant.participantId : "",
         });
         setParticipantsList((prevParticipants) =>
-          prevParticipants.map((participant) =>
-            participant.participantId === participantId
-              ? { ...participant, role: nextRole }
-              : participant
-          )
+          prevParticipants.map((participant) => {
+            // 변경한 참여자 권한 업데이트
+            if (participant.participantId === participantId) {
+              return { ...participant, role: nextRole };
+            }
+            // 소유권이 이전된 경우, 이전 소유자를 편집자로 변경
+            if (
+              nextRole === "OWNER" &&
+              ownerParticipant &&
+              participant.participantId === ownerParticipant.participantId &&
+              ownerParticipant.participantId !== participantId
+            ) {
+              return { ...participant, role: "EDITOR" };
+            }
+            return participant;
+          })
         );
         toast.success("참여자 권한을 변경했습니다.");
-        router.refresh();
       } catch (error) {
         console.error("Error changing participant role:", error);
         toast.error("참여자 권한 변경에 실패했습니다. 다시 시도해주세요.");

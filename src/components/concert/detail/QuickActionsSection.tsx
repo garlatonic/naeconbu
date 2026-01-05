@@ -351,7 +351,7 @@ export default function QuickActionsSection({
               {isCreatingPlan ? (
                 <>
                   <Loader2Icon className="animate-spin" />
-                  플래너 만들기
+                  생성 중...
                 </>
               ) : (
                 "만들기"

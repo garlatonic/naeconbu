@@ -57,55 +57,73 @@ export function PlannerMembers({
   return (
     <Field>
       <FieldLabel>멤버</FieldLabel>
-      {isSettingParticipants && <p>로딩 중...</p>}
-      <div className="space-y-3">
-        {participants.map((m) => (
-          <div
-            key={m.participantId}
-            className="bg-muted/40 border-input flex items-center justify-between gap-4 rounded-2xl border px-4 py-3"
-          >
-            <div className="flex items-center gap-4">
-              <Avatar className="size-10">
-                <AvatarImage src={m.profileImage} alt={m.nickname} />
-                <AvatarFallback>
-                  <ProfileNoImage size="sm" alt={m.nickname} />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-1 flex-col gap-1">
-                <strong className="text-sm font-medium">{m.nickname}</strong>
-                <span className="text-text-sub text-xs">{m.role}</span>
+      {isSettingParticipants ? (
+        <div className="space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-muted/40 border-input flex animate-pulse items-center justify-between gap-4 rounded-2xl border px-4 py-3"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-muted size-10 rounded-full" />
+                <div className="flex flex-1 flex-col gap-2">
+                  <div className="bg-muted h-4 w-20 rounded" />
+                  <div className="bg-muted h-3 w-16 rounded" />
+                </div>
+              </div>
+              <div className="bg-muted h-8 w-20 rounded" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {participants.map((m) => (
+            <div
+              key={m.participantId}
+              className="bg-muted/40 border-input flex items-center justify-between gap-4 rounded-2xl border px-4 py-3"
+            >
+              <div className="flex items-center gap-4">
+                <Avatar className="size-10">
+                  <AvatarImage src={m.profileImage} alt={m.nickname} />
+                  <AvatarFallback>
+                    <ProfileNoImage size="sm" alt={m.nickname} />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-1 flex-col gap-1">
+                  <strong className="text-sm font-medium">{m.nickname}</strong>
+                  <span className="text-text-sub text-xs">{m.role}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {myRole === "OWNER" && m.role !== "OWNER" && (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      aria-label="권한 변경"
+                      type="button"
+                      disabled={isChangingRole}
+                      onClick={() => openRoleDialog(m)}
+                    >
+                      권한 변경
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      aria-label="삭제"
+                      type="button"
+                      onClick={() => handleRemoveParticipant(m.participantId)}
+                      disabled={isBanningParticipant}
+                    >
+                      추방
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {myRole === "OWNER" && m.role !== "OWNER" && (
-                <>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    aria-label="권한 변경"
-                    type="button"
-                    disabled={isChangingRole}
-                    onClick={() => openRoleDialog(m)}
-                  >
-                    권한 변경
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    aria-label="삭제"
-                    type="button"
-                    onClick={() => handleRemoveParticipant(m.participantId)}
-                    disabled={isBanningParticipant}
-                  >
-                    추방
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
+          ))}
+        </div>
+      )}
       <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
         <DialogContent>
           <DialogHeader>

@@ -199,7 +199,6 @@ export const updatePlanParticipantRole = async ({
       body: JSON.stringify({ role: participantUpdateRole }),
     });
     if (!res.ok) {
-      console.error("API Error:", res.status, res.statusText);
       throw new Error(`API 요청 실패: ${res.status}`);
     }
 
@@ -213,8 +212,16 @@ export const updatePlanParticipantRole = async ({
         }
       );
       if (!resOwnerChange.ok) {
-        console.error("API Error:", resOwnerChange.status, resOwnerChange.statusText);
-        throw new Error(`API 요청 실패: ${resOwnerChange.status}`);
+        // 롤백: 첫 번째 변경을 원래대로 되돌리기
+        try {
+          await ClientApi(`/api/v1/plans/${planId}/participants/${participantId}/role`, {
+            method: "PATCH",
+            body: JSON.stringify({ role: participantCurrentRole }),
+          });
+        } catch (rollbackError) {
+          console.error("권한 변경 롤백 실패:", rollbackError);
+        }
+        throw new Error("OWNER 권한 이전 중 오류가 발생했습니다. 변경이 취소되었습니다.");
       }
     }
   } catch (error) {

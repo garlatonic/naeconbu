@@ -303,7 +303,7 @@ export default function ConcertHeaderBtn({
               {isCreatingPlan ? (
                 <>
                   <Loader2Icon className="animate-spin" />
-                  플래너 만들기
+                  생성 중...
                 </>
               ) : (
                 "플래너 만들기"
@@ -425,7 +425,7 @@ export default function ConcertHeaderBtn({
               {isUpdatingTicketing ? (
                 <>
                   <Loader2Icon className="animate-spin" />
-                  티켓팅 일정 등록
+                  등록 중...
                 </>
               ) : (
                 "티켓팅 일정 등록"
