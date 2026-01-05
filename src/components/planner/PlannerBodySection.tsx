@@ -3,8 +3,9 @@ import PlannerTimelineSection from "./timeline/PlannerTimelineSection";
 import PlannerSidebarContents from "./sidebar/PlannerSidebarContents";
 import { ConcertCoords, PlannerParticipantRole, ScheduleDetail } from "@/types/planner";
 import MobilePlannerSidebar from "./sidebar/MobilePlannerSidebar";
+import { getPlanParticipants } from "@/lib/api/planner/planner.server";
 
-export default function PlannerBodySection({
+export default async function PlannerBodySection({
   planId,
   schedules,
   concertCoords,
@@ -17,6 +18,8 @@ export default function PlannerBodySection({
   role: PlannerParticipantRole;
   totalDuration: number;
 }) {
+  const participants = await getPlanParticipants(planId);
+
   return (
     <section className="border-border bg-bg-sub border-t px-5 py-8 lg:px-15 lg:py-10">
       <div className="mx-auto flex w-full max-w-400 gap-8">
@@ -35,12 +38,12 @@ export default function PlannerBodySection({
         {/* === 데스크톱 사이드바 === */}
         <div className="hidden lg:block lg:max-w-125 lg:flex-1">
           <div className="sticky top-30 space-y-8">
-            <PlannerSidebarContents />
+            <PlannerSidebarContents participants={participants} />
           </div>
         </div>
       </div>
       {/* === 모바일 사이드바 === */}
-      <MobilePlannerSidebar />
+      <MobilePlannerSidebar participants={participants} />
     </section>
   );
 }

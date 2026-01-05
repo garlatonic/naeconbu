@@ -1,5 +1,5 @@
 import { ResponseData } from "@/types/api";
-import { PlannerParticipant } from "@/types/planner";
+import { PlannerParticipant, PlannerParticipantRole } from "@/types/planner";
 import ClientApi from "@/utils/helpers/clientApi";
 
 interface Planner {
@@ -155,6 +155,55 @@ export const deletePlanParticipant = async ({
     }
   } catch (error) {
     console.error("Error deleting participant:", error);
+    throw error;
+  }
+};
+
+// 플래너 참가자 권한 변경
+export const updatePlanParticipantRole = async ({
+  planId,
+  participantId,
+  participantUpdateRole,
+  participantCurrentRole,
+  ownerParticipantId,
+}: {
+  planId: string;
+  participantId: string;
+  participantUpdateRole: PlannerParticipantRole;
+  participantCurrentRole: PlannerParticipantRole;
+  ownerParticipantId: string;
+}): Promise<void> => {
+  try {
+    // 현재 역할과 변경할 역할이 같으면 아무 작업도 수행하지 않음
+    if (participantCurrentRole === participantUpdateRole) {
+      return;
+    }
+
+    const res = await ClientApi(`/api/v1/plans/${planId}/participants/${participantId}/role`, {
+      method: "PATCH",
+      body: JSON.stringify({ role: participantUpdateRole }),
+    });
+    if (!res.ok) {
+      console.error("API Error:", res.status, res.statusText);
+      throw new Error(`API 요청 실패: ${res.status}`);
+    }
+
+    // 변경할 역할이 OWNER인 경우, 현재 플랜의 소유자 권한을 EDITOR로 변경
+    if (participantUpdateRole === "OWNER") {
+      const resOwnerChange = await ClientApi(
+        `/api/v1/plans/${planId}/participants/${ownerParticipantId}/role`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ role: "EDITOR" }),
+        }
+      );
+      if (!resOwnerChange.ok) {
+        console.error("API Error:", resOwnerChange.status, resOwnerChange.statusText);
+        throw new Error(`API 요청 실패: ${resOwnerChange.status}`);
+      }
+    }
+  } catch (error) {
+    console.error("Error updating participant role:", error);
     throw error;
   }
 };
