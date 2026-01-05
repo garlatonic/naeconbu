@@ -13,6 +13,7 @@ export default function ReviewPostMain({
   isAuthor,
 }: {
   concertDetail: ConcertDetail;
+  // TODO: 아래 ReviewDetailData는 동행구인 상세 데이터 타입으로 변경하셔야해요
   reviewDetail: ReviewDetailData;
   isAuthor: boolean;
 }) {
@@ -22,12 +23,8 @@ export default function ReviewPostMain({
         {/*왼쪽 파트*/}
         <section className={"flex w-full flex-col gap-8"}>
           <ReviewConcertCard concertDetail={concertDetail} />
-          <ReviewPostHeader
-            title={reviewDetail.post.title}
-            createdDate={reviewDetail.post.createdDate}
-            modifiedDate={reviewDetail.post.modifiedDate}
-            isAuthor={isAuthor}
-          />
+          {/*TODO: 아래에서 전달하는 post 타입은 구인글이나 후기글 상세 조회에서 동일한 타입입니다*/}
+          <ReviewPostHeader post={reviewDetail.post} isAuthor={isAuthor} />
           <Separator />
           <ReviewPostBody showBadge={false} />
           <ReviewPostComments />
