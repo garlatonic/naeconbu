@@ -1,7 +1,8 @@
 "use client";
 
-import { CardContent, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -25,10 +26,11 @@ export default function PreferenceSelectSection() {
   return (
     <CardContent className="grid grid-cols-3 gap-2">
       <div className="flex flex-col gap-2">
-        <CardTitle>
+        <Label htmlFor="participants">
           인원 수 <span className="text-text-sub">*</span>
-        </CardTitle>
+        </Label>
         <Input
+          id="participants"
           type="number"
           {...register("maxParticipants", {
             valueAsNumber: true,
@@ -51,15 +53,15 @@ export default function PreferenceSelectSection() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <CardTitle>
+        <Label htmlFor="gender-preference">
           성별 <span className="text-text-sub">*</span>
-        </CardTitle>
+        </Label>
         <Controller
           name="genderPreference"
           rules={{ required: "성별을 선택해주세요" }}
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="!h-13 w-full">
+              <SelectTrigger id="gender-preference" className="!h-13 w-full">
                 <SelectValue placeholder="ex. 성별 무관" />
               </SelectTrigger>
               <SelectContent>
@@ -79,9 +81,10 @@ export default function PreferenceSelectSection() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <CardTitle>연령대</CardTitle>
+        <Label htmlFor="age-range-min">연령대</Label>
         <div className="flex gap-2">
           <Input
+            id="age-range-min"
             type="number"
             {...register("ageRangeMin", {
               valueAsNumber: true,
@@ -98,6 +101,7 @@ export default function PreferenceSelectSection() {
             className="h-13"
           />
           <Input
+            id="age-range-max"
             type="number"
             {...register("ageRangeMax", {
               valueAsNumber: true,
