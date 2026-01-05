@@ -8,15 +8,14 @@ import ServerApi from "@/utils/helpers/serverApi";
  * @returns {Promise<PostListResponse | null>} - 커뮤니티 글 목록 또는 null
  */
 export const getPostsList = async ({
-  // TODO : 백엔드 권한 수정 이후 다시
   category,
-  page = 0,
+  page = 1,
 }: {
   category: CommunityCategory;
   page: number;
 }): Promise<PostListResponse | null> => {
   try {
-    const res = await ServerApi(`/api/v1/posts/category/${category}?page=${page}&size=5`, {
+    const res = await ServerApi(`/api/v1/posts/category/${category}?page=${page}`, {
       method: "GET",
     });
 
@@ -29,7 +28,7 @@ export const getPostsList = async ({
 
     return data.data;
   } catch (error) {
-    console.error("Error fetching posts list:", error);
+    console.error("Error fetching concert mate posts list:", error);
     return null;
   }
 };

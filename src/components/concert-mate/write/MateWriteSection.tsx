@@ -16,13 +16,13 @@ export default function MateWriteSection() {
   return (
     <CardContent>
       <div className="grid w-full gap-3">
-        <Label htmlFor="message-2" className="gap-1">
+        <Label htmlFor="content" className="gap-1">
           구인 작성 <span className="text-text-sub">*</span>
         </Label>
         <Textarea
+          id="content"
           className="h-50 resize-none"
           placeholder="원하는 동행자 스타일, 함께 하고 싶은 활동 등을 자유롭게 적어주세요"
-          id="message-2"
           {...register("content", { required: "글 내용을 입력해주세요" })}
         />
         {errors.content && <span className="text-xs text-red-500">{errors.content.message}</span>}

@@ -1,7 +1,8 @@
 "use client";
 
-import { CardContent, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -15,6 +16,7 @@ import { MatePostWrite } from "@/types/community/concert-mate";
 import { Controller, useFormContext } from "react-hook-form";
 
 export default function PreferenceSelectSection() {
+  // TODO : message: "최소 1명 이상 모집해야 합니다." 이런 경고 메세지 안 뜸 문제
   const {
     register,
     watch,
@@ -24,10 +26,11 @@ export default function PreferenceSelectSection() {
   return (
     <CardContent className="grid grid-cols-3 gap-2">
       <div className="flex flex-col gap-2">
-        <CardTitle>
+        <Label htmlFor="participants">
           인원 수 <span className="text-text-sub">*</span>
-        </CardTitle>
+        </Label>
         <Input
+          id="participants"
           type="number"
           {...register("maxParticipants", {
             valueAsNumber: true,
@@ -50,12 +53,15 @@ export default function PreferenceSelectSection() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <CardTitle>성별</CardTitle>
+        <Label htmlFor="gender-preference">
+          성별 <span className="text-text-sub">*</span>
+        </Label>
         <Controller
           name="genderPreference"
+          rules={{ required: "성별을 선택해주세요" }}
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="!h-13 w-full">
+              <SelectTrigger id="gender-preference" className="!h-13 w-full">
                 <SelectValue placeholder="ex. 성별 무관" />
               </SelectTrigger>
               <SelectContent>
@@ -69,12 +75,16 @@ export default function PreferenceSelectSection() {
             </Select>
           )}
         />
+        {errors.genderPreference && (
+          <span className="text-xs text-red-500">{errors.genderPreference.message}</span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <CardTitle>연령대</CardTitle>
+        <Label htmlFor="age-range-min">연령대</Label>
         <div className="flex gap-2">
           <Input
+            id="age-range-min"
             type="number"
             {...register("ageRangeMin", {
               valueAsNumber: true,
@@ -91,6 +101,7 @@ export default function PreferenceSelectSection() {
             className="h-13"
           />
           <Input
+            id="age-range-max"
             type="number"
             {...register("ageRangeMax", {
               valueAsNumber: true,
@@ -99,11 +110,25 @@ export default function PreferenceSelectSection() {
                 const min = watch("ageRangeMin");
                 return !val || !min || val >= min || "최소값보다 커야 합니다";
               },
+              min: {
+                value: 19,
+                message: "만 19세 이상 성인만 모집 가능합니다.",
+              },
+              max: {
+                value: 99,
+                message: "입력 가능한 연령 범위가 아닙니다.",
+              },
             })}
             placeholder="ex. 100"
             className="h-13"
           />
         </div>
+        {errors.ageRangeMin && (
+          <span className="text-xs text-red-500">{errors.ageRangeMin.message}</span>
+        )}
+        {errors.ageRangeMax && (
+          <span className="text-xs text-red-500">{errors.ageRangeMax.message}</span>
+        )}
       </div>
     </CardContent>
   );
