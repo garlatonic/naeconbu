@@ -3,6 +3,11 @@ export type ReviewPostWrite = {
   title: string;
   rating: number;
   content: string;
-  images: string;
-  activityTags: string[];
+  images?: File[];
+  activityTags?: string[];
+};
+
+export type PhotoUploadSectionProps = {
+  images: File[];
+  onChangeImages: (files: File[]) => void;
 };

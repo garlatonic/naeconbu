@@ -30,7 +30,6 @@ export default function ReviewWriteMain({ concertId }: { concertId: number }) {
       title: "",
       rating: 0,
       content: "",
-      images: "",
       activityTags: [],
     },
   });
@@ -43,13 +42,14 @@ export default function ReviewWriteMain({ concertId }: { concertId: number }) {
   } = methods;
 
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
   const onCheckedChange = (isConfirmed: boolean) => {
     setIsConfirmed(isConfirmed);
   };
 
   // 등록 버튼
   const onSubmitReview = async (data: ReviewPostWrite) => {
-    const finalData = { ...data };
+    const finalData = { ...data, images };
 
     try {
       const isSuccess = await createReviewPost(finalData);
@@ -84,7 +84,7 @@ export default function ReviewWriteMain({ concertId }: { concertId: number }) {
             <ReviewTitleSection />
             <ReviewRatingSection />
             <ReviewConcertSection />
-            <PhotoUploadSection />
+            <PhotoUploadSection images={images} onChangeImages={setImages} />
             <div className="px-6">
               <Separator />
             </div>
