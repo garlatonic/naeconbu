@@ -217,6 +217,14 @@ export interface Leg {
     // 경로 선형 (지도 그리기용)
     linestring: string; // "lon,lat lon,lat ..." 형태의 문자열
   };
+  Lane?: Array<{
+    // 버스 노선 옵션들 (여러 노선 선택 가능)
+    routeColor?: string;
+    route?: string;
+    routeId?: string;
+    service?: number;
+    type?: number;
+  }>;
 }
 
 // 4. 위치 좌표 객체 (TMAP 내부용)
@@ -305,7 +313,7 @@ export type NearbyPlaces = {
 };
 
 // 콘서트 장소 좌표 타입
-export type ConcertCoords = { lat: number; lon: number };
+export type ConcertCoords = { lon: number; lat: number };
 
 // 플래너 링크
 export type PlannerShareLink = {
