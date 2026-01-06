@@ -71,7 +71,10 @@ export default function MateWriteMain() {
   };
 
   // 취소 버튼
-  const onCancelMate = () => {};
+  // TODO : 작성 중 내용 확인
+  const onCancelMate = () => {
+    router.push(`/concert-mate`);
+  };
 
   return (
     <FormProvider {...methods}>
