@@ -46,6 +46,10 @@ import {
 import TransitRouteList from "../timeline/TransitRouteList";
 import { Separator } from "@/components/ui/separator";
 
+// 경로 정보 조회 실패 시 사용할 기본 소요 시간 (분)
+const DEFAULT_CAR_DURATION_MINUTES = 60; // 자동차: 평균 도심 이동 시간 고려
+const DEFAULT_WALK_DURATION_MINUTES = 30; // 도보: 평균 도보 이동 시간 고려
+
 // 시간에 분 단위 더하기
 function addMinutesToTime(timeStr: string, minutes: number): string {
   const [hours, mins] = timeStr.split(":").map(Number);
@@ -99,10 +103,10 @@ export default function AddScheduleDialog({
   const [isRouteFetching, setIsRouteFetching] = useState(false);
 
   // 경로 데이터 state
-  const [transportData, setRouteData] = useState<Itinerary[]>([]);
+  const [transportType, setTransportType] = useState<TransportType | null>(null);
+  const [routeData, setRouteData] = useState<Itinerary[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<Itinerary | null>(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
-  const [transportType, setTransportType] = useState<TransportType | null>(null);
   const [carRouteSummary, setCarRouteSummary] = useState<KakaoMapSummary | null>(null);
   const [walkRouteSummary, setWalkRouteSummary] = useState<TMapWalkRoute | null>(null);
 
@@ -372,7 +376,7 @@ export default function AddScheduleDialog({
         return;
       }
 
-      if (transportType === "PUBLIC_TRANSPORT" && !selectedRoute && transportData.length > 0) {
+      if (transportType === "PUBLIC_TRANSPORT" && !selectedRoute && routeData.length > 0) {
         toast.error("추천 경로 중 하나를 선택해주세요.");
         return;
       }
@@ -458,9 +462,9 @@ export default function AddScheduleDialog({
           // 요약 정보 없을 때 기본값 설정
           scheduleData = {
             ...scheduleData,
-            duration: 60, // 기본 1시간
+            duration: DEFAULT_CAR_DURATION_MINUTES,
             transportRoute: {
-              totalTime: 3600, // 1시간(초)
+              totalTime: DEFAULT_CAR_DURATION_MINUTES * 60,
               totalDistance: 0,
               totalWalkTime: 0,
               totalWalkDistance: 0,
@@ -496,11 +500,11 @@ export default function AddScheduleDialog({
           // 요약 정보 없을 때 기본값 설정
           scheduleData = {
             ...scheduleData,
-            duration: 30, // 기본 30분
+            duration: DEFAULT_WALK_DURATION_MINUTES,
             transportRoute: {
-              totalTime: 1800, // 30분(초)
+              totalTime: DEFAULT_WALK_DURATION_MINUTES * 60,
               totalDistance: 0,
-              totalWalkTime: 1800,
+              totalWalkTime: DEFAULT_WALK_DURATION_MINUTES * 60,
               totalWalkDistance: 0,
               transferCount: 0,
               leg: [],
@@ -776,16 +780,16 @@ export default function AddScheduleDialog({
                   {!isRouteFetching &&
                     startScheduleId &&
                     endScheduleId &&
-                    transportData.length === 0 &&
+                    routeData.length === 0 &&
                     !carRouteSummary &&
                     !walkRouteSummary && (
                       <div className="border-input text-muted-foreground flex items-center justify-center rounded-md border py-4 text-sm">
                         선택한 출발지와 도착지 사이의 경로 정보가 없습니다.
                       </div>
                     )}
-                  {!isRouteFetching && transportData.length > 0 && (
+                  {!isRouteFetching && routeData.length > 0 && (
                     <TransitRouteList
-                      itineraries={transportData}
+                      itineraries={routeData}
                       selectedIndex={selectedRouteIndex}
                       onSelect={(route, index) => {
                         setSelectedRoute(route);
