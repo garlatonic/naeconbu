@@ -7,18 +7,17 @@ import ReviewPostSidebar from "@/components/review/post/sidebar/ReviewPostSideba
 import { ConcertDetail } from "@/types/concerts";
 import { ReviewDetailData } from "@/types/community/concert-review";
 
-// TODO: 똑같이 구현하기 위해선 아래 세 개의 데이터가 필요합니다
-
 export default function ReviewPostMain({
   concertDetail,
   reviewDetail,
   isAuthor,
+  postId,
   isLiked,
 }: {
   concertDetail: ConcertDetail;
-  // TODO: 아래 ReviewDetailData는 동행구인 상세 데이터 타입으로 변경하셔야해요
   reviewDetail: ReviewDetailData;
   isAuthor: boolean;
+  postId: string;
   isLiked: boolean;
 }) {
   return (
@@ -27,11 +26,10 @@ export default function ReviewPostMain({
         {/*왼쪽 파트*/}
         <section className={"flex w-full flex-col gap-8"}>
           <ReviewConcertCard concertDetail={concertDetail} />
-          {/*TODO: 아래에서 전달하는 post 타입은 구인글이나 후기글 상세 조회에서 동일한 타입입니다*/}
           <ReviewPostHeader post={reviewDetail.post} isAuthor={isAuthor} />
           <Separator />
           <ReviewPostBody reviewDetail={reviewDetail} initialIsLiked={isLiked} />
-          <ReviewPostComments />
+          <ReviewPostComments postId={postId} />
         </section>
         {/*오른쪽 파트*/}
         <ReviewPostSidebar authorId={reviewDetail.post.userId} />
