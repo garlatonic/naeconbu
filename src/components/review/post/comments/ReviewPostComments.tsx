@@ -4,9 +4,14 @@ import { getAuthStatus } from "@/lib/api/auth/auth.server";
 import { getCommentsList } from "@/lib/api/community/community.server";
 import { getUserInfo, getUsersMe } from "@/lib/api/user/user.server";
 import { compareDesc } from "date-fns";
+import { notFound } from "next/navigation";
 
 export default async function ReviewPostComments({ postId }: { postId: string }) {
-  const postIdNum = Number(postId) || 1;
+  const postIdNum = Number(postId);
+
+  if (!postIdNum || isNaN(postIdNum)) {
+    notFound(); // 404 페이지로 이동
+  }
 
   const isLoggedIn = await getAuthStatus();
 
@@ -18,6 +23,7 @@ export default async function ReviewPostComments({ postId }: { postId: string })
   const currentUserId = currentUser?.id;
 
   // 유저 정보 합치기
+  // TODO : 캐싱 최적화로 요청 횟수를 줄이는 것을 고려
   const userIds = Array.from(new Set(comments.map((c) => c.userId)));
   const userProfiles = await Promise.all(userIds.map((id) => getUserInfo(id)));
 
@@ -29,7 +35,7 @@ export default async function ReviewPostComments({ postId }: { postId: string })
         author: user?.nickname || "알 수 없는 사용자",
         avatar: user?.profileImageUrl || "",
         // 댓글 본인 여부 확인
-        isMyComment: String(comment.userId) === String(currentUserId),
+        isMyComment: comment.userId === currentUserId,
       };
     })
     .sort((a, b) => compareDesc(new Date(a.createdDate), new Date(b.createdDate)));

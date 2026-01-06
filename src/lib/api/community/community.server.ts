@@ -5,6 +5,7 @@ import {
   PostListResponse,
 } from "@/types/community";
 import ServerApi from "@/utils/helpers/serverApi";
+// TODO : postId 매개변수의 데이터 유형이 일관성 확보
 
 /**
  * 카테고리별 게시글 목록 조회

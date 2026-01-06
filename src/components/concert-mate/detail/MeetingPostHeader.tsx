@@ -64,7 +64,7 @@ export default function MeetingPostHeader({
     }
   };
 
-  // TODO : close된 게시글 감추기 등 정책 추가
+  // TODO : close된 게시글 감추기 등 정책 추가 고려
   const handlerClosed = async () => {
     try {
       // 서버에 상태 변경 요청
@@ -76,8 +76,12 @@ export default function MeetingPostHeader({
         toast.success("동행 구인 모집을 마감했습니다.");
         router.refresh();
       }
-    } catch {
-      toast.error("마감 처리 중 오류가 발생했습니다.");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("마감 처리 중 오류가 발생했습니다.");
+      }
     }
   };
 

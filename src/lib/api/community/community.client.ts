@@ -87,7 +87,7 @@ export const createComment = async ({
     }
 
     const resComment = await res.json();
-    return resComment.data; // 확인 필요
+    return resComment.data;
   } catch (error) {
     console.error("Error Writing a comment:", error);
     return null;

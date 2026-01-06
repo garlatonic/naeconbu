@@ -115,9 +115,7 @@ export default function CommentItem({ res, comments, postId }: CommentItemProps)
                            */}
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
                   </div>
 
                   <p>{comment.content}</p>

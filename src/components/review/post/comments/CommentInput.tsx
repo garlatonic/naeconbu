@@ -29,7 +29,11 @@ export default function CommentInput({
 
   const handleSubmit = async () => {
     const finalComment = comment.trim();
-    if (!finalComment) return;
+
+    if (!finalComment) {
+      toast.info("댓글 내용을 입력해주세요!");
+      return;
+    }
 
     setIsLoading(true);
 
