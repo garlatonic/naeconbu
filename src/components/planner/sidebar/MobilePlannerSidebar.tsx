@@ -8,7 +8,6 @@ import PlannerSidebarContents from "./PlannerSidebarContents";
 import { PlannerParticipant, ScheduleDetail } from "@/types/planner";
 
 interface MobilePlannerSidebarProps {
-  planId: string;
   participants: PlannerParticipant[];
   schedules: ScheduleDetail[];
 }

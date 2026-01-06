@@ -21,13 +21,21 @@ export default function PlannerNearbyRestaurants({
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    startTransition(async () => {
+    let cancelled = false;
+    const fetchNearbyRestaurants = async () => {
       const data = await getNearbyRestaurants(
         concertSchedule.locationLon!,
         concertSchedule.locationLat!
       );
-      setNearbyRestaurants(data);
-    });
+      if (cancelled) return;
+      startTransition(() => {
+        setNearbyRestaurants(data);
+      });
+    };
+    fetchNearbyRestaurants();
+    return () => {
+      cancelled = true;
+    };
   }, [concertSchedule.locationLon, concertSchedule.locationLat]);
 
   const displayedRestaurants = isExpanded
@@ -41,6 +49,10 @@ export default function PlannerNearbyRestaurants({
         <div className="flex items-center justify-center py-10">
           <Loader2Icon className="text-muted-foreground animate-spin" />
         </div>
+      ) : nearbyRestaurants.length === 0 ? (
+        <div className="text-text-sub flex items-center justify-center py-10 text-sm">
+          주변에 식당이 없습니다.
+        </div>
       ) : (
         <>
           <ul
@@ -49,7 +61,7 @@ export default function PlannerNearbyRestaurants({
               isExpanded && "scrollbar-hide lg:max-h-[300px] lg:overflow-y-auto lg:pr-2"
             )}
           >
-            {displayedRestaurants.map((restaurant, index) => {
+            {displayedRestaurants.map((restaurant) => {
               const distance = calculateDistance(
                 concertSchedule.locationLat!,
                 concertSchedule.locationLon!,
@@ -58,7 +70,10 @@ export default function PlannerNearbyRestaurants({
               );
 
               return (
-                <li key={index} className="bg-bg-sub flex flex-col gap-1 rounded-xl p-4">
+                <li
+                  key={restaurant.place_url}
+                  className="bg-bg-sub flex flex-col gap-1 rounded-xl p-4"
+                >
                   <strong>{restaurant.place_name}</strong>
                   <span className="text-text-sub text-xs">{restaurant.road_address_name}</span>
                   <div className="flex justify-between text-xs">
@@ -83,7 +98,7 @@ export default function PlannerNearbyRestaurants({
               onClick={() => setIsExpanded(!isExpanded)}
             >
               <ChevronDownIcon
-                className={`size-4 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                className={cn("size-4 transition-transform", isExpanded && "rotate-180")}
               />
               {isExpanded
                 ? "숨기기"

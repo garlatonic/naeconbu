@@ -22,6 +22,11 @@ export default function PlannerMapView({ schedules }: { schedules: ScheduleDetai
     return concert ? { lat: concert.locationLat!, lon: concert.locationLon! } : null;
   }, [schedules]);
 
+  const schedulesWithLocation = useMemo(
+    () => schedules.filter((s) => s.location && s.locationLat != null && s.locationLon != null),
+    [schedules]
+  );
+
   const uniqueCoords = useMemo(() => {
     const coordMap = new Map<string, { lat: number; lon: number; isConcert: boolean }>();
 
@@ -109,38 +114,45 @@ export default function PlannerMapView({ schedules }: { schedules: ScheduleDetai
         return new kakao.maps.MarkerImage(imageSrc, size, { offset });
       };
 
-      // 새 마커 추가 (번호 표시 + 클릭 시 확대)
-      uniqueCoords.forEach(({ lat, lon, isConcert }, idx) => {
-        const marker = new kakao.maps.Marker({
-          position: new kakao.maps.LatLng(lat, lon),
-          image: makeMarkerImage(String(idx + 1), isConcert),
+      try {
+        // 새 마커 추가 (번호 표시 + 클릭 시 확대)
+        uniqueCoords.forEach(({ lat, lon, isConcert }, idx) => {
+          const marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(lat, lon),
+            image: makeMarkerImage(String(idx + 1), isConcert),
+          });
+          marker.setMap(map);
+          markersRef.current.push(marker);
+          kakao.maps.event.addListener(marker, "click", () => {
+            map.setCenter(new kakao.maps.LatLng(lat, lon));
+            map.setLevel(3, { animate: { duration: 300 } });
+          });
         });
-        marker.setMap(map);
-        markersRef.current.push(marker);
-
-        kakao.maps.event.addListener(marker, "click", () => {
+        // 좌표가 하나면 적당한 확대 레벨로 센터만 이동
+        if (uniqueCoords.length === 1) {
+          const { lat, lon } = uniqueCoords[0];
+          map.setLevel(3);
           map.setCenter(new kakao.maps.LatLng(lat, lon));
-          map.setLevel(3, { animate: { duration: 300 } });
-        });
-      });
-
-      // 좌표가 하나면 적당한 확대 레벨로 센터만 이동
-      if (uniqueCoords.length === 1) {
-        const { lat, lon } = uniqueCoords[0];
-        map.setLevel(3);
-        map.setCenter(new kakao.maps.LatLng(lat, lon));
-        return;
+          return;
+        }
+        // 여러 좌표가 모두 보이도록 bounds 적용
+        const bounds = new kakao.maps.LatLngBounds();
+        uniqueCoords.forEach(({ lat, lon }) => bounds.extend(new kakao.maps.LatLng(lat, lon)));
+        map.setBounds(bounds, 40, 40, 40, 40);
+      } catch (error) {
+        // Kakao Maps SDK 초기화 중 오류가 발생한 경우 사용자에게 알리고 로그를 남깁니다.
+        console.error("Failed to initialize Kakao map:", error);
+        if (typeof window !== "undefined") {
+          window.alert("지도를 불러오는 데 실패했어요. 페이지를 새로고침한 뒤 다시 시도해 주세요.");
+        }
       }
-
-      // 여러 좌표가 모두 보이도록 bounds 적용
-      const bounds = new kakao.maps.LatLngBounds();
-      uniqueCoords.forEach(({ lat, lon }) => bounds.extend(new kakao.maps.LatLng(lat, lon)));
-      map.setBounds(bounds, 40, 40, 40, 40);
     });
   }, [uniqueCoords]);
 
-  const coordsUnion = uniqueCoords.map((c) => `${c.lat},${c.lon}`).join("/");
-  const mapLink = `https://www.google.com/maps/dir/${coordsUnion}`;
+  const mapLink = useMemo(() => {
+    const coordsUnion = uniqueCoords.map((c) => `${c.lat},${c.lon}`).join("/");
+    return `https://www.google.com/maps/dir/${coordsUnion}`;
+  }, [uniqueCoords]);
 
   return (
     <div className="bg-bg-main border-border border p-6">
@@ -156,44 +168,48 @@ export default function PlannerMapView({ schedules }: { schedules: ScheduleDetai
           )}
         </div>
       </AspectRatio>
-      {schedules.filter((s) => s.location && s.locationLat != null && s.locationLon != null)
-        .length > 0 && (
+      {schedulesWithLocation.length > 0 && (
         <ul className="space-y-3">
-          {schedules
-            .filter((s) => s.location && s.locationLat != null && s.locationLon != null)
-            .map((schedule, idx) => {
-              const isConcert = schedule.isMainEvent || schedule.concertId != null;
-              const distance =
-                concertCoords &&
-                schedule.locationLat != null &&
-                schedule.locationLon != null &&
-                !isConcert
-                  ? calculateDistance(
-                      concertCoords.lat,
-                      concertCoords.lon,
-                      schedule.locationLat,
-                      schedule.locationLon
-                    )
-                  : null;
-              return (
-                <li key={schedule.id || idx} className="flex justify-between gap-2">
-                  <strong className="flex gap-2">
-                    <Badge
-                      variant={isConcert ? "destructive" : "outline"}
-                      className="size-5 items-center p-0 leading-1"
-                    >
-                      {idx + 1}
-                    </Badge>
-                    <span className="text-text-main line-clamp-1">{schedule.location}</span>
-                  </strong>
-                  {isConcert ? (
-                    <Music4Icon className="text-text-sub size-4" />
-                  ) : (
-                    <span className="text-text-sub">{formatDistance(distance!)}</span>
-                  )}
-                </li>
-              );
-            })}
+          {schedulesWithLocation.map((schedule, idx) => {
+            const isConcert = schedule.isMainEvent || schedule.concertId != null;
+            const distance =
+              concertCoords &&
+              schedule.locationLat != null &&
+              schedule.locationLon != null &&
+              !isConcert
+                ? calculateDistance(
+                    concertCoords.lat,
+                    concertCoords.lon,
+                    schedule.locationLat,
+                    schedule.locationLon
+                  )
+                : null;
+
+            const scheduleKey =
+              schedule.id ??
+              `${schedule.concertId ?? "no-concert-id"}-${schedule.location ?? "no-location"}-${
+                schedule.locationLat ?? "no-lat"
+              }-${schedule.locationLon ?? "no-lon"}`;
+
+            return (
+              <li key={scheduleKey} className="flex justify-between gap-2">
+                <strong className="flex gap-2">
+                  <Badge
+                    variant={isConcert ? "destructive" : "outline"}
+                    className="size-5 items-center p-0 leading-1"
+                  >
+                    {idx + 1}
+                  </Badge>
+                  <span className="text-text-main line-clamp-1">{schedule.location}</span>
+                </strong>
+                {isConcert ? (
+                  <Music4Icon className="text-text-sub size-4" />
+                ) : distance != null ? (
+                  <span className="text-text-sub">{formatDistance(distance)}</span>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       )}
       <Link href={mapLink} target="_blank" rel="noopener noreferrer" className="block">

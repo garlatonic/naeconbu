@@ -43,7 +43,7 @@ export default async function PlannerBodySection({
         </div>
       </div>
       {/* === 모바일 사이드바 === */}
-      <MobilePlannerSidebar planId={planId} participants={participants} schedules={schedules} />
+      <MobilePlannerSidebar participants={participants} schedules={schedules} />
     </section>
   );
 }
