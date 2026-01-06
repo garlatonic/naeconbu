@@ -1,3 +1,5 @@
+import { ConcertWithTicket } from "../home";
+
 // 콘서트 타입
 export interface Concert {
   id: string;
@@ -39,4 +41,9 @@ export interface LikedArtist {
   imageUrl: string;
   nameKo: string;
   isLiked: boolean;
+}
+
+// 찜한 아티스트의 공연 정보 포함 타입
+export interface LikedArtistWithConcerts extends LikedArtist {
+  concerts: ConcertWithTicket[];
 }

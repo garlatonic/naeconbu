@@ -1,10 +1,10 @@
 import { ResponseData } from "@/types/api";
 import { Concert, ConcertWithTicket } from "@/types/home";
-import { LikedArtist } from "@/types/my-page";
+import { LikedArtist, LikedArtistWithConcerts } from "@/types/my-page";
 import { PAGE_SIZE } from "@/utils/helpers/constants";
 import { createEmptyResponse } from "@/utils/helpers/createEmptyResponse";
 import ServerApi from "@/utils/helpers/serverApi";
-import { getTicketOfficesByConcertId } from "../concerts/concerts.server";
+import { getConcertsByArtistId, getTicketOfficesByConcertId } from "../concerts/concerts.server";
 
 /**
  * 찜한 공연 목록 조회
@@ -118,7 +118,43 @@ export const getAllLikedConcerts = async (
     return createEmptyResponse("찜한 공연 목록을 가져오는데 실패했습니다");
   }
 };
-// TODO : 찜한 아티스트 싹 불러오기
-// TODO : 내가 속한 외출플래너 싹 불러오기
-// TODO : 내가 찜한 콘서트에서 예정된 콘서트 필터링
-// TODO : 최근 찜한 콘서트/아티스트 구분없이 3개까지만
+
+// 찜한 아티스트의 전체 공연 조회
+export const getLikedArtistsConcerts = async (): Promise<
+  ResponseData<LikedArtistWithConcerts[] | null>
+> => {
+  try {
+    const res = await ServerApi(`/api/v1/artists/likes`, {
+      method: "GET",
+    });
+    if (!res.ok) {
+      throw new Error("찜한 아티스트 목록을 불러오는데 실패했습니다.");
+    }
+    const data = await res.json();
+    const artistConcerts = await Promise.all(
+      data.data.map(async (artist: LikedArtist) => {
+        try {
+          const concerts = await getConcertsByArtistId({ artistId: artist.id, page: 0, size: 100 });
+
+          return {
+            ...artist,
+            concerts: concerts.data,
+          };
+        } catch (error) {
+          console.error(`Error fetching concerts for artist ${artist.id}:`, error);
+          return {
+            ...artist,
+            concerts: [],
+          };
+        }
+      })
+    );
+    return {
+      ...data,
+      data: artistConcerts,
+    };
+  } catch (error) {
+    console.error("Error fetching liked artists' concerts:", error);
+    return createEmptyResponse("찜한 아티스트의 공연 목록을 가져오는데 실패했습니다");
+  }
+};

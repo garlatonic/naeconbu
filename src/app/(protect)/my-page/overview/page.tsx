@@ -1,6 +1,10 @@
 import MyPageAside from "@/components/my-page/overview/MyPageAside";
 import MyPageCalendar from "@/components/my-page/overview/MyPageCalendar";
-import { getAllLikedConcerts, getLikedArtistList } from "@/lib/api/myPage/myPage.server";
+import {
+  getAllLikedConcerts,
+  getLikedArtistList,
+  getLikedArtistsConcerts,
+} from "@/lib/api/myPage/myPage.server";
 import { getPlanList } from "@/lib/api/planner/planner.server";
 
 export default async function Page() {
@@ -15,6 +19,21 @@ export default async function Page() {
 
   if (likedArtists.data == null) {
     likedArtists.data = [];
+  }
+
+  const likedConcertsFromArtists = await getLikedArtistsConcerts();
+
+  if (likedConcertsFromArtists.data != null) {
+    // 좋아요한 아티스트의 공연들 중복 제거 후 찜한 공연 목록에 추가
+    const existingConcertIds = new Set(likedConcerts.data.map((concert) => concert.id));
+    likedConcertsFromArtists.data.forEach((artistWithConcerts) => {
+      artistWithConcerts.concerts.forEach((concert) => {
+        if (!existingConcertIds.has(concert.id)) {
+          likedConcerts.data!.push(concert);
+          existingConcertIds.add(concert.id);
+        }
+      });
+    });
   }
 
   return (
