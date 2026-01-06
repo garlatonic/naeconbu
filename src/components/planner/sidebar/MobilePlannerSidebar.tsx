@@ -5,8 +5,13 @@ import { Button } from "@/components/ui/button";
 import { MapIcon } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import PlannerSidebarContents from "./PlannerSidebarContents";
+import { PlannerParticipant } from "@/types/planner";
 
-export default function MobilePlannerSidebar() {
+export default function MobilePlannerSidebar({
+  participants,
+}: {
+  participants: PlannerParticipant[];
+}) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   return (
     <>
@@ -27,7 +32,7 @@ export default function MobilePlannerSidebar() {
               <SheetTitle>공연 정보 및 지도</SheetTitle>
             </SheetHeader>
             <div className="h-[calc(100%-80px)] overflow-y-auto pb-10">
-              <PlannerSidebarContents />
+              <PlannerSidebarContents participants={participants} />
             </div>
           </SheetContent>
         </Sheet>
