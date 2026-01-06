@@ -38,16 +38,12 @@ export type ReviewDetailData = {
   imageUrls: string[];
 };
 
+export type RatingDistribution = Record<1 | 2 | 3 | 4 | 5, number>;
+
 export type ReviewSummary = {
   totalCount: number;
   averageRating: number;
-  ratingDistribution: {
-    1: number;
-    2: number;
-    3: number;
-    4: number;
-    5: number;
-  };
+  ratingDistribution: RatingDistribution;
 };
 
 export type ReviewListItem = {
