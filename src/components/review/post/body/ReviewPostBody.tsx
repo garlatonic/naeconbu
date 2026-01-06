@@ -18,11 +18,9 @@ import {
 import Image from "next/image";
 
 export default function ReviewPostBody({
-  showBadge,
   reviewDetail,
   initialIsLiked,
 }: {
-  showBadge: boolean;
   reviewDetail: ReviewDetailData;
   initialIsLiked: boolean;
 }) {

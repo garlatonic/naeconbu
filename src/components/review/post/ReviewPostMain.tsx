@@ -28,7 +28,7 @@ export default function ReviewPostMain({
           <ReviewConcertCard concertDetail={concertDetail} />
           <ReviewPostHeader post={reviewDetail.post} isAuthor={isAuthor} />
           <Separator />
-          <ReviewPostBody showBadge={false} reviewDetail={reviewDetail} initialIsLiked={isLiked} />
+          <ReviewPostBody reviewDetail={reviewDetail} initialIsLiked={isLiked} />
           <ReviewPostComments postId={postId} />
         </section>
         {/*오른쪽 파트*/}
