@@ -10,6 +10,18 @@ export type PlanParticipants = {
   role: PlannerParticipantRole;
 };
 
+export type PlanList = {
+  id: number;
+  concertId: number;
+  createdBy: number;
+  title: string;
+  planDate: string;
+  createdDate: string;
+  modifiedDate: string;
+  scheduleCount: number;
+  totalDuration: number;
+};
+
 export type PlanDetail = {
   id: number;
   concertId: number;
@@ -53,6 +65,17 @@ export type ScheduleDetail = {
   concertMaxPrice?: number;
   createdDate?: string;
   modifiedDate?: string;
+  transportRoute?: {
+    totalTime: number;
+    totalDistance: number;
+    totalWalkTime: number;
+    totalWalkDistance: number;
+    transferCount: number;
+    leg: Leg[];
+    fare: {
+      taxi?: number;
+    };
+  };
 };
 
 export type ScheduleLocationProps = {
@@ -289,3 +312,21 @@ export type PlannerShareLink = {
 };
 
 export type PlannerParticipantRole = "OWNER" | "EDITOR" | "VIEWER" | null;
+
+export type PlannerParticipantInviteStatus =
+  | "JOINED"
+  | "PENDING"
+  | "ACCEPTED"
+  | "DECLINED"
+  | "LEFT"
+  | "REMOVED";
+
+export type PlannerParticipant = {
+  participantId: string;
+  userId: number;
+  nickname: string;
+  email: string;
+  profileImage: string;
+  inviteStatus: PlannerParticipantInviteStatus;
+  role: PlannerParticipantRole;
+};
