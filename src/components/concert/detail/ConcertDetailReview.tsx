@@ -54,7 +54,7 @@ export default function ConcertDetailReview({
     return <div>리뷰 정보를 불러올 수 없습니다.</div>;
   }
 
-  const { summary } = data;
+  const { summary, reviews } = data;
   const filledStarCount = Math.floor(summary.averageRating);
 
   return (
@@ -95,11 +95,25 @@ export default function ConcertDetailReview({
           totalCount={summary.totalCount}
         />
       </div>
-      {Array.from({ length: 3 }).map((_, index) => (
-        <ConcertReviewCard key={index} />
-      ))}
-
-      <LoadMoreBtn />
+      {reviews.length > 0 ? (
+        <>
+          {reviews.map((review) => (
+            <ConcertReviewCard key={review.postId} review={review} concertId={concertId} />
+          ))}
+          {reviews.length > 0 && <LoadMoreBtn />}
+        </>
+      ) : (
+        <div className="border-border flex flex-col items-center gap-3 rounded-xl border border-dashed p-8">
+          <p className="text-text-sub text-sm">아직 작성된 리뷰가 없습니다.</p>
+          {isLoggedIn && (
+            <Link href={`/concerts/${concertId}/review/write`}>
+              <Button variant="ghost" size="sm">
+                첫 리뷰 작성하기
+              </Button>
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 }
