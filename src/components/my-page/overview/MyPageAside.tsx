@@ -1,7 +1,8 @@
+"use client";
+
 import { PLACEHOLDER_IMAGE } from "@/components/home/upcoming-slider/constants";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { getLikedConcertCount } from "@/lib/api/myPage/myPage.server";
-import { ConcertWithTicket } from "@/types/home";
+import { ConcertWithTicket } from "@/types/my-page";
 import { LikedArtist } from "@/types/my-page";
 import { PlannerListWithDetails } from "@/types/planner";
 import { formatDateRange } from "@/utils/helpers/formatters";
@@ -9,22 +10,18 @@ import { CalendarCheck, MicVocalIcon, SpotlightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function MyPageAside({
+export default function MyPageAside({
   likedConcerts,
+  likedConcertsCount,
   likedArtists,
   joinedPlanners,
 }: {
   likedConcerts: ConcertWithTicket[];
+  likedConcertsCount: number;
   likedArtists: LikedArtist[];
   joinedPlanners: PlannerListWithDetails[];
 }) {
-  const likedConcertsCount = await getLikedConcertCount();
-
-  if (likedConcertsCount.data == null) {
-    likedConcertsCount.data = 0;
-  }
-
-  // 찜한 콘서트 배열에서 예정된 콘서트 일정 3개까지 가져오기
+  // 찜한 콘서트 배열에서 예정된 콘서트 일정 필터링 및 정렬
   const upcomingLikedConcerts = likedConcerts
     .sort((a, b) => {
       return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
@@ -37,8 +34,7 @@ export default async function MyPageAside({
         return true;
       }
       return false;
-    })
-    .slice(0, 3);
+    });
 
   return (
     <div className="max-w-125 flex-1">
@@ -54,7 +50,7 @@ export default async function MyPageAside({
                 <div className="flex-1">
                   <h5 className="text-text-sub text-sm font-medium">찜한 콘서트</h5>
                   <p className="text-text-main line-clamp-1 text-base font-medium">
-                    {likedConcertsCount.data ?? 0}개
+                    {likedConcertsCount}개
                   </p>
                 </div>
               </Link>
@@ -118,22 +114,6 @@ export default async function MyPageAside({
                 </div>
               </li>
             ))}
-          </ul>
-        </div>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-base font-bold">최근 글</h4>
-            <Link href="/my-page/board" className="text-text-sub text-sm font-medium">
-              모두 보기
-            </Link>
-          </div>
-          <ul className="space-y-3">
-            <li className="flex items-center gap-4">
-              <Link href={"#"} className="space-y-1">
-                <h5 className="text-text-main line-clamp-1 text-base font-medium">아티스트명</h5>
-                <p className="text-text-sub text-xs font-medium">글 제목 · 3일전</p>
-              </Link>
-            </li>
           </ul>
         </div>
       </div>

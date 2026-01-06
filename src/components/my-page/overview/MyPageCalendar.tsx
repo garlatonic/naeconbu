@@ -7,7 +7,7 @@ import { Button } from "../../ui/button";
 import { EventContextType } from "@/types/my-page";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import MyPageCalendarList from "./MyPageCalendarList";
-import { ConcertWithTicket } from "@/types/home";
+import { ConcertWithTicket } from "@/types/my-page";
 import { PlannerListWithDetails } from "@/types/planner";
 
 const EventContext = createContext<EventContextType>({
@@ -71,13 +71,17 @@ const CustomCaption = (props: MonthCaptionProps) => {
 // 커스텀 날짜 버튼 컴포넌트
 const CustomDay = (props: DayProps) => {
   const { day, modifiers } = props;
-  const { events, schedules, onDateClick } = useContext(EventContext);
+  const { schedules, onDateClick, concertsByDate } = useContext(EventContext);
 
   const dateKey = `${day.date.getFullYear()}-${String(day.date.getMonth() + 1).padStart(2, "0")}-${String(day.date.getDate()).padStart(2, "0")}`;
   const dayNumber = day.date.getDate();
 
-  const eventCount = events[dateKey] || 0; // 콘서트 일정 개수
   const scheduleCount = schedules[dateKey] || 0; // 플래너 일정 개수 (필요시 데이터 연동)
+
+  // 해당 날짜의 콘서트 구분 (찜한 공연 / 아티스트 공연)
+  const concertsOnDate = concertsByDate?.[dateKey] || [];
+  const likedConcertCount = concertsOnDate.filter((c) => !c.isLikedArtistConcert).length;
+  const artistConcertCount = concertsOnDate.filter((c) => c.isLikedArtistConcert).length;
 
   return (
     <td className="border-r last:border-0">
@@ -102,15 +106,30 @@ const CustomDay = (props: DayProps) => {
       >
         <strong className="text-point-main text-sm font-normal">{dayNumber}</strong>
         {modifiers.today && <span className="text-text-sub text-xs">Today</span>}
-        {/* 이벤트 점 */}
-        {eventCount > 0 && (
+        {/* 찜한 공연 점 (빨간색) */}
+        {likedConcertCount > 0 && (
           <div className="flex items-center gap-1">
             <div className="flex gap-1">
-              {Array.from({ length: Math.min(eventCount, 3) }).map((_, i) => (
+              {Array.from({ length: Math.min(likedConcertCount, 3) }).map((_, i) => (
                 <span key={i} className="bg-point-main size-2 rounded-full" />
               ))}
             </div>
-            {eventCount > 3 && <span className="text-text-sub text-xs">+{eventCount - 3}</span>}
+            {likedConcertCount > 3 && (
+              <span className="text-text-sub text-xs">+{likedConcertCount - 3}</span>
+            )}
+          </div>
+        )}
+        {/* 아티스트 공연 점 */}
+        {artistConcertCount > 0 && (
+          <div className="flex items-center gap-1">
+            <div className="flex gap-1">
+              {Array.from({ length: Math.min(artistConcertCount, 3) }).map((_, i) => (
+                <span key={i} className="border-point-main size-2 rounded-full border-2" />
+              ))}
+            </div>
+            {artistConcertCount > 3 && (
+              <span className="text-text-sub text-xs">+{artistConcertCount - 3}</span>
+            )}
           </div>
         )}
         {/* 플래너 점 */}
@@ -224,7 +243,12 @@ export default function MyPageCalendar({
     <div className="flex-3 space-y-8">
       <section className="border-border w-full rounded-xl border p-8">
         <EventContext.Provider
-          value={{ events: concertEvents, schedules: scheduleEvents, onDateClick: handleDayClick }}
+          value={{
+            events: concertEvents,
+            schedules: scheduleEvents,
+            onDateClick: handleDayClick,
+            concertsByDate,
+          }}
         >
           <Calendar
             mode="single"
@@ -254,9 +278,9 @@ export default function MyPageCalendar({
             }}
           />
           <ul className="*:text-text-main mt-5 flex gap-4 *:flex *:items-center *:gap-2 *:font-medium *:before:size-2 *:before:rounded-full">
-            <li className="before:bg-point-main">콘서트 일정</li>
+            <li className="before:bg-point-main">찜한 공연</li>
+            <li className="before:border-point-main before:border-2">찜한 아티스트 공연</li>
             <li className="before:bg-border">플래너 일정</li>
-            <li className="before:border-point-main before:border-2">선택한 날짜</li>
           </ul>
         </EventContext.Provider>
       </section>

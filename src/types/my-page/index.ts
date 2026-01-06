@@ -1,4 +1,9 @@
-import { ConcertWithTicket } from "../home";
+import { ConcertWithTicket as HomeConcertWithTicket } from "../home";
+
+// 마이페이지에서 사용할 콘서트 타입 (찜한 공연과 아티스트 공연 구분)
+export type ConcertWithTicket = HomeConcertWithTicket & {
+  isLikedArtistConcert?: boolean;
+};
 
 // 콘서트 타입
 export interface Concert {
@@ -32,6 +37,7 @@ export interface EventContextType {
   events: Record<string, number>;
   schedules: Record<string, number>;
   onDateClick?: (date: Date) => void;
+  concertsByDate?: Record<string, ConcertWithTicket[]>;
 }
 
 // 찜한 아티스트

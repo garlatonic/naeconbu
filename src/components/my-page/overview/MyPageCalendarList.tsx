@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ConcertWithTicket } from "@/types/home";
+import { ConcertWithTicket } from "@/types/my-page";
 import { Loader2Icon } from "lucide-react";
 import MyPageConcertCard from "./MyPageConcertCard";
 import { dateToISOString, getConcertStartDate, isSameDay } from "@/utils/helpers/handleDate";

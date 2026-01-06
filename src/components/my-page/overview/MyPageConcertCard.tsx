@@ -3,7 +3,7 @@ import { PLACEHOLDER_IMAGE } from "@/components/home/upcoming-slider/constants";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ConcertWithTicket } from "@/types/home";
+import { ConcertWithTicket } from "@/types/my-page";
 import { formatConcertPrice, formatDateRangeKorean } from "@/utils/helpers/formatters";
 import { Ticket, CalendarIcon, MapPinIcon, TicketsIcon } from "lucide-react";
 import Image from "next/image";
