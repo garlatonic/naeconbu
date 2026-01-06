@@ -48,13 +48,13 @@ export type ReviewSummary = {
 
 export type ReviewListItem = {
   postId: number;
+  userId: number;
   title: string;
   content: string;
   rating: number;
+  likeCount: 0;
+  tags: string[];
   createdDate: string;
-  modifiedDate: string;
-  authorId: number;
-  authorNickname: string;
 };
 
 export type ConcertReviewListResponse = {
