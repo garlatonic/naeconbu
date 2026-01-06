@@ -15,14 +15,11 @@ export default function ReviewPostMain({
   isLiked,
 }: {
   concertDetail: ConcertDetail;
-  // TODO: 아래 ReviewDetailData는 동행구인 상세 데이터 타입으로 변경하셔야해요
   reviewDetail: ReviewDetailData;
   isAuthor: boolean;
   postId: string;
   isLiked: boolean;
 }) {
-  // TODO: 똑같이 구현하기 위해선 아래 세 개의 데이터가 필요합니다
-
   return (
     <section className={"px-15 py-16"}>
       <div className="mx-auto flex w-full max-w-400 gap-12">

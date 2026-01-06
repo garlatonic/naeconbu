@@ -50,7 +50,7 @@ export type MateDetailMainProps = {
 export type MeetingPostBodyProps = {
   showBadge: boolean;
   postDetail: MateDetailDataPost;
-  isLiked: boolean;
+  initialIsLiked: boolean;
   isOpen: boolean;
 };
 

@@ -24,12 +24,7 @@ export default function MateDetailMain({
           <MeetingConcertCard concertDetail={concertDetail} />
           <MeetingPostHeader postDetail={res.post} isAuthor={isAuthor} />
           <Separator />
-          <MeetingPostBody
-            showBadge={true}
-            postDetail={res.post}
-            isLiked={isLiked}
-            isOpen={isOpen}
-          />
+          <MeetingPostBody postDetail={res.post} initialIsLiked={isLiked} isOpen={isOpen} />
           <ReviewPostComments postId={postId} />
         </section>
         {/*오른쪽 파트*/}
