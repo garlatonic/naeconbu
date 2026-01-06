@@ -15,13 +15,18 @@ import LoadMoreBtn from "@/components/common/LoadMoreBtn";
 import { CommentAddUser, CommentResponse } from "@/types/community";
 import ProfileNoImage from "@/components/common/ProfileNoImage";
 import { format } from "date-fns";
+import { deleteComment } from "@/lib/api/community/community.client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CommentItem({
   res,
   comments,
+  postId,
 }: {
   res: CommentResponse | null;
   comments: CommentAddUser[] | undefined;
+  postId: string;
 }) {
   /**
    * TODO:
@@ -31,10 +36,30 @@ export default function CommentItem({
    * - 한 번에 보여줄 갯수 지정
    * - 글자수 제한
    */
+  const router = useRouter();
 
-  const handlerEdit = () => {};
+  // const handlerEdit = () => {};
 
-  const handlerDelete = () => {};
+  const handlerDelete = async (targetCommentId: string) => {
+    try {
+      const success = await deleteComment({
+        postId: String(postId),
+        commentId: String(targetCommentId),
+      });
+
+      if (success) {
+        // TODO : 삭제 여부 한 번 더 체크하는 모달
+        toast.success("댓글이 삭제되었습니다!");
+        router.refresh();
+      } else {
+        toast.error("삭제에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("삭제 중 에러 발생:", error);
+
+      toast.error("서버와 통신 중 오류가 발생했습니다.");
+    }
+  };
 
   // 댓글이 없을 때
   if (!comments || comments.length === 0) {
@@ -83,8 +108,14 @@ export default function CommentItem({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-40" align="end">
-                          <DropdownMenuItem onClick={handlerEdit}>수정하기</DropdownMenuItem>
-                          <DropdownMenuItem onClick={handlerDelete}>삭제하기</DropdownMenuItem>
+                          {/* TODO : 댓글 수정하기
+                            <DropdownMenuItem onClick={handlerEdit}>수정하기</DropdownMenuItem>
+                            */}
+                          <DropdownMenuItem
+                            onClick={() => handlerDelete(String(comment.commentId))}
+                          >
+                            삭제하기
+                          </DropdownMenuItem>
                           {/**
                            * TODO: 신고하기
                            * - 작성자 본인 권한

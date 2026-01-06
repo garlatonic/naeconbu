@@ -40,7 +40,7 @@ export default async function ReviewPostComments({ postId }: { postId: string })
   return (
     <div className={"flex flex-col gap-6"}>
       <CommentInput isLoggedIn={isLoggedIn} totalComments={totalComments} />
-      <CommentItem res={res} comments={enrichedComments} />
+      <CommentItem res={res} comments={enrichedComments} postId={postId} />
     </div>
   );
 }

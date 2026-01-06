@@ -93,3 +93,27 @@ export const createComment = async ({
     return null;
   }
 };
+
+/**
+ * 게시글 댓글 삭제하기
+ *
+ * @param {string} postId - 게시글 ID
+ * @param {string} commentId - 댓글 ID
+ */
+export const deleteComment = async ({
+  postId,
+  commentId,
+}: {
+  postId: string;
+  commentId: string;
+}): Promise<boolean> => {
+  try {
+    const res = await ClientApi(`/api/v1/posts/${postId}/comments/${commentId}`, {
+      method: "DELETE",
+    });
+    return res.ok;
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return false;
+  }
+};
