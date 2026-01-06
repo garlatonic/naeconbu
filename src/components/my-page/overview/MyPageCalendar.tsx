@@ -7,8 +7,8 @@ import { Button } from "../../ui/button";
 import { EventContextType } from "@/types/my-page";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import MyPageCalendarList from "./MyPageCalendarList";
-import { getSchedulesByDate, scheduleEvents } from "@/data/userSchedules";
 import { ConcertWithTicket } from "@/types/home";
+import { PlannerListWithDetails } from "@/types/planner";
 
 const EventContext = createContext<EventContextType>({
   events: {},
@@ -131,7 +131,13 @@ const CustomDay = (props: DayProps) => {
   );
 };
 
-export default function MyPageCalendar({ concerts }: { concerts: ConcertWithTicket[] }) {
+export default function MyPageCalendar({
+  concerts,
+  planners,
+}: {
+  concerts: ConcertWithTicket[];
+  planners: PlannerListWithDetails[];
+}) {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   // 날짜 유틸: YYYY-MM-DD로 포맷 (로컬 기준)
@@ -183,6 +189,20 @@ export default function MyPageCalendar({ concerts }: { concerts: ConcertWithTick
   const getConcertsByDate = (dateStr: string): ConcertWithTicket[] => {
     return concertsByDate[dateStr] ?? [];
   };
+
+  // 특정 날짜의 사용자 일정 가져오기
+  const getSchedulesByDate = (dateStr: string): PlannerListWithDetails[] => {
+    return planners?.filter((schedule) => schedule.planDate === dateStr) ?? [];
+  };
+
+  // 캘린더 표시용 - 일정이 있는 날짜
+  const scheduleEvents: Record<string, number> = planners.reduce(
+    (acc, schedule) => {
+      acc[schedule.planDate] = (acc[schedule.planDate] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   const selectedConcerts = date
     ? getConcertsByDate(

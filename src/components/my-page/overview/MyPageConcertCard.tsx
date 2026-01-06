@@ -17,7 +17,7 @@ export default function MyPageConcertCard({
   onCreatePlan: () => void;
 }) {
   return (
-    <Card className="flex flex-row gap-6 p-6">
+    <Card className="bg-bg-main flex flex-row gap-6 border p-6">
       <div className="relative w-35 shrink-0">
         <AspectRatio ratio={320 / 426.5}>
           <Image
@@ -35,7 +35,7 @@ export default function MyPageConcertCard({
         <div className="flex flex-col justify-between gap-2">
           <div className="space-y-2">
             <h3 className="text-2xl font-bold">{concert.name}</h3>
-            <ul className="text-text-sub space-y-1 text-sm [&>li]:flex [&>li]:items-center [&>li]:gap-1 [&>li>svg]:size-4">
+            <ul className="text-text-sub space-y-1 text-sm [&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li>svg]:size-4">
               <li>
                 <CalendarIcon />
                 {formatDateRangeKorean(concert.startDate, concert.endDate)}

@@ -1,17 +1,13 @@
-import ProfileNoImage from "@/components/common/ProfileNoImage";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { ConcertWithTicket } from "@/types/home";
-import { UserSchedule } from "@/types/my-page";
-import { MapPin, Calendar, Loader2Icon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import MyPageConcertCard from "./MyPageConcertCard";
 import { dateToISOString, getConcertStartDate, isSameDay } from "@/utils/helpers/handleDate";
 import { toast } from "sonner";
 import { createNewPlan } from "@/lib/api/planner/planner.client";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import {
   Dialog,
   DialogContent,
@@ -21,10 +17,12 @@ import {
 } from "@/components/ui/dialog";
 import { ConcertDatePicker } from "@/components/concert/detail/ConcertDatePicker";
 import { Input } from "@/components/ui/input";
+import { PlannerListWithDetails } from "@/types/planner";
+import MyPagePlanCard from "./MyPagePlanCard";
 
 interface ConcertListProps {
   concerts: ConcertWithTicket[];
-  schedules: UserSchedule[];
+  schedules: PlannerListWithDetails[];
   selectedDate: Date;
 }
 
@@ -141,7 +139,9 @@ export default function MyPageCalendarList({
       <div className="flex flex-col gap-8">
         {concerts.length > 0 && (
           <>
-            <Separator className="*:text-text-main h-auto *:px-10 *:text-base *:font-bold" />
+            <FieldSeparator className="*:text-text-main h-auto *:px-10 *:text-base *:font-bold">
+              공연
+            </FieldSeparator>
             <div className="space-y-4">
               {concerts.map((concert) => (
                 <MyPageConcertCard
@@ -210,71 +210,12 @@ export default function MyPageCalendarList({
         )}
         {schedules.length > 0 && (
           <>
-            <Separator className="*:text-text-main h-auto *:px-10 *:text-base *:font-bold">
+            <FieldSeparator className="*:text-text-main h-auto *:px-10 *:text-base *:font-bold">
               일정
-            </Separator>
+            </FieldSeparator>
             <div className="space-y-4">
               {schedules.map((schedule) => (
-                <div key={schedule.id} className="border-border flex gap-4 rounded-lg border p-4">
-                  {/* 포스터 */}
-                  <div className="bg-muted flex h-32 w-32 shrink-0 items-center justify-center rounded-lg">
-                    <span className="text-text-sub text-sm">Concert Poster</span>
-                  </div>
-
-                  {/* 일정 정보 */}
-                  <div className="flex flex-1 flex-col justify-between gap-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-lg font-bold">{schedule.concertTitle}</h4>
-                        <span className="text-text-sub text-xs">{schedule.daysUntil}일 후</span>
-                      </div>
-                      <div className="text-text-sub space-y-1 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" />
-                          <span>
-                            {schedule.date} • {schedule.time}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{schedule.venue}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="flex items-center justify-between">
-                      {schedule.goingWith.length === 0 && (
-                        <span className="text-text-sub text-xs">참여자 </span>
-                      )}
-                      {schedule.goingWith.length > 0 && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-text-sub text-xs">참여자 </span>
-                          <div className="flex -space-x-2">
-                            {schedule.goingWith.map((friend, idx) => {
-                              if (idx < 3)
-                                return (
-                                  <Avatar className="ring-bg-main size-8 ring-2" key={idx}>
-                                    <AvatarImage />
-                                    <AvatarFallback>
-                                      <ProfileNoImage size="xs" alt={friend} />
-                                    </AvatarFallback>
-                                  </Avatar>
-                                );
-                            })}
-                            {schedule.goingWith.length > 3 && (
-                              <Avatar className="ring-bg-main bg-bg-sub size-8 ring-2">
-                                <AvatarFallback className="text-text-main text-xs font-medium">
-                                  +{schedule.goingWith.length - 3}
-                                </AvatarFallback>
-                              </Avatar>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      <Button>관리하기</Button>
-                    </div>
-                  </div>
-                </div>
+                <MyPagePlanCard key={schedule.id} schedule={schedule} />
               ))}
             </div>
           </>
