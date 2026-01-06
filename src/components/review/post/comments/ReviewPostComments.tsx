@@ -2,6 +2,7 @@ import CommentInput from "@/components/review/post/comments/CommentInput";
 import CommentItem from "@/components/review/post/comments/CommentItem";
 import { getCommentsList } from "@/lib/api/community/community.server";
 import { getUserInfo } from "@/lib/api/user/user.server";
+import { compareDesc } from "date-fns";
 import { cookies } from "next/headers";
 
 export default async function ReviewPostComments({ postId }: { postId: string }) {
@@ -18,14 +19,16 @@ export default async function ReviewPostComments({ postId }: { postId: string })
   const userIds = Array.from(new Set(comments.map((c) => c.userId)));
   const userProfiles = await Promise.all(userIds.map((id) => getUserInfo(id)));
 
-  const enrichedComments = comments.map((comment) => {
-    const user = userProfiles.find((u) => u.id === comment.userId);
-    return {
-      ...comment,
-      author: user?.nickname || "알 수 없는 사용자",
-      avatar: user?.profileImageUrl || "",
-    };
-  });
+  const enrichedComments = comments
+    .map((comment) => {
+      const user = userProfiles.find((u) => u.id === comment.userId);
+      return {
+        ...comment,
+        author: user?.nickname || "알 수 없는 사용자",
+        avatar: user?.profileImageUrl || "",
+      };
+    })
+    .sort((a, b) => compareDesc(new Date(a.createdDate), new Date(b.createdDate)));
 
   const totalComments = res?.totalElements || 0;
 

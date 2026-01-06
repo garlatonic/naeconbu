@@ -10,9 +10,7 @@ export default async function Page({
 }: {
   params: Promise<{ id: string; postId: string }>;
 }) {
-  // const { id, postId } = await params;
-  const pageParam = await params;
-  const { id, postId } = pageParam;
+  const { id, postId } = await params;
 
   const concertDetail = await getConcertDetail({ concertId: id });
   const reviewDetail = await getReviewDetail(Number(postId));
