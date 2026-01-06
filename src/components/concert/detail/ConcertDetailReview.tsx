@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import ReviewRatingBar from "@/components/concert/detail/ReviewRatingBar";
 import { twMerge } from "tailwind-merge";
 import ConcertReviewCard from "@/components/concert/detail/ConcertReviewCard";
-import LoadMoreBtn from "@/components/common/LoadMoreBtn";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ConcertReviewListResponse } from "@/types/community/concert-review";
@@ -21,6 +20,7 @@ export default function ConcertDetailReview({
 }) {
   const [data, setData] = useState<ConcertReviewListResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     if (!concertId) return;
@@ -97,10 +97,17 @@ export default function ConcertDetailReview({
       </div>
       {reviews.length > 0 ? (
         <>
-          {reviews.map((review) => (
+          {(showAllReviews ? reviews : reviews.slice(0, 3)).map((review) => (
             <ConcertReviewCard key={review.postId} review={review} concertId={concertId} />
           ))}
-          {reviews.length > 0 && <LoadMoreBtn />}
+
+          {!showAllReviews && reviews.length > 3 && (
+            <div className="flex justify-center">
+              <Button variant="ghost" size="sm" onClick={() => setShowAllReviews(true)}>
+                리뷰 더보기
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <div className="border-border flex flex-col items-center gap-3 rounded-xl border border-dashed p-8">

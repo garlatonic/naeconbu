@@ -93,7 +93,7 @@ export default function ConcertReviewCard({
 
         <div>
           <h3 className="text-text-main mb-1 line-clamp-1 text-lg font-bold">{review.title}</h3>
-          <p className="text-text-sub line-clamp-2 text-sm leading-relaxed">{review.content}</p>
+          <p className="text-text-sub line-clamp-1 text-sm leading-relaxed">{review.content}</p>
         </div>
 
         <div className="mt-auto flex flex-wrap gap-2">
