@@ -55,7 +55,7 @@ export default async function MateListCard({ post }: { post: Post }) {
               </p>
             </div>
           </div>
-          <p className="text-text-sub text-smㄴ line-clamp-4">{post.content}</p>
+          <p className="text-text-sub line-clamp-4 text-sm">{post.content}</p>
         </div>
       </Link>
       <MateListBtn postId={post.postId} />

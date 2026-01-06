@@ -24,7 +24,7 @@ export default async function ReviewPostComments({ postId }: { postId: string })
 
   const enrichedComments = comments
     .map((comment) => {
-      const user = userProfiles.find((u) => u.id === comment.userId);
+      const user = userProfiles.find((u) => u?.id === comment.userId);
       return {
         ...comment,
         author: user?.nickname || "알 수 없는 사용자",

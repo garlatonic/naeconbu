@@ -4,21 +4,34 @@ import MeetingConcertCard from "@/components/concert-mate/detail/MeetingConcertC
 import MeetingPostHeader from "@/components/concert-mate/detail/MeetingPostHeader";
 import MeetingPostBody from "@/components/concert-mate/detail/MeetingPostBody";
 import MeetingPostSidebar from "@/components/concert-mate/detail/MeetingPostSidebar";
+import { MateDetailMainProps } from "@/types/community/concert-mate";
 
-export default function MateDetailMain({ postId }: { postId: string }) {
+export default function MateDetailMain({
+  postId,
+  postDetail,
+  concertDetail,
+  userDetail,
+  isAuthor,
+  isLiked,
+}: MateDetailMainProps) {
   return (
     <section className="px-15 py-16">
       <div className="mx-auto flex w-full max-w-400 gap-12">
         {/*왼쪽 파트*/}
         <section className="flex w-full flex-col gap-8">
-          <MeetingConcertCard />
+          <MeetingConcertCard concertDetail={concertDetail} />
           <MeetingPostHeader />
           <Separator />
-          <MeetingPostBody showBadge={true} />
+          <MeetingPostBody
+            showBadge={true}
+            postDetail={postDetail}
+            isAuthor={isAuthor}
+            isLiked={isLiked}
+          />
           <ReviewPostComments postId={postId} />
         </section>
         {/*오른쪽 파트*/}
-        <MeetingPostSidebar showMeetingDetail={true} />
+        <MeetingPostSidebar showMeetingDetail={true} userDetail={userDetail} />
       </div>
     </section>
   );
