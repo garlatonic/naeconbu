@@ -1,13 +1,16 @@
-import { Post } from "@/types/community";
+import { MateDetailData } from "@/types/community/concert-mate";
 import ServerApi from "@/utils/helpers/serverApi";
 
 /**
  * 구인 게시글 상세 조회
- *
  * @param {string} postId  - 게시글 ID
- * @returns {Promise<Post | null>} - 게시글 상세 정보 또는 null
+ * @returns {Promise<MateDetailData | null>} - 게시글 상세 정보 또는 null
  */
-export const getPostsDetail = async ({ postId }: { postId: string }): Promise<Post | null> => {
+export const getPostsDetail = async ({
+  postId,
+}: {
+  postId: string;
+}): Promise<MateDetailData | null> => {
   try {
     const res = await ServerApi(`/api/v1/join/${postId}`, {
       method: "GET",
@@ -22,7 +25,7 @@ export const getPostsDetail = async ({ postId }: { postId: string }): Promise<Po
 
     return data.data;
   } catch (error) {
-    console.error("Error fetching concert mate posts list:", error);
+    console.error("Error fetching concert mate detail:", error);
     return null;
   }
 };

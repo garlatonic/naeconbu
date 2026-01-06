@@ -51,6 +51,8 @@ export interface CommentData {
   userId: number;
   content: string;
   createdDate: string;
+  modifiedDate: string;
+  isEdited: boolean;
 }
 
 export type CommentAddUser = CommentData & {
