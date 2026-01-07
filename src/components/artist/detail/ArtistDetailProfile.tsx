@@ -13,10 +13,12 @@ export default function ArtistDetailProfile({
   artist,
   artistId,
   initialIsLiked,
+  upComingConcertCount = 0,
 }: {
   artist: ArtistDetail;
   artistId: number;
   initialIsLiked: boolean;
+  upComingConcertCount: number;
 }) {
   const [likeCount, setLikeCount] = useState(artist.likeCount);
   const [isLiked, setIsLiked] = useState<boolean>(initialIsLiked);
@@ -81,8 +83,9 @@ export default function ArtistDetailProfile({
             </div>
             <Separator orientation={"vertical"} />
             <div className={"flex flex-col items-center justify-center gap-1"}>
-              {/*TODO: 아래 공연 수 값은 나중에 데이터로 불러오기*/}
-              <span className={"text-text-main text-2xl font-semibold"}>정보 준비중</span>
+              <span className={"text-text-main text-2xl font-semibold"}>
+                {upComingConcertCount}
+              </span>
               <span className={"text-text-sub"}>예정된 공연</span>
             </div>
           </div>
