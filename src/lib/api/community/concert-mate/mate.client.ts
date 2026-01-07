@@ -58,25 +58,26 @@ export const updateMatePost = async ({
   data: MatePostWrite;
 }): Promise<boolean> => {
   try {
-    const formData = new FormData();
-
-    // 필수 필드
-    formData.append("concertId", String(data.concertId));
-    formData.append("title", data.title);
-    formData.append("content", data.content);
-    formData.append("maxParticipants", String(data.maxParticipants));
-    formData.append("genderPreference", data.genderPreference);
-
-    // 태그 (옵션)
-    if (data.activityTags && data.activityTags.length > 0) {
-      data.activityTags.forEach((tag) => {
-        formData.append("tags", tag);
-      });
-    }
+    const payload = {
+      concertId: data.concertId,
+      title: data.title,
+      content: data.content,
+      maxParticipants: data.maxParticipants,
+      genderPreference: data.genderPreference,
+      // 선택적 필드들 (스웨거 이미지 참고)
+      ageRangeMin: data.ageRangeMin,
+      ageRangeMax: data.ageRangeMax,
+      meetingAt: data.meetingAt,
+      meetingPlace: data.meetingPlace,
+      activityTags: data.activityTags || [],
+    };
 
     const res = await ClientApi(`/api/v1/join/${postId}`, {
       method: "PUT",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
 
     let json;
