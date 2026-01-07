@@ -78,6 +78,9 @@ export default function MyPageSetting({ userData }: { userData: User }) {
   const handlePWVisible = () => setIsVisible((prevState) => !prevState);
   const handlePWCVisible = () => setIsVisibleConfirm((prevState) => !prevState);
 
+  // 로그인 소셜 타입 확인
+  const isSocial = userData.socialType === "KAKAO" || userData.socialType === "GOOGLE";
+
   // 이메일알림 및 다크모드 설정 상태 가져오기
   useEffect(() => {
     if (showEditDialog) {
@@ -312,93 +315,109 @@ export default function MyPageSetting({ userData }: { userData: User }) {
                 onChange={(e) => setNickname(e.target.value)}
               />
             </Field>
-            {/* TODO : 소셜 로그인은 비밀번호 변경 불가능 하도록 처리 */}
-            <Field>
-              <Label htmlFor="nickname">현재 비밀번호</Label>
-              <div className="relative space-y-1">
-                <Input
-                  type={isVisibleCurrent ? "text" : "password"}
-                  placeholder="현재 비밀번호를 입력하세요."
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value.replace(/\s/g, ""))}
-                  className="pr-9"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleCPWVisible}
-                  className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
-                >
-                  {isVisibleCurrent ? <EyeOffIcon /> : <EyeIcon />}
-                  <span className="sr-only">
-                    {isVisibleCurrent ? "Hide password" : "Show password"}
-                  </span>
-                </Button>
-                {currentPassword.length > 0 && (
-                  <p
-                    className={`text-xs ${isCurrentPasswordFormatValid ? "text-text-sub" : "text-red-500"}`}
-                  >
-                    {isCurrentPasswordFormatValid
-                      ? ""
-                      : "영문, 숫자, 특수문자 포함 8자 이상 입력하세요."}
-                  </p>
-                )}
-              </div>
-            </Field>
-            <Field>
-              <Label htmlFor="nickname">새 비밀번호</Label>
-              <div className="relative space-y-1">
-                <Input
-                  type={isVisible ? "text" : "password"}
-                  placeholder="새 비밀번호를 입력하세요."
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value.replace(/\s/g, ""))}
-                  className="pr-9"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handlePWVisible}
-                  className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
-                >
-                  {isVisible ? <EyeOffIcon /> : <EyeIcon />}
-                  <span className="sr-only">{isVisible ? "Hide password" : "Show password"}</span>
-                </Button>
-                {password.length > 0 && (
-                  <p className={`text-xs ${isPasswordValid ? "text-text-sub" : "text-red-500"}`}>
-                    {isPasswordValid ? "" : "영문, 숫자, 특수문자 포함 8자 이상 입력하세요."}
-                  </p>
-                )}
-              </div>
-            </Field>
-            <Field>
-              <Label htmlFor="nickname">비밀번호 확인</Label>
-              <div className="relative space-y-1">
-                <Input
-                  type={isVisibleConfirm ? "text" : "password"}
-                  placeholder="비밀번호를 입력하세요."
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value.replace(/\s/g, ""))}
-                  className="pr-9"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handlePWCVisible}
-                  className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
-                >
-                  {isVisibleConfirm ? <EyeOffIcon /> : <EyeIcon />}
-                  <span className="sr-only">
-                    {isVisibleConfirm ? "Hide password" : "Show password"}
-                  </span>
-                </Button>
-                {passwordConfirm.length > 0 && (
-                  <p className={`text-xs ${isPasswordMatch ? "text-text-sub" : "text-red-500"}`}>
-                    {isPasswordMatch ? "" : "비밀번호가 일치하지 않습니다."}
-                  </p>
-                )}
-              </div>
-            </Field>
+            {isSocial ? (
+              <>
+                <Label htmlFor="nickname">비밀번호 수정</Label>
+                <div className="text-text-sub flex justify-center text-xs">
+                  <span>소셜 로그인은 비밀번호 변경이 불가합니다.</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <Field>
+                  <Label htmlFor="nickname">현재 비밀번호</Label>
+                  <div className="relative space-y-1">
+                    <Input
+                      type={isVisibleCurrent ? "text" : "password"}
+                      placeholder="현재 비밀번호를 입력하세요."
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value.replace(/\s/g, ""))}
+                      className="pr-9"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleCPWVisible}
+                      className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+                    >
+                      {isVisibleCurrent ? <EyeOffIcon /> : <EyeIcon />}
+                      <span className="sr-only">
+                        {isVisibleCurrent ? "Hide password" : "Show password"}
+                      </span>
+                    </Button>
+                    {currentPassword.length > 0 && (
+                      <p
+                        className={`text-xs ${isCurrentPasswordFormatValid ? "text-text-sub" : "text-red-500"}`}
+                      >
+                        {isCurrentPasswordFormatValid
+                          ? ""
+                          : "영문, 숫자, 특수문자 포함 8자 이상 입력하세요."}
+                      </p>
+                    )}
+                  </div>
+                </Field>
+                <Field>
+                  <Label htmlFor="nickname">새 비밀번호</Label>
+                  <div className="relative space-y-1">
+                    <Input
+                      type={isVisible ? "text" : "password"}
+                      placeholder="새 비밀번호를 입력하세요."
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value.replace(/\s/g, ""))}
+                      className="pr-9"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handlePWVisible}
+                      className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+                    >
+                      {isVisible ? <EyeOffIcon /> : <EyeIcon />}
+                      <span className="sr-only">
+                        {isVisible ? "Hide password" : "Show password"}
+                      </span>
+                    </Button>
+                    {password.length > 0 && (
+                      <p
+                        className={`text-xs ${isPasswordValid ? "text-text-sub" : "text-red-500"}`}
+                      >
+                        {isPasswordValid ? "" : "영문, 숫자, 특수문자 포함 8자 이상 입력하세요."}
+                      </p>
+                    )}
+                  </div>
+                </Field>
+                <Field>
+                  <Label htmlFor="nickname">비밀번호 확인</Label>
+                  <div className="relative space-y-1">
+                    <Input
+                      type={isVisibleConfirm ? "text" : "password"}
+                      placeholder="비밀번호를 입력하세요."
+                      value={passwordConfirm}
+                      onChange={(e) => setPasswordConfirm(e.target.value.replace(/\s/g, ""))}
+                      className="pr-9"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handlePWCVisible}
+                      className="text-text-sub focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+                    >
+                      {isVisibleConfirm ? <EyeOffIcon /> : <EyeIcon />}
+                      <span className="sr-only">
+                        {isVisibleConfirm ? "Hide password" : "Show password"}
+                      </span>
+                    </Button>
+                    {passwordConfirm.length > 0 && (
+                      <p
+                        className={`text-xs ${isPasswordMatch ? "text-text-sub" : "text-red-500"}`}
+                      >
+                        {isPasswordMatch ? "" : "비밀번호가 일치하지 않습니다."}
+                      </p>
+                    )}
+                  </div>
+                </Field>
+              </>
+            )}
             <Field>
               <Label htmlFor="email">이메일 *</Label>
               <div className="relative space-y-1">

@@ -1,5 +1,6 @@
 import { ConcertDetail } from "@/types/concerts";
 import { UserInfo } from "@/types/user";
+import { Post } from "..";
 
 export type MatePostWrite = {
   concertId: number;
@@ -64,3 +65,13 @@ export type MeetingPostHeaderProps = {
   isAuthor: boolean;
   isOpen: boolean;
 };
+
+export type MateListCardProps = {
+  post: Post;
+  user?: UserInfo | null;
+  concert?: ConcertDetail | null;
+  likeCount?: string;
+  commentCount?: number;
+};
+
+export type MateListBtnProps = { postId: number; likeCount?: string; commentCount?: number };
