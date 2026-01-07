@@ -5,6 +5,28 @@ import ArtistDetailPast from "@/components/artist/detail/ArtistDetailPast";
 import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
 import { getArtistDetail, getArtistLikeStatus } from "@/lib/api/artists/artists.server";
 import { getConcertsByArtistId } from "@/lib/api/concerts/concerts.server";
+// TODO: 공연 목록 토글 애니메이션 적용
+// - 전체 공연 보기 / 접기 시 height 변화가 자연스럽도록
+// - max-height + transition 또는 framer-motion 적용 검토
+
+// TODO: 접기 버튼 클릭 시 스크롤 포커스 보정
+// - 공연 목록이 접힐 때 섹션 상단으로 scrollIntoView 처리
+// - 공연 수가 많아질 경우 UX 개선 필요
+
+// TODO: Upcoming / Past 공연 리스트 공통 컴포넌트로 분리
+// - 로직(showAll, slice, 버튼 조건)이 거의 동일함
+// - title, concerts props만 받는 형태로 추출 가능
+
+// TODO: 모바일 뷰에서 기본 노출 개수 조정
+// - desktop: 3개
+// - mobile: 2개 또는 1개 노출 검토
+
+// TODO: 공연 시작 날짜 기준 정렬 보장 여부 확인
+// - 현재는 서버 정렬을 신뢰
+// - 필요 시 프론트에서 startAt 기준 정렬 추가
+
+// TODO: 공연 데이터 로딩 상태(Skeleton UI) 추가
+// - 데이터 패칭 지연 시 Empty UI와 구분 필요
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
