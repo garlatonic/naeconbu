@@ -13,7 +13,7 @@ export default function ArtistDetailProfile({
   artist,
   artistId,
   initialIsLiked,
-  upComingConcertCount = 0,
+  upComingConcertCount,
 }: {
   artist: ArtistDetail;
   artistId: number;

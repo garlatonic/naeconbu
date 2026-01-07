@@ -35,6 +35,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [artist, initialIsLiked, upComingConcerts, pastConcerts] = await Promise.all([
     getArtistDetail(artistId),
     getArtistLikeStatus(artistId),
+    // TODO: 아티스트 상세 페이지에서는
+    // 예정/지난 공연을 한 번에 노출하기 위해
+    // 충분히 큰 size(100)를 사용함.
+    // 실제 UX에서는 최대 3개만 기본 노출되며,
+    // 추후 페이지네이션 도입 시 size 조정 예정.
     getConcertsByArtistId({ artistId, type: "upcoming", page: 0, size: 100 }),
     getConcertsByArtistId({ artistId, type: "past", page: 0, size: 100 }),
   ]);

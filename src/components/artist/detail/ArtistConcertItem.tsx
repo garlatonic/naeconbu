@@ -13,12 +13,14 @@ import { formatConcertPrice, formatDateRangeKorean } from "@/utils/helpers/forma
 // TODO: 모바일에서 카드 레이아웃 세로형 전환 검토
 
 export default function ArtistConcertItem({ concert }: { concert: ConcertWithTicket }) {
+  const posterSrc = concert.posterUrl || PLACEHOLDER_IMAGE;
+
   return (
     <Card className="bg-bg-main flex flex-row gap-6 border p-6">
       <div className="relative w-35 shrink-0">
         <AspectRatio ratio={320 / 426.5}>
           <Image
-            src={concert.posterUrl ?? PLACEHOLDER_IMAGE}
+            src={posterSrc}
             alt={concert.name}
             className="rounded-2xl object-cover"
             fill
@@ -37,7 +39,7 @@ export default function ArtistConcertItem({ concert }: { concert: ConcertWithTic
                 <CalendarIcon />
                 {formatDateRangeKorean(concert.startDate, concert.endDate)}
               </li>
-              {concert.ticketTime && concert.ticketEndTime && (
+              {concert.ticketTime != null && concert.ticketEndTime != null && (
                 <li>
                   <TicketsIcon />
                   {formatDateRangeKorean(concert.ticketTime, concert.ticketEndTime)}
@@ -47,7 +49,7 @@ export default function ArtistConcertItem({ concert }: { concert: ConcertWithTic
                 <MapPinIcon />
                 {concert.placeName}
               </li>
-              {concert.minPrice && concert.maxPrice && (
+              {concert.minPrice != null && concert.maxPrice != null && (
                 <li>
                   <Ticket />
                   {formatConcertPrice(concert.minPrice, concert.maxPrice)}
@@ -57,7 +59,7 @@ export default function ArtistConcertItem({ concert }: { concert: ConcertWithTic
           </div>
           <div className="flex gap-2">
             <Link href={`/concerts/${concert.id}`}>
-              <Button>자세히보기</Button>
+              <Button>자세히 보기</Button>
             </Link>
           </div>
         </div>
