@@ -9,7 +9,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import TopButton from "@/components/common/TopButton";
 import Script from "next/script";
-import React from "react";
 
 export const metadata = {
   title: "내콘부 | 내 콘서트를 부탁해",
