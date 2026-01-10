@@ -73,7 +73,7 @@ export const formatDateTimeRange = (startDateTime: string, endDateTime: string):
     const hours = date.getHours();
     const period = hours < 12 ? "오전" : "오후";
     const minutes = String(date.getMinutes()).padStart(2, "0");
-    const formattedHours = String(hours % 12 === 0 ? 12 : hours % 12).padStart(2, "0");
+    const formattedHours = String(hours % 12 === 0 ? 12 : hours % 12);
     if (minutes === "00") {
       return `${year}.${month}.${day} ${period} ${formattedHours}시`;
     } else {
