@@ -24,6 +24,7 @@ import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
 import { getConcertDetail, getSimilarConcerts } from "@/lib/api/concerts/concerts.server";
 import { Suspense } from "react";
 import { getAuthStatus } from "@/lib/api/auth/auth.server";
+import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -34,9 +35,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const isLoggedIn = await getAuthStatus();
 
-  // TODO: 존재하지 않는 공연 id 접근 시 404 페이지로 리다이렉트 처리 필요
   if (!concertDetail) {
-    return null;
+    notFound();
   }
 
   return (
