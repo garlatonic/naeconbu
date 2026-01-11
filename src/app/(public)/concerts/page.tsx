@@ -4,6 +4,11 @@ import ConcertListsSkeleton from "@/components/loading/concert/list/ConcertLists
 import BreadcrumbNavbar from "@/components/review/BreadcrumbNavbar";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "공연 목록 | 내 콘서트를 부탁해",
+  description: "Play Your Life, Live Your Music. 다양한 공연을 찾아보고 예매하세요.",
+};
+
 export default async function Page({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
   const resolvedParams = await searchParams;
 
