@@ -39,6 +39,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return null;
   }
 
+  const now = new Date();
+
+  let isChatAvailable = false;
+
+  if (concertDetail.ticketTime) {
+    const ticketTime = new Date(concertDetail.ticketTime);
+    const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+
+    isChatAvailable =
+      now.getTime() >= ticketTime.getTime() - THREE_DAYS &&
+      now.getTime() <= ticketTime.getTime() + THREE_DAYS;
+  }
+
   return (
     <>
       <BreadcrumbNavbar
@@ -49,10 +62,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         ]}
       />
       <Suspense fallback={<ConcertHeaderSkeleton />}>
-        <ConcertHeader concertId={id} />
+        <ConcertHeader concertId={id} isLoggedIn={isLoggedIn} isChatAvailable={isChatAvailable} />
       </Suspense>
       <Suspense fallback={<ConcertDetailSkeleton />}>
-        <ConcertDetail concertId={id} isLoggedIn={isLoggedIn} />
+        <ConcertDetail concertId={id} isLoggedIn={isLoggedIn} isChatAvailable={isChatAvailable} />
       </Suspense>
       {similarConcerts.length > 0 && (
         <Suspense fallback={<ConcertSimilarSkeleton />}>

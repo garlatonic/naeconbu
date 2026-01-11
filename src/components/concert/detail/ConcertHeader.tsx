@@ -18,12 +18,22 @@ import {
 import { getAuthStatus, getMe } from "@/lib/api/auth/auth.server";
 import ConcertChatButton from "./ConcertChatButton";
 
-export default async function ConcertHeader({ concertId }: { concertId: string }) {
+export default async function ConcertHeader({
+  concertId,
+  isLoggedIn,
+  isChatAvailable,
+}: {
+  concertId: string;
+  isLoggedIn: boolean;
+  isChatAvailable: boolean;
+}) {
   const [concertDetail, concertTicketing, isAuthenticated] = await Promise.all([
     getConcertDetail({ concertId }),
     getTicketOfficesByConcertId({ concertId }),
     getAuthStatus(),
   ]);
+
+  const canShowChatButton = isLoggedIn && isChatAvailable;
 
   let userData = null;
   let isLikedConcert = null;
@@ -76,7 +86,7 @@ export default async function ConcertHeader({ concertId }: { concertId: string }
               </div>
             </div>
             <div className="flex gap-2">
-              <ConcertChatButton concertId={concertDetail.concertId} />
+              {canShowChatButton && <ConcertChatButton concertId={concertDetail.concertId} />}
               <ConcertLikeButton
                 concertId={concertDetail.concertId}
                 isAuthenticated={isAuthenticated}

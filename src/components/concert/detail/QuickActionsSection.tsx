@@ -42,7 +42,7 @@ import { createNewPlan } from "@/lib/api/planner/planner.client";
 import { useRouter } from "next/navigation";
 import { User } from "@/types/user";
 import { postLikeConcert } from "@/lib/api/concerts/concerts.client";
-import { getConcertStartDate, isSameDay, dateToISOString } from "@/utils/helpers/handleDate";
+import { dateToISOString, getConcertStartDate, isSameDay } from "@/utils/helpers/handleDate";
 import { joinChatRoom } from "@/lib/api/chat/chat.client";
 
 export default function QuickActionsSection({
@@ -52,6 +52,7 @@ export default function QuickActionsSection({
   concertEndDate,
   userData,
   isLiked,
+  canShowChatButton,
 }: {
   concertId?: string;
   concertTicketingData?: TicketOffice[] | null;
@@ -59,6 +60,7 @@ export default function QuickActionsSection({
   concertEndDate?: string;
   userData: User | null;
   isLiked?: boolean;
+  canShowChatButton: boolean;
 }) {
   // 링크 이동
   const router = useRouter();
@@ -254,18 +256,20 @@ export default function QuickActionsSection({
           </div>
           <ArrowRightIcon className="text-text-sub h-4 w-4" />
         </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={handleOpenChatModal}
-          className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
-        >
-          <div className="flex items-center gap-2">
-            <MessageSquareIcon className="h-4 w-4" />
-            채팅 참여하기
-          </div>
-          <ArrowRightIcon className="text-text-sub h-4 w-4" />
-        </Button>
+        {canShowChatButton && (
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={handleOpenChatModal}
+            className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <MessageSquareIcon className="h-4 w-4" />
+              채팅 참여하기
+            </div>
+            <ArrowRightIcon className="text-text-sub h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       {/* 티켓 예매하기 클릭 시 모달 */}
@@ -440,8 +444,6 @@ export default function QuickActionsSection({
             <AlertDialogTitle>채팅에 참여하시겠어요?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogDescription>
-            예매일이 임박한 공연이에요.
-            <br />
             채팅에 참여해 실시간 서버 시간과 다른 이용자들과의 이야기를 함께 나눠보세요.
           </AlertDialogDescription>
           <AlertDialogFooter>
