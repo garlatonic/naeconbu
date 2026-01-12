@@ -14,9 +14,11 @@ import MobileQuickActions from "./MobileQuickActions";
 export default async function ConcertDetail({
   concertId,
   isLoggedIn,
+  isChatAvailable,
 }: {
   concertId: string;
   isLoggedIn: boolean;
+  isChatAvailable: boolean;
 }) {
   const [concertDetail, concertVenue, concertTicketing, isAuthenticated] = await Promise.all([
     getConcertDetail({ concertId }),
@@ -24,6 +26,8 @@ export default async function ConcertDetail({
     getTicketOfficesByConcertId({ concertId }),
     getAuthStatus(),
   ]);
+
+  const canShowChatButton = isLoggedIn && isChatAvailable;
 
   let userData = null;
   let isLikedConcert = null;
@@ -59,6 +63,7 @@ export default async function ConcertDetail({
                 concertEndDate={concertDetail?.endDate}
                 userData={userData}
                 isLiked={isLikedConcert?.isLike}
+                canShowChatButton={canShowChatButton}
               />
             </div>
           </div>

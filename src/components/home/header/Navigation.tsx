@@ -16,13 +16,19 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
-export default function Navigation({ isAdmin }: { isAdmin: boolean }) {
+export default function Navigation({
+  isAdmin,
+  isLoggedIn,
+}: {
+  isAdmin: boolean;
+  isLoggedIn: boolean;
+}) {
   const navLinks = [
     { href: "/concerts", label: "공연" },
     ...(isAdmin ? [{ href: "/concerts/admin", label: "관리자" }] : []),
     { href: "/artists", label: "아티스트" },
     { href: "/concert-mate", label: "동행구인" },
-    { href: "/planner", label: "외출플래너" },
+    ...(isLoggedIn ? [{ href: "/planner", label: "외출플래너" }] : []),
   ];
 
   return (

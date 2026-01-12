@@ -73,8 +73,6 @@ export default function ConcertChatButton({ concertId }: { concertId?: string })
             <AlertDialogTitle>채팅에 참여하시겠어요?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogDescription>
-            예매일이 임박한 공연이에요.
-            <br />
             채팅에 참여해 실시간 서버 시간과 다른 이용자들과의 이야기를 함께 나눠보세요.
           </AlertDialogDescription>
           <AlertDialogFooter>

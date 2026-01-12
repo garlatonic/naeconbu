@@ -19,12 +19,22 @@ import { getAuthStatus, getMe } from "@/lib/api/auth/auth.server";
 import ConcertChatButton from "./ConcertChatButton";
 import { PLACEHOLDER_IMAGE } from "@/components/home/upcoming-slider/constants";
 
-export default async function ConcertHeader({ concertId }: { concertId: string }) {
+export default async function ConcertHeader({
+  concertId,
+  isLoggedIn,
+  isChatAvailable,
+}: {
+  concertId: string;
+  isLoggedIn: boolean;
+  isChatAvailable: boolean;
+}) {
   const [concertDetail, concertTicketing, isAuthenticated] = await Promise.all([
     getConcertDetail({ concertId }),
     getTicketOfficesByConcertId({ concertId }),
     getAuthStatus(),
   ]);
+
+  const canShowChatButton = isLoggedIn && isChatAvailable;
 
   let userData = null;
   let isLikedConcert = null;
@@ -86,7 +96,7 @@ export default async function ConcertHeader({ concertId }: { concertId: string }
 
             {/* 버튼 그룹: 모바일에서는 상단 우측 혹은 하단 배치 등 고려 가능 */}
             <div className="flex gap-2">
-              <ConcertChatButton concertId={concertDetail.concertId} />
+              {canShowChatButton && <ConcertChatButton concertId={concertDetail.concertId} />}
               <ConcertLikeButton
                 concertId={concertDetail.concertId}
                 isAuthenticated={isAuthenticated}
