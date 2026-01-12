@@ -44,7 +44,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   let isChatAvailable = false;
 
   if (concertDetail.ticketTime) {
+    // ticketTime은 KST 기준 시간으로 내려온다고 가정
     const ticketTime = new Date(concertDetail.ticketTime);
+    // 채팅은 티켓 오픈 시점 기준 ±3일 동안만 가능
     const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
     isChatAvailable =
