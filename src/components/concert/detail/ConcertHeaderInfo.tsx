@@ -13,9 +13,7 @@ export default function ConcertHeaderInfo({ type, label, title }: ConcertInfoIte
     const parts = title.split(" ~ ");
 
     if (parts.length >= 2) {
-      const [start, ...rest] = parts;
-      const end = rest.join(" ~ ");
-
+      const [start, end] = parts;
       return (
         <div className="flex items-center gap-4">
           <div className="bg-bg-sub flex size-15 items-center justify-center rounded-full">
@@ -25,7 +23,7 @@ export default function ConcertHeaderInfo({ type, label, title }: ConcertInfoIte
             <h3 className="text-text-sub text-xs leading-normal font-medium">{label}</h3>
             <strong className="flex flex-col text-base">
               <span>{start}</span>
-              <span>{end}</span>
+              <span>~ {end}</span>
             </strong>
           </div>
         </div>

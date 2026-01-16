@@ -10,32 +10,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import QuickActionsSection from "./QuickActionsSection";
-import { TicketOffice } from "@/types/concerts";
-import { User } from "@/types/user";
+import QuickStat from "./QuickStat";
+import HotTrack from "./HotTrack";
+import SimilarArtists from "./SimilarArtists";
+import { ArtistDetail } from "@/types/artists";
 import { FlashlightIcon } from "lucide-react";
 
-interface MobileQuickActionsProps {
-  concertId?: string;
-  concertTicketingData?: TicketOffice[] | null;
-  concertStartDate?: string;
-  concertEndDate?: string;
-  userData: User | null;
-  isLiked?: boolean;
-  isLoggedIn: boolean;
-  isChatAvailable: boolean;
+interface MobileArtistActionsProps {
+  artist: ArtistDetail;
 }
 
-export default function MobileQuickActions({
-  concertId,
-  concertTicketingData,
-  concertStartDate,
-  concertEndDate,
-  userData,
-  isLiked,
-  isLoggedIn,
-  isChatAvailable,
-}: MobileQuickActionsProps) {
+export default function MobileArtistActions({ artist }: MobileArtistActionsProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,7 +36,7 @@ export default function MobileQuickActions({
                   className="size-12 rounded-full shadow-lg transition-shadow hover:shadow-xl"
                 >
                   <FlashlightIcon className="size-5" />
-                  <span className="sr-only">빠른 실행</span>
+                  <span className="sr-only">아티스트 정보 더보기</span>
                 </Button>
               </SheetTrigger>
             </div>
@@ -62,27 +47,23 @@ export default function MobileQuickActions({
           side="bottom"
           className="z-50 max-h-[85vh] overflow-y-auto pb-[env(safe-area-inset-bottom)] [&>button]:hidden"
         >
+          {/* 드래그 핸들 */}
           <SheetHeader className="sr-only">
-            <SheetTitle>빠른 실행</SheetTitle>
+            <SheetTitle>아티스트 정보</SheetTitle>
           </SheetHeader>
-          <div className="p-4 pt-15 pb-6">
+          <div className="space-y-6 p-4 pt-15 pb-6">
             <SheetClose
               className="bg-muted absolute top-4 left-1/2 h-1.5 w-12 -translate-x-1/2 rounded-lg"
-              aria-label="빠른 실행창 닫기"
+              aria-label="아티스트 정보창 닫기"
             />
-            <QuickActionsSection
-              concertId={concertId}
-              concertTicketingData={concertTicketingData}
-              concertStartDate={concertStartDate}
-              concertEndDate={concertEndDate}
-              userData={userData}
-              isLiked={isLiked}
-              isLoggedIn={isLoggedIn}
-              isChatAvailable={isChatAvailable}
-            />
+            <QuickStat artist={artist} />
+            <HotTrack tracks={artist.topTracks} />
+            <SimilarArtists relatedArtists={artist.relatedArtists} />
           </div>
         </SheetContent>
       </Sheet>
+      {/* 내용이 버튼과 겹치지 않도록 하단 패딩 (safe-area 반영) */}
+      <div className="h-[calc(5rem+env(safe-area-inset-bottom))]" />
     </div>
   );
 }
