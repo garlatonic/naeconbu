@@ -52,7 +52,8 @@ export default function QuickActionsSection({
   concertEndDate,
   userData,
   isLiked,
-  canShowChatButton,
+  isLoggedIn,
+  isChatAvailable,
 }: {
   concertId?: string;
   concertTicketingData?: TicketOffice[] | null;
@@ -60,7 +61,8 @@ export default function QuickActionsSection({
   concertEndDate?: string;
   userData: User | null;
   isLiked?: boolean;
-  canShowChatButton: boolean;
+  isLoggedIn: boolean;
+  isChatAvailable: boolean;
 }) {
   // 링크 이동
   const router = useRouter();
@@ -107,6 +109,17 @@ export default function QuickActionsSection({
     setAlarmDialogOpen(true);
   };
   const handleOpenChatModal = () => {
+    if (!isLoggedIn) {
+      toast.error("로그인이 필요합니다.");
+      router.push("/sign-in");
+      return;
+    }
+    if (!isChatAvailable) {
+      toast.error("지금은 채팅 가능 기간이 아닙니다.");
+      return;
+    }
+    setChatDialogOpen(true);
+
     setChatDialogOpen(true);
   };
 
@@ -256,20 +269,18 @@ export default function QuickActionsSection({
           </div>
           <ArrowRightIcon className="text-text-sub h-4 w-4" />
         </Button>
-        {canShowChatButton && (
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={handleOpenChatModal}
-            className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
-          >
-            <div className="flex items-center gap-2">
-              <MessageSquareIcon className="h-4 w-4" />
-              채팅 참여하기
-            </div>
-            <ArrowRightIcon className="text-text-sub h-4 w-4" />
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={handleOpenChatModal}
+          className="border-border bg-point-sub flex w-full cursor-pointer items-center justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <MessageSquareIcon className="h-4 w-4" />
+            채팅 참여하기
+          </div>
+          <ArrowRightIcon className="text-text-sub h-4 w-4" />
+        </Button>
       </div>
 
       {/* 티켓 예매하기 클릭 시 모달 */}

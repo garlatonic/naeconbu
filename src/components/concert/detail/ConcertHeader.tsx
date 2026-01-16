@@ -34,8 +34,6 @@ export default async function ConcertHeader({
     getAuthStatus(),
   ]);
 
-  const canShowChatButton = isLoggedIn && isChatAvailable;
-
   let userData = null;
   let isLikedConcert = null;
 
@@ -96,7 +94,11 @@ export default async function ConcertHeader({
 
             {/* 버튼 그룹: 모바일에서는 상단 우측 혹은 하단 배치 등 고려 가능 */}
             <div className="flex gap-2">
-              {canShowChatButton && <ConcertChatButton concertId={concertDetail.concertId} />}
+              <ConcertChatButton
+                concertId={concertDetail.concertId}
+                isLoggedIn={isLoggedIn}
+                isChatAvailable={isChatAvailable}
+              />
               <ConcertLikeButton
                 concertId={concertDetail.concertId}
                 isAuthenticated={isAuthenticated}
