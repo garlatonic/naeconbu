@@ -41,7 +41,7 @@ export default async function ConcertDetail({
 
   return (
     <section className="bg-bg-main lg:px-15 lg:py-10">
-      <div className="mx-auto flex w-full max-w-400 flex-col gap-5 lg:flex-row lg:gap-8">
+      <div className="mx-auto flex w-full max-w-400 flex-col gap-5 lg:flex-row xl:gap-8">
         <div className="flex-2 space-y-15 lg:space-y-20">
           <ConcertDetailInfo
             concertImageUrls={concertDetail?.concertImageUrls}
@@ -78,6 +78,7 @@ export default async function ConcertDetail({
         concertEndDate={concertDetail?.endDate}
         userData={userData}
         isLiked={isLikedConcert?.isLike}
+        canShowChatButton={canShowChatButton}
       />
     </section>
   );
