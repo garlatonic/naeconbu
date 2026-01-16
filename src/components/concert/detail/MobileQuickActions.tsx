@@ -22,7 +22,8 @@ interface MobileQuickActionsProps {
   concertEndDate?: string;
   userData: User | null;
   isLiked?: boolean;
-  canShowChatButton: boolean;
+  isLoggedIn: boolean;
+  isChatAvailable: boolean;
 }
 
 export default function MobileQuickActions({
@@ -32,7 +33,8 @@ export default function MobileQuickActions({
   concertEndDate,
   userData,
   isLiked,
-  canShowChatButton,
+  isLoggedIn,
+  isChatAvailable,
 }: MobileQuickActionsProps) {
   const [open, setOpen] = useState(false);
 
@@ -75,7 +77,8 @@ export default function MobileQuickActions({
               concertEndDate={concertEndDate}
               userData={userData}
               isLiked={isLiked}
-              canShowChatButton={canShowChatButton}
+              isLoggedIn={isLoggedIn}
+              isChatAvailable={isChatAvailable}
             />
           </div>
         </SheetContent>

@@ -18,11 +18,28 @@ import { useRouter } from "next/navigation";
 import { MessageSquareIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-export default function ConcertChatButton({ concertId }: { concertId?: string }) {
+export default function ConcertChatButton({
+  concertId,
+  isLoggedIn,
+  isChatAvailable,
+}: {
+  concertId?: string;
+  isLoggedIn?: boolean;
+  isChatAvailable?: boolean;
+}) {
   const router = useRouter();
   const [chatDialogOpen, setChatDialogOpen] = useState(false);
 
-  const handleOpenChatModal = () => {
+  const handleClick = () => {
+    if (!isLoggedIn) {
+      toast.error("로그인이 필요합니다.");
+      router.push("/sign-in");
+      return;
+    }
+    if (!isChatAvailable) {
+      toast.error("지금은 채팅 가능 기간이 아닙니다.");
+      return;
+    }
     setChatDialogOpen(true);
   };
 
@@ -53,7 +70,7 @@ export default function ConcertChatButton({ concertId }: { concertId?: string })
             variant="outline"
             size="icon"
             className="border-border hover:bg-border group"
-            onClick={handleOpenChatModal}
+            onClick={handleClick}
           >
             <MessageSquareIcon className="h-4 w-4" />
           </Button>

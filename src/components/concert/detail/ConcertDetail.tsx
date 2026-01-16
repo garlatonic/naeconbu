@@ -27,8 +27,6 @@ export default async function ConcertDetail({
     getAuthStatus(),
   ]);
 
-  const canShowChatButton = isLoggedIn && isChatAvailable;
-
   let userData = null;
   let isLikedConcert = null;
 
@@ -63,7 +61,8 @@ export default async function ConcertDetail({
                 concertEndDate={concertDetail?.endDate}
                 userData={userData}
                 isLiked={isLikedConcert?.isLike}
-                canShowChatButton={canShowChatButton}
+                isLoggedIn={isLoggedIn}
+                isChatAvailable={isChatAvailable}
               />
             </div>
           </div>
@@ -78,7 +77,8 @@ export default async function ConcertDetail({
         concertEndDate={concertDetail?.endDate}
         userData={userData}
         isLiked={isLikedConcert?.isLike}
-        canShowChatButton={canShowChatButton}
+        isLoggedIn={isLoggedIn}
+        isChatAvailable={isChatAvailable}
       />
     </section>
   );

@@ -41,7 +41,7 @@ export default async function Header() {
         </div>
 
         {/* 내비게이션 */}
-        <Navigation isAdmin={isAdmin} isLoggedIn={isLoggedIn} />
+        <Navigation isAdmin={isAdmin} />
       </div>
     </header>
   );
